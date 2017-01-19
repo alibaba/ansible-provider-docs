@@ -78,9 +78,9 @@ options:
   io_optimized:
     description: Whether instance is using optimized volumes.
     required: false
-    default: False
+    default: "no"
     aliases: []
-    choices: [true, false]
+    choices: ["yes", "no"]
   vswitch_id:
     description: The subnet ID in which to launch the instance (VPC).
     required: false
@@ -151,8 +151,9 @@ options:
       description:
         - Whether allocate a public ip for the new instance.
       required: false
-      default: "true"
+      default: "yes"
       aliases: ['assign_public_ip']
+      choices: ["yes", "no"]
   bind_eip:
       description:
         - ID of Elastic IP Address bind to the new instance.
@@ -187,14 +188,14 @@ options:
       description:
         - Whether automate renew the charge of the instance.
       required: false
-      choices: [true, false]
-      default: "false"
+      choices: ["yes", "no"]
+      default: "no"
   auto_renew_period:
       description:
-        - The duration of the automatic renew the charge of the instance. It is vaild when auto_renew is true.
+        - The duration of the automatic renew the charge of the instance. It is vaild when auto_renew is yes.
       required: false
       choices: [1, 2, 3, 6, 12]
-      default: "false"
+      default: "no"
   ids:
       description:
         - A list of identifier for this instance or set of instances, so that the module will be idempotent with respect to ECS instances. This identifier should not be reused for another call later on. For details, see the description of client token at U(https://help.aliyun.com/document_detail/25693.html?spm=5176.doc25499.2.7.mrVgE2).
@@ -205,8 +206,8 @@ options:
       description:
         - Wait for the instance to be 'running' before returning.
       required: false
-      choices: [true, false]
-      default: "false"
+      choices: ["yes", "no"]
+      default: "no"
   wait_timeout:
       description:
         - how long before wait gives up, in seconds
@@ -225,288 +226,335 @@ notes:
 '''
 
 EXAMPLES = '''
-# Note: These examples do not set authentication details.
-# Basic provisioning example
-- ecs:
-    key_name: mykey
-    instance_type: t2.micro
-    image: ami-123456
-    wait: yes
-    group: webserver
-    count: 3
-    vpc_subnet_id: subnet-29e63245
-    assign_public_ip: yes
-# Advanced example with tagging and CloudWatch
-- ecs:
-    key_name: mykey
-    group: databases
-    instance_type: t2.micro
-    image: ami-123456
-    wait: yes
-    wait_timeout: 500
-    count: 5
-    instance_tags:
-       db: postgres
-    monitoring: yes
-    vpc_subnet_id: subnet-29e63245
-    assign_public_ip: yes
-# Single instance with additional IOPS volume from snapshot and volume delete on termination
-- ecs:
-    key_name: mykey
-    group: webserver
-    instance_type: c3.medium
-    image: ami-123456
-    wait: yes
-    wait_timeout: 500
-    volumes:
-      - device_name: /dev/sdb
-        snapshot: snap-abcdef12
-        volume_type: io1
-        iops: 1000
-        volume_size: 100
-        delete_on_termination: true
-    monitoring: yes
-    vpc_subnet_id: subnet-29e63245
-    assign_public_ip: yes
-# Single instance with ssd gp2 root volume
-- ecs:
-    key_name: mykey
-    group: webserver
-    instance_type: c3.medium
-    image: ami-123456
-    wait: yes
-    wait_timeout: 500
-    volumes:
-      - device_name: /dev/xvda
-        volume_type: gp2
-        volume_size: 8
-    vpc_subnet_id: subnet-29e63245
-    assign_public_ip: yes
-    exact_count: 1
-# Multiple groups example
-- ecs:
-    key_name: mykey
-    group: ['databases', 'internal-services', 'sshable', 'and-so-forth']
-    instance_type: m1.large
-    image: ami-6e649707
-    wait: yes
-    wait_timeout: 500
-    count: 5
-    instance_tags:
-        db: postgres
-    monitoring: yes
-    vpc_subnet_id: subnet-29e63245
-    assign_public_ip: yes
-# Multiple instances with additional volume from snapshot
-- ecs:
-    key_name: mykey
-    group: webserver
-    instance_type: m1.large
-    image: ami-6e649707
-    wait: yes
-    wait_timeout: 500
-    count: 5
-    volumes:
-    - device_name: /dev/sdb
-      snapshot: snap-abcdef12
-      volume_size: 10
-    monitoring: yes
-    vpc_subnet_id: subnet-29e63245
-    assign_public_ip: yes
-# Dedicated tenancy example
-- local_action:
-    module: ecs
-    assign_public_ip: yes
-    group_id: sg-1dc53f72
-    key_name: mykey
-    image: ami-6e649707
-    instance_type: m1.small
-    tenancy: dedicated
-    vpc_subnet_id: subnet-29e63245
-    wait: yes
-# Spot instance example
-- ecs:
-    spot_price: 0.24
-    spot_wait_timeout: 600
-    keypair: mykey
-    group_id: sg-1dc53f72
-    instance_type: m1.small
-    image: ami-6e649707
-    wait: yes
-    vpc_subnet_id: subnet-29e63245
-    assign_public_ip: yes
-    spot_launch_group: report_generators
-# Examples using pre-existing network interfaces
-- ecs:
-    key_name: mykey
-    instance_type: t2.small
-    image: ami-f005ba11
-    network_interface: eni-deadbeef
-- ecs:
-    key_name: mykey
-    instance_type: t2.small
-    image: ami-f005ba11
-    network_interfaces: ['eni-deadbeef', 'eni-5ca1ab1e']
-# Launch instances, runs some tasks
-# and then terminate them
-- name: Create a sandbox instance
-  hosts: localhost
-  gather_facts: False
-  vars:
-    key_name: my_keypair
-    instance_type: m1.small
-    security_group: my_securitygroup
-    image: my_ami_id
-    region: us-east-1
-  tasks:
-    - name: Launch instance
-      ecs:
-         key_name: "{{ keypair }}"
-         group: "{{ security_group }}"
-         instance_type: "{{ instance_type }}"
-         image: "{{ image }}"
-         wait: true
-         region: "{{ region }}"
-         vpc_subnet_id: subnet-29e63245
-         assign_public_ip: yes
-      register: ecs
-    - name: Add new instance to host group
-      add_host:
-        hostname: "{{ item.public_ip }}"
-        groupname: launched
-      with_items: "{{ ecs.instances }}"
-    - name: Wait for SSH to come up
-      wait_for:
-        host: "{{ item.public_dns_name }}"
-        port: 22
-        delay: 60
-        timeout: 320
-        state: started
-      with_items: "{{ ecs.instances }}"
-- name: Configure instance(s)
-  hosts: launched
-  become: True
-  gather_facts: True
-  roles:
-    - my_awesome_role
-    - my_awesome_test
-- name: Terminate instances
-  hosts: localhost
-  connection: local
-  tasks:
-    - name: Terminate instances that were previously launched
-      ecs:
-        state: 'absent'
-        instance_ids: '{{ ecs.instance_ids }}'
-# Start a few existing instances, run some tasks
-# and stop the instances
-- name: Start sandbox instances
-  hosts: localhost
-  gather_facts: false
-  connection: local
-  vars:
-    instance_ids:
-      - 'i-xxxxxx'
-      - 'i-xxxxxx'
-      - 'i-xxxxxx'
-    region: us-east-1
-  tasks:
-    - name: Start the sandbox instances
-      ecs:
-        instance_ids: '{{ instance_ids }}'
-        region: '{{ region }}'
-        state: running
-        wait: True
-        vpc_subnet_id: subnet-29e63245
-        assign_public_ip: yes
-  roles:
-    - do_neat_stuff
-    - do_more_neat_stuff
-- name: Stop sandbox instances
-  hosts: localhost
-  gather_facts: false
-  connection: local
-  vars:
-    instance_ids:
-      - 'i-xxxxxx'
-      - 'i-xxxxxx'
-      - 'i-xxxxxx'
-    region: us-east-1
-  tasks:
-    - name: Stop the sandbox instances
-      ecs:
-        instance_ids: '{{ instance_ids }}'
-        region: '{{ region }}'
-        state: stopped
-        wait: True
-        vpc_subnet_id: subnet-29e63245
-        assign_public_ip: yes
 #
-# Start stopped instances specified by tag
+# provisioning new ecs instance
 #
-- local_action:
-    module: ecs
+
+# basic provisioning example classic network
+- name: basic provisioning example
+  hosts: localhost
+  vars:
+    acs_access_key: XXXXXXXXXXXXXX
+    acs_secret_access_key: XXXXXXXXXXXXXX
+    region: cn-beijing
+    zone: cn-beijing
+    image: ubuntu1404_64_40G_cloudinit_20160727.raw
+    instance_type: ecs.n1.small
+    assign_public_ip: yes
+  tasks:
+    - name: classic network
+      ecs:
+        acs_access_key: '{{ acs_access_key }}'
+        acs_secret_access_key: '{{ acs_secret_access_key }}'
+        region: '{{ region }}'
+        zone: '{{ zone }}'
+        image: '{{ image }}'
+        instance_type: '{{ instance_type }}'
+        count: 2
+        assign_public_ip: '{{ assign_public_ip }}'
+
+# basic provisioning example vpc network
+- name: basic provisioning example
+  hosts: localhost
+  vars:
+    acs_access_key: XXXXXXXXXXXXXX
+    acs_secret_access_key: XXXXXXXXXXXXXX
+    region: cn-beijing
+    zone: cn-beijing
+    image: ubuntu1404_64_40G_cloudinit_20160727.raw
+    instance_type: ecs.n1.small
+    vswitch_id: vsw-j6co2uknrmopj4ypgdnq4
+    assign_public_ip: no
+
+  tasks:
+    - name: vpc network
+      ecs:
+        acs_access_key: '{{ acs_access_key }}'
+        acs_secret_access_key: '{{ acs_secret_access_key }}'
+        region: '{{ region }}'
+        image: '{{ image }}'
+        instance_type: '{{ instance_type }}'
+        vswitch_id: '{{ vswitch_id }}'
+        assign_public_ip: '{{ assign_public_ip }}'
+
+
+# advanced example with tagging and host name password
+- name: advanced provisioning example
+  hosts: localhost
+  vars:
+    acs_access_key: XXXXXXXXXXXXXX
+    acs_secret_access_key: XXXXXXXXXXXXXX
+    region: cn-beijing
+    zone: cn-beijing
+    image: ubuntu1404_64_40G_cloudinit_20160727.raw
+    instance_type: ecs.n1.small
+    group_id: sg-25y6ag32b
+    host_name: myhost
+    password: mypassword
+  tasks:
+    - name: tagging and host name password
+      ecs:
+        acs_access_key: '{{ acs_access_key }}'
+        acs_secret_access_key: '{{ acs_secret_access_key }}'
+        region: '{{ region }}'
+        image: '{{ image }}'
+        instance_type: '{{ instance_type }}'
+        assign_public_ip: yes
+        group_id: '{{ group_id }}'
+        instance_tags:
+            - tag_key : postgress
+              tag_value: 1
+        host_name: '{{ host_name }}'
+        password: '{{ password }}'
+        wait: yes
+        wait_timeout: 500
+
+# single instance with internet data configuration and instance details
+- name: advanced provisioning example
+  hosts: localhost
+  vars:
+    acs_access_key: XXXXXXXXXXXXXX
+    acs_secret_access_key: XXXXXXXXXXXXXX
+    region: cn-beijing
+    zone: cn-beijing
+    image: ubuntu1404_64_40G_cloudinit_20160727.raw
+    instance_type: ecs.n1.small
+    group_id: sg-25y6ag32b
+    instance_name: myinstance
+    description: my description
+  tasks:
+    - name: internet data configuration and instance details
+      ecs:
+        acs_access_key: '{{ acs_access_key }}'
+        acs_secret_access_key: '{{ acs_secret_access_key }}'
+        region: '{{ region }}'
+        image: '{{ image }}'
+        instance_type: '{{ instance_type }}'
+        group_id: '{{ group_id }}'
+        instance_name: '{{ instance_name }}'
+        description: '{{ description }}'
+        internet_data:
+            charge_type: PayByBandwidth
+            max_bandwidth_in: 200
+            max_bandwidth_out: 50
+
+
+# single instance with additional volume from snapshot and volume delete on termination
+- name: advanced provisioning example
+  hosts: localhost
+  vars:
+    acs_access_key: XXXXXXXXXXXXXX
+    acs_secret_access_key: XXXXXXXXXXXXXX
+    region: cn-beijing
+    zone: cn-beijing
+    image: ubuntu1404_64_40G_cloudinit_20160727.raw
+    instance_type: ecs.n1.small
+  tasks:
+    - name: additional volume
+      ecs:
+        acs_access_key: '{{ acs_access_key }}'
+        acs_secret_access_key: '{{ acs_secret_access_key }}'
+        region: '{{ region }}'
+        image: '{{ image }}'
+        instance_type: '{{ instance_type }}'
+        assign_public_ip: yes
+        volumes:
+          - disk_name: /dev/sdb
+            snapshot_id: snap-abcdef12
+            disk_category: cloud_efficiency
+            disk_size: 100
+            delete_on_termination: true
+
+# example with system disk configuration and IO optimized
+- name: advanced provisioning example
+  hosts: localhost
+  vars:
+    acs_access_key: XXXXXXXXXXXXXX
+    acs_secret_access_key: XXXXXXXXXXXXXX
+    region: cn-beijing
+    zone: cn-beijing
+    image: ubuntu1404_64_40G_cloudinit_20160727.raw
+    instance_type: ecs.n1.small
+  tasks:
+    - name: additional volume
+      ecs:
+        acs_access_key: '{{ acs_access_key }}'
+        acs_secret_access_key: '{{ acs_secret_access_key }}'
+        region: '{{ region }}'
+        image: '{{ image }}'
+        instance_type: '{{ instance_type }}'
+        io_optimized: yes
+        system_disk:
+            disk_category: cloud
+            disk_size: 50
+            disk_name: DiskName
+            disk_description: Invalid System Disk Size
+
+# example with prepaid internet charge type configuration
+- name: advanced provisioning example
+  hosts: localhost
+  vars:
+    acs_access_key: XXXXXXXXXXXXXX
+    acs_secret_access_key: XXXXXXXXXXXXXX
+    region: cn-beijing
+    image: ubuntu1404_64_40G_cloudinit_20160727.raw
+    instance_type: ecs.n1.small
+  tasks:
+    - name: prepaid internet charge type configuration
+      ecs:
+        acs_access_key: '{{ acs_access_key }}'
+        acs_secret_access_key: '{{ acs_secret_access_key }}'
+        region: '{{ region }}'
+        image: '{{ image }}'
+        instance_type: '{{ instance_type }}'
+        assign_public_ip: yes
+        instance_charge_type: PrePaid
+        period: 1
+        auto_renew: yes
+        auto_renew_period: 3
+
+#
+# modifying attributes of ecs instance
+#
+- name: modify attribute example
+  hosts: localhost
+  vars:
+    acs_access_key: XXXXXXXXXXXXXX
+    acs_secret_access_key: XXXXXXXXXXXXXX
+    region: cn-beijing
+  tasks:
+    - name: modify attribute of multiple instances
+      ecs:
+        acs_access_key: '{{ acs_access_key }}'
+        acs_secret_access_key: '{{ acs_secret_access_key }}'
+        region: '{{ region }}'
+        attributes:
+            - id:  i-rj9be6tlwmae1995uq5t
+              name: InstanceName1
+              description: volume attribute1
+              password: mypassword1
+              host_name: hostName1
+            - id:  i-rj9be6tlwmdfsfsd3543
+              name: InstanceName2
+              description: volume attribute2
+              password: mypassword2
+              host_name: hostcomes2
+
+#
+# querying instance status
+#
+- name: query instance status
+  hosts: localhost
+  vars:
+    acs_access_key: XXXXXXXXXXXXXX
+    acs_secret_access_key: XXXXXXXXXXXXXX
+    region: cn-beijing
+    zone: cn-beijing
+    status: getstatus
+    pagenumber: 1
+    pagesize: 10
+  tasks:
+    - name: query instance status from the particular region
+      ecs:
+        acs_access_key: '{{ acs_access_key }}'
+        acs_secret_access_key: '{{ acs_secret_access_key }}'
+        region: '{{ region }}'
+        zone: '{{ zone }}'
+        status: '{{ status }}'
+        pagenumber: '{{ pagenumber }}'
+        pagesize: '{{ pagesize }}'
+
+#
+# start or terminate instance
+#
+- name: start or terminate instance
+  hosts: localhost
+  vars:
+    acs_access_key: XXXXXXXXXXXXXX
+    acs_secret_access_key: XXXXXXXXXXXXXX
+    region: cn-shenzhen
+    instance_ids: i-94dehop6n
     instance_tags:
-        Name: ExtraPower
+    - tag_key: xz_test
+      tag_value: '1.20'
     state: running
+  tasks:
+    - name: start instance
+      ecs_model:
+        acs_access_key: '{{ acs_access_key }}'
+        acs_secret_access_key: '{{ acs_secret_access_key }}'
+        region: '{{ region }}'
+        instance_ids: '{{ instance_ids }}'
+        instance_tags: '{{ instance_tags }}'
+        state: '{{ state }}'
+
 #
-# Restart instances specified by tag
+# stop or restarted instance
 #
-- local_action:
-    module: ecs
+- name: start stop restart instance
+  hosts: localhost
+  vars:
+    acs_access_key: XXXXXXXXXXXXXX
+    acs_secret_access_key: XXXXXXXXXXXXXX
+    region: cn-shenzhen
+    instance_ids: i-94dehop6n
     instance_tags:
-        Name: ExtraPower
+    - tag_key: xz_test
+      tag_value: '1.20'
+    force: False
     state: restarted
+  tasks:
+    - name: Restart instance
+      ecs_model:
+        acs_access_key: '{{ acs_access_key }}'
+        acs_secret_access_key: '{{ acs_secret_access_key }}'
+        region: '{{ region }}'
+        instance_ids: '{{ instance_ids }}'
+        instance_tags: '{{ instance_tags }}'
+        state: '{{ state }}'
+
 #
-# Enforce that 5 instances with a tag "foo" are running
-# (Highly recommended!)
+# add an instance to security group
 #
-- ecs:
-    key_name: mykey
-    instance_type: c1.medium
-    image: ami-40603AD1
-    wait: yes
-    group: webserver
-    instance_tags:
-        foo: bar
-    exact_count: 5
-    count_tag: foo
-    vpc_subnet_id: subnet-29e63245
-    assign_public_ip: yes
+- name: Add an instance to security group
+  hosts: localhost
+  vars:
+    acs_access_key: XXXXXXXXXXXXXX
+    acs_secret_access_key: XXXXXXXXXXXXXX
+    region: cn-shenzhen
+    instance_id: i-94dehop6n
+    group_id: sg-25y6ag32b
+    sg_action: join
+  tasks:
+    - name: Add an instance to security group
+      ecs_model:
+        acs_access_key: '{{ acs_access_key }}'
+        acs_secret_access_key: '{{ acs_secret_access_key }}'
+        region: '{{ region }}'
+        instance_id: '{{ instance_id }}'
+        group_id: '{{ group_id }}'
+        sg_action: '{{ sg_action }}'
+
 #
-# Enforce that 5 running instances named "database" with a "dbtype" of "postgres"
+# remove instance from security group
 #
-- ecs:
-    key_name: mykey
-    instance_type: c1.medium
-    image: ami-40603AD1
-    wait: yes
-    group: webserver
-    instance_tags:
-        Name: database
-        dbtype: postgres
-    exact_count: 5
-    count_tag:
-        Name: database
-        dbtype: postgres
-    vpc_subnet_id: subnet-29e63245
-    assign_public_ip: yes
-#
-# count_tag complex argument examples
-#
-    # instances with tag foo
-    count_tag:
-        foo:
-    # instances with tag foo=bar
-    count_tag:
-        foo: bar
-    # instances with tags foo=bar & baz
-    count_tag:
-        foo: bar
-        baz:
-    # instances with tags foo & bar & baz=bang
-    count_tag:
-        - foo
-        - bar
-        - baz: bang
+- name: Remove an instance from security group
+  hosts: localhost
+  vars:
+    acs_access_key: XXXXXXXXXXXXXX
+    acs_secret_access_key: XXXXXXXXXXXXXX
+    region: cn-shenzhen
+    instance_id: i-94dehop6n
+    group_id: sg-25y6ag32b
+    sg_action: leave
+  tasks:
+    - name: Remove an instance from security group
+      ecs_model:
+        acs_access_key: '{{ acs_access_key }}'
+        acs_secret_access_key: '{{ acs_secret_access_key }}'
+        region: '{{ region }}'
+        instance_id: '{{ instance_id }}'
+        group_id: '{{ group_id }}'
+        sg_action: '{{ sg_action }}'
+
 '''
