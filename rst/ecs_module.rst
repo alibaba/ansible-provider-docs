@@ -1,7 +1,7 @@
 .. _ecs:
 
 
-ecs - create, start, stop, restart or terminate an instance in ecs
+ecs - Create, Start, Stop, Restart or Terminate an Instance in ECS
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
@@ -62,7 +62,7 @@ Options
     <td>auto_renew<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td>no</td>
-        <td><ul><li>yes</li><li>no</li></ul></td>
+        <td><ul><li>true</li><li>false</li></ul></td>
         <td><div>Whether automate renew the charge of the instance.</div></td></tr>
             <tr>
     <td>auto_renew_period<br/><div style="font-size: small;"></div></td>
@@ -112,7 +112,8 @@ Options
     <td>no</td>
     <td></td>
         <td><ul></ul></td>
-        <td><div>A list of identifier for this instance or set of instances, so that the module will be idempotent with respect to ECS instances. This identifier should not be reused for another call later on. For details, see the description of client token at <a href='https://help.aliyun.com/document_detail/25693.html?spm=5176.doc25499.2.7.mrVgE2'>https://help.aliyun.com/document_detail/25693.html?spm=5176.doc25499.2.7.mrVgE2</a>.</div><div>The length of the ids is the same with count</div></td></tr>
+        <td><div>A list of identifier for this instance or set of instances, so that the module will be idempotent with respect to ECS instances. This identifier should not be reused for another call later on. For details, see the description of client token at <a href='https://help.aliyun.com/document_detail/25693.html?spm=5176.doc25499.2.7.mrVgE2'>https://help.aliyun.com/document_detail/25693.html?spm=5176.doc25499.2.7.mrVgE2</a>.</div><div>The length of the ids is the same with count</div></br>
+        <div style="font-size: small;">aliases: id<div></td></tr>
             <tr>
     <td>image_id<br/><div style="font-size: small;"></div></td>
     <td>yes</td>

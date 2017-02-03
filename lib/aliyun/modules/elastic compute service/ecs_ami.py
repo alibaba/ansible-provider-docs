@@ -24,11 +24,11 @@ ANSIBLE_METADATA = {'status': ['stableinterface'],
 
 DOCUMENTATION = '''
 ---
-module: ecs_disk
+module: ecs_ami
 version_added: "1.0"
-short_description: Create, Attach, Detach or Delete a disk
+short_description: Create or Delete User-defined Image in ECS
 description:
-    - Create, Attach, Detach or Delete a disk
+    - Creates or delete User-defined Images in ecs
 options:
   acs_access_key:
     description:
@@ -47,83 +47,85 @@ options:
       - The Aliyun Cloud region to use. If not specified then the value of the `ACS_REGION`, `ACS_DEFAULT_REGION` or `ECS_REGION` environment variable, if any, is used.
     required: false
     default: null
-    aliases: [ 'acs_region', 'ecs_region']
+    aliases: ['acs_region', 'ecs_region']
   status:
     description:
-      - The state of the instance after operating.
+      - The state of the image for operating.
     required: false
     default: 'present'
     aliases: ['state']
     choices: ['present', 'absent']
-  zone_id:
+  instance_id:
     description:
-      - Aliyun availability zone ID in which to launch the instance
-    required: true
-    default: null
-    aliases: ['zone', 'availability_zone', 'acs_zone', 'ecs_zone']
-  disk_name:
-    description:
-      - The value of disk name is blank by default. [2, 128] English or Chinese characters, must begin with an uppercase/lowercase letter or Chinese character. Can contain numbers, '.', '_' and '-'. The disk name will appear on the console. It cannot begin with http:// or https://.
+      - instance id of the image to create.
     required: false
     default: null
-    aliases: ['name']
-  description:
-    description:
-      - The value of disk description is blank by default. [2, 256] characters. The disk description will appear on the console. It cannot begin with http:// or https://.
-    required: false
-    default: null
-    aliases: [ 'disk_description' ]
-  disk_category:
-    description:
-      - Category of the data disk
-    required: false
-    default: cloud
-    aliases: ['volume_type', 'disk_type']
-    choices: ['cloud - general cloud disk', 'cloud_efficiency - efficiency cloud disk', 'cloud_ssd - cloud SSD']
-  size:
-    description:
-      - Size of the system disk, in GB.The value should be equal to or greater than the size of the specific SnapshotId. 
-    required: false
-    default: null
-    aliases: ['volume_size', 'disk_size']
-    choices: ['cloud - 5 ~ 2000', 'cloud_efficiency - 20 ~ 2048', 'cloud_ssd - 20 ~ 2048']
+    aliases: ['instance']
   snapshot_id:
     description:
-      - Snapshots are used to create the data disk After this parameter is specified, Size is ignored. The actual size of the created disk is the size of the specified snapshot Snapshots from on or before July 15, 2013 cannot be used to create a disk
+      - The snapshot ID. A user-defined image is created from the specified snapshot.
     required: false
     default: null
     aliases: ['snapshot']
-  disk_tags:
+  image_name:
     description:
-      - A list of hash/dictionaries of instance tags, ['{"tag_key":"value", "tag_value":"value"}'], tag_key must be not null when tag_value isn't null
+      - The name of the image, [2, 128] English or Chinese characters.
+    required: false
+    default: null
+    aliases: ['name']
+  image_version:
+    description:
+      - The version number of the image, with a length limit of 1 to 40 English characters.
+    required: false
+    default: null
+    aliases: ['version']
+  description:
+    description:
+      - The description of the image, with a length limit of 0 to 256 characters.
+    required: false
+    default: null
+    aliases: []
+  disk_mapping:
+    description:
+      - An optional list of device hashes/dictionaries with custom configurations.
+      - keys allowed are
+          - device (required=false;) - Disk Device Name value /dev/xvda start to /dev/xvdz, /dev/xvda default system disk is a snapshot of /dev/xvdb-z is only a snapshot of the data disk
+          - snapshot_id (required=false;) - Snapshot Id
+          - disk_size (required=false;) - Size of the disk, in the range [5-2000GB]
+    required: false
+    default: null
+    aliases: []
+  images_tags:
+    description:
+      - A list of hash/dictionaries of image tags, '[{tag_key:"value", tag_value:"value"}]', tag_key must be not null when tag_value isn't null
     required: false
     default: null
     aliases: ['tags']
-  instance_id:
+  launch_permission:
     description:
-      - The specified instance ID.
-    required: true
-    default: null
-    aliases: ['instance']
-  disk_id:
-    description:
-      - The disk ID. The disk and Instance must be in the same zone.
-    required: true
-    default: null
-    aliases: ['vol_id', 'id']
-  device:
-    description:
-      - The value null indicates that the value is allocated by default, starting from /dev/xvdb to /dev/xvdz.
+      - Users that should be able to launch the ami
     required: false
     default: null
-    aliases: ['device_name']
-  delete_with_instance:
-    description:
-      - Whether or not the disk is released along with the instance. True/Yes indicates that when the instance is released, this disk will be released with it.False/No indicates that when the instance is released, this disk will be retained.
-    required: false
-    default: none
-    aliases: ['delete_on_termination']
-    choices: []
+    aliases: []
+  wait:
+      description:
+        - Wait for the image creation.
+      required: false
+      default: "no"
+      choices: ["yes", "no"]
+  wait_timeout:
+      description:
+        - how long before wait gives up, in seconds
+      required: false
+      default: "300"
+      choices: []
+  image_id:
+      description:
+        - ID of an image
+      required: true
+      default: null
+      aliases: []
+
 requirements:
   - "python >= 2.7"
   - aliyun-python-sdk-core, aliyun-python-sdk-ecs, ecsutils and footmark
@@ -137,133 +139,135 @@ notes:
 
 EXAMPLES = '''
 #
-# Provisioning new disk
+# provisioning to create new user-defined image
 #
 
-# Basic provisioning example create a disk
-- name: create disk
-  hosts: localhost
-  connection: local
-  vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-beijing
-    zone_id: cn-beijing-b
-    size: 20
-    state: present
-  tasks:
-    - name: create disk
-      ecs_disk:
-        acs_access_key_id: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
-        zone_id: '{{ zone_id }}'
-        size: '{{ size }}'
-        state: '{{ state }}'
-      register: result
-    - debug: var=result
-
-# Advanced example with tagging and snapshot
-- name: create disk
+# basic provisioning example to create image using ecs instance
+- name: create image from ecs instance
   hosts: localhost
   connection: local
   vars:
     acs_access_key: xxxxxxxxxx
     acs_secret_access_key: xxxxxxxxxx
     region: cn-hongkong
-    zone_id: cn-hongkong-b
-    disk_name: disk_1
-    description: data disk_1
-    size: 20
-    snapshot_id: s-j6cjdk51ejf0mtdnb7bb
-    disk_category: CLOUD_SSD
-    state: present
+    instance_id: i-2zeaelo8l9hhu10gs02q
   tasks:
-    - name: create disk
-      ecs_disk:
-        acs_access_key_id: '{{ acs_access_key }}'
+    - name: create image form ecs instance
+      ecs_ami:
+        acs_access_key: '{{ acs_access_key }}'
         acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
-        zone_id: '{{ zone_id }}'
-        disk_name: '{{ disk_name }}'
-        description: '{{ description }}'
-        size: '{{ size }}'
-        snapshot_id: '{{ snapshot_id }}'
-        disk_category: '{{ disk_category }}'
-        state: '{{ state }}'
-      register: result
-    - debug: var=result
-
-
-# Example to attach disk to an instance
-- name: attach disk to instance
-  hosts: localhost
-  connection: local
-  vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    state: present
-    region: us-west-1
-    instance_id: i-rj95iytyo4d16kxqj58a
-    vol_id: d-rj9j8a740966dhs3kbya
-    device: /dev/xvdb
-    delete_with_instance: false
-  tasks:
-    - name: Attach Disk to instance
-      ecs_disk:
-        acs_access_key_id: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        status: '{{ state }}'
         region: '{{ region }}'
         instance_id: '{{ instance_id }}'
-        vol_id: '{{ vol_id }}'
-        device: '{{ device }}'
-        delete_with_instance: '{{ delete_with_instance }}'
       register: result
     - debug: var=result
 
-
-# Example to detach disk from instance
-- name: detach disk
+# basic provisioning example to create image using snapshot
+- name: create image using snapshot
   hosts: localhost
   connection: local
   vars:
     acs_access_key: xxxxxxxxxx
     acs_secret_access_key: xxxxxxxxxx
-    region: us-west-1
-    disk_id: d-rj9j8a740966dhs3kbya
+    region: cn-hongkong
+    snapshot_id: s-j6ccfgptbi05ha1csvw9
     state: present
   tasks:
-    - name: detach disk
-      ecs_disk:
-        acs_access_key_id: '{{ acs_access_key }}'
+    - name: create image using snapshot
+      ecs_ami:
+        acs_access_key: '{{ acs_access_key }}'
         acs_secret_access_key: '{{ acs_secret_access_key }}'
         region: '{{ region }}'
-        id: '{{ disk_id }}'
+        snapshot_id: '{{ snapshot_id }}'
         state: '{{ state }}'
       register: result
     - debug: var=result
 
+# basic provisioning example to create image using disk mapping
+- name: create image using disk mapping
+  hosts: localhost
+  connection: local
+  vars:
+    acs_access_key: xxxxxxxxxx
+    acs_secret_access_key: xxxxxxxxxx
+    region: cn-hongkong
+    disk_mapping:
+      - device: /dev/xvdb-z
+        disk_size: 5
+        snapshot_id: s-j6cbabmbtvnzxrzzjsns
+    state: present
+  tasks:
+    - name: create image using disk mapping
+      ecs_ami:
+        acs_access_key: '{{ acs_access_key }}'
+        acs_secret_access_key: '{{ acs_secret_access_key }}'
+        region: '{{ region }}'
+        disk_mapping: '{{ disk_mapping }}'
+        state: '{{ state }}'
+      register: result
+    - debug: var=result
 
-# Example to delete disk
-- name: detach disk
+# advanced example to create image with tagging, version and launch permission
+- name: create image
+  hosts: localhost
+  connection: local
+  vars:
+    acs_access_key: xxxxxxxxxx
+    acs_secret_access_key: xxxxxxxxxx
+    region: cn-hongkong
+    image_name: image_test
+    image_version: 4
+    description: description
+    images_tags:
+      - tag_key: key
+        tag_value: value
+    disk_mapping:
+      - device: /dev/xvdb-z
+        disk_size: 5
+        snapshot_id: s-j6cbabmbtvnzxrzzjsns
+    state: present
+    wait: false
+    wait_timeout: 10
+    launch_permission: ['1077970544931979']
+  tasks:
+    - name: create image
+      ecs_ami:
+        acs_access_key_id: '{{ acs_access_key }}'
+        acs_secret_access_key: '{{ acs_secret_access_key }}'
+        region: '{{ region }}'
+        image_name: '{{ image_name }}'
+        image_version: '{{ image_version }}'
+        description: '{{ description }}'
+        images_tags: '{{ images_tags }}'
+        disk_mapping: '{{ disk_mapping }}'
+        state: '{{ state }}'
+        wait: '{{ wait }}'
+        wait_timeout: '{{ wait_timeout }}'
+        launch_permission: '{{ launch_permission }}'
+      register: result
+    - debug: var=result
+
+#
+# provisioning to delete user-defined image
+#
+
+# provisioning to delete user-defined image
+- name: delete image
   hosts: localhost
   connection: local
   vars:
     acs_access_key: xxxxxxxxxx
     acs_secret_access_key: xxxxxxxxxx
     region: us-west-1
-    disk_id: d-rj9j8a740966dhs3kbya
+    image_id: m-rj9fpm1mc6a68zmntjtu
     state: absent
   tasks:
-    - name: detach disk
-      ecs_disk:
+    - name: delete image
+      ecs_ami:
         acs_access_key_id: '{{ acs_access_key }}'
         acs_secret_access_key: '{{ acs_secret_access_key }}'
         region: '{{ region }}'
-        disk_id: '{{ disk_id }}'
+        image_id: '{{ image_id }}'
         state: '{{ state }}'
       register: result
     - debug: var=result
-
 '''

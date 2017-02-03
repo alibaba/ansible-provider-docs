@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>ecs - create, start, stop, restart or terminate an instance in ecs &mdash; Aliyun Ansible Documentation</title>
+  <title>ecs - Create, Start, Stop, Restart or Terminate an Instance in ECS &mdash; Aliyun Ansible Documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="Aliyun Ansible Documentation" href="index.html"/>
         <link rel="up" title="All Modules" href="list_of_all_modules.html"/>
-        <link rel="next" title="Elastic Compute Service Modules" href="list_of_elastic compute service_modules.html"/>
+        <link rel="next" title="ecs_ami - Create or Delete User-defined Image in ECS" href="ecs_ami_module.html"/>
         <link rel="prev" title="All Modules" href="list_of_all_modules.html"/> 
 
   
@@ -89,7 +89,7 @@
                 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="modules_by_category.html">Module Index</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="list_of_all_modules.html">All Modules</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">ecs - create, start, stop, restart or terminate an instance in ecs</a><ul>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">ecs - Create, Start, Stop, Restart or Terminate an Instance in ECS</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#synopsis">Synopsis</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#requirements-on-host-that-executes-module">Requirements (on host that executes module)</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#options">Options</a></li>
@@ -97,6 +97,9 @@
 <li class="toctree-l4"><a class="reference internal" href="#notes">Notes</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="ecs_ami_module.html">ecs_ami - Create or Delete User-defined Image in ECS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ecs_disk_module.html">ecs_disk - Create, Attach, Detach or Delete a disk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ecs_group_module.html">ecs_group - Create, Query or Delete Security Group</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="list_of_elastic compute service_modules.html">Elastic Compute Service Modules</a></li>
@@ -150,7 +153,7 @@
         
           <li><a href="list_of_all_modules.html">All Modules</a> &raquo;</li>
         
-      <li>ecs - create, start, stop, restart or terminate an instance in ecs</li>
+      <li>ecs - Create, Start, Stop, Restart or Terminate an Instance in ECS</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -168,7 +171,7 @@
            <div itemprop="articleBody">
             
   <div class="section" id="ecs-create-start-stop-restart-or-terminate-an-instance-in-ecs">
-<span id="ecs"></span><h1>ecs - create, start, stop, restart or terminate an instance in ecs<a class="headerlink" href="#ecs-create-start-stop-restart-or-terminate-an-instance-in-ecs" title="Permalink to this headline">¶</a></h1>
+<span id="ecs"></span><h1>ecs - Create, Start, Stop, Restart or Terminate an Instance in ECS<a class="headerlink" href="#ecs-create-start-stop-restart-or-terminate-an-instance-in-ecs" title="Permalink to this headline">¶</a></h1>
 <div class="contents local topic" id="contents">
 <ul class="simple">
 <li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
@@ -232,7 +235,7 @@
 <td>auto_renew<br/><div style="font-size: small;"></div></td>
 <td>no</td>
 <td>no</td>
-    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td><ul><li>true</li><li>false</li></ul></td>
     <td><div>Whether automate renew the charge of the instance.</div></td></tr>
         <tr>
 <td>auto_renew_period<br/><div style="font-size: small;"></div></td>
@@ -282,7 +285,8 @@
 <td>no</td>
 <td></td>
     <td><ul></ul></td>
-    <td><div>A list of identifier for this instance or set of instances, so that the module will be idempotent with respect to ECS instances. This identifier should not be reused for another call later on. For details, see the description of client token at <a href='https://help.aliyun.com/document_detail/25693.html?spm=5176.doc25499.2.7.mrVgE2'>https://help.aliyun.com/document_detail/25693.html?spm=5176.doc25499.2.7.mrVgE2</a>.</div><div>The length of the ids is the same with count</div></td></tr>
+    <td><div>A list of identifier for this instance or set of instances, so that the module will be idempotent with respect to ECS instances. This identifier should not be reused for another call later on. For details, see the description of client token at <a href='https://help.aliyun.com/document_detail/25693.html?spm=5176.doc25499.2.7.mrVgE2'>https://help.aliyun.com/document_detail/25693.html?spm=5176.doc25499.2.7.mrVgE2</a>.</div><div>The length of the ids is the same with count</div></br>
+    <div style="font-size: small;">aliases: id<div></td></tr>
         <tr>
 <td>image_id<br/><div style="font-size: small;"></div></td>
 <td>yes</td>
@@ -758,7 +762,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="list_of_elastic compute service_modules.html" class="btn btn-neutral float-right" title="Elastic Compute Service Modules" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="ecs_ami_module.html" class="btn btn-neutral float-right" title="ecs_ami - Create or Delete User-defined Image in ECS" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="list_of_all_modules.html" class="btn btn-neutral" title="All Modules" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -771,7 +775,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017 Alibaba, Inc.
-      Last updated on Jan 19, 2017.
+      Last updated on Feb 03, 2017.
 
     </p>
   </div>

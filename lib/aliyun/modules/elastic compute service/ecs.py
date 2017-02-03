@@ -26,7 +26,7 @@ DOCUMENTATION = '''
 ---
 module: ecs
 version_added: "1.0"
-short_description: create, start, stop, restart or terminate an instance in ecs
+short_description: Create, Start, Stop, Restart or Terminate an Instance in ECS
 description:
     - Creates or terminates ecs instances.
 options:
@@ -188,7 +188,7 @@ options:
       description:
         - Whether automate renew the charge of the instance.
       required: false
-      choices: ["yes", "no"]
+      choices: ["true", "false"]
       default: "no"
   auto_renew_period:
       description:
@@ -202,6 +202,7 @@ options:
         - The length of the ids is the same with count
       required: false
       default: null
+      aliases: ["id"]
   wait:
       description:
         - Wait for the instance to be 'running' before returning.
