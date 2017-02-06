@@ -60,7 +60,7 @@ options:
       - Aliyun availability zone ID in which to launch the instance
     required: true
     default: null
-    aliases: ['zone', 'availability_zone', 'acs_zone', 'ecs_zone']
+    aliases: ['zone', 'availability_zone', 'acs_zone', 'ecs_zone' , 'zone']
   disk_name:
     description:
       - The value of disk name is blank by default. [2, 128] English or Chinese characters, must begin with an uppercase/lowercase letter or Chinese character. Can contain numbers, '.', '_' and '-'. The disk name will appear on the console. It cannot begin with http:// or https://.
@@ -148,18 +148,18 @@ EXAMPLES = '''
     acs_access_key: xxxxxxxxxx
     acs_secret_access_key: xxxxxxxxxx
     region: cn-beijing
-    zone_id: cn-beijing-b
+    zone: cn-beijing-b
     size: 20
-    state: present
+    status: present
   tasks:
     - name: create disk
       ecs_disk:
         acs_access_key_id: '{{ acs_access_key }}'
         acs_secret_access_key: '{{ acs_secret_access_key }}'
         region: '{{ region }}'
-        zone_id: '{{ zone_id }}'
+        zone: '{{ zone }}'
         size: '{{ size }}'
-        state: '{{ state }}'
+        status: '{{ status }}'
       register: result
     - debug: var=result
 
@@ -171,26 +171,26 @@ EXAMPLES = '''
     acs_access_key: xxxxxxxxxx
     acs_secret_access_key: xxxxxxxxxx
     region: cn-hongkong
-    zone_id: cn-hongkong-b
+    zone: cn-hongkong-b
     disk_name: disk_1
     description: data disk_1
     size: 20
-    snapshot_id: s-j6cjdk51ejf0mtdnb7bb
-    disk_category: CLOUD_SSD
-    state: present
+    snapshot_id: xxxxxxxxxx
+    disk_category: cloud_ssd
+    status: present
   tasks:
     - name: create disk
       ecs_disk:
         acs_access_key_id: '{{ acs_access_key }}'
         acs_secret_access_key: '{{ acs_secret_access_key }}'
         region: '{{ region }}'
-        zone_id: '{{ zone_id }}'
+        zone: '{{ zone }}'
         disk_name: '{{ disk_name }}'
         description: '{{ description }}'
         size: '{{ size }}'
         snapshot_id: '{{ snapshot_id }}'
         disk_category: '{{ disk_category }}'
-        state: '{{ state }}'
+        status: '{{ status }}'
       register: result
     - debug: var=result
 
@@ -202,10 +202,10 @@ EXAMPLES = '''
   vars:
     acs_access_key: xxxxxxxxxx
     acs_secret_access_key: xxxxxxxxxx
-    state: present
+    status: present
     region: us-west-1
-    instance_id: i-rj95iytyo4d16kxqj58a
-    vol_id: d-rj9j8a740966dhs3kbya
+    instance_id: xxxxxxxxxx
+    disk_id: xxxxxxxxxx
     device: /dev/xvdb
     delete_with_instance: false
   tasks:
@@ -213,10 +213,10 @@ EXAMPLES = '''
       ecs_disk:
         acs_access_key_id: '{{ acs_access_key }}'
         acs_secret_access_key: '{{ acs_secret_access_key }}'
-        status: '{{ state }}'
+        status: '{{ status }}'
         region: '{{ region }}'
         instance_id: '{{ instance_id }}'
-        vol_id: '{{ vol_id }}'
+        disk_id: '{{ disk_id }}'
         device: '{{ device }}'
         delete_with_instance: '{{ delete_with_instance }}'
       register: result
@@ -231,8 +231,8 @@ EXAMPLES = '''
     acs_access_key: xxxxxxxxxx
     acs_secret_access_key: xxxxxxxxxx
     region: us-west-1
-    disk_id: d-rj9j8a740966dhs3kbya
-    state: present
+    disk_id: xxxxxxxxxx
+    status: present
   tasks:
     - name: detach disk
       ecs_disk:
@@ -240,7 +240,7 @@ EXAMPLES = '''
         acs_secret_access_key: '{{ acs_secret_access_key }}'
         region: '{{ region }}'
         id: '{{ disk_id }}'
-        state: '{{ state }}'
+        status: '{{ status }}'
       register: result
     - debug: var=result
 
@@ -253,8 +253,8 @@ EXAMPLES = '''
     acs_access_key: xxxxxxxxxx
     acs_secret_access_key: xxxxxxxxxx
     region: us-west-1
-    disk_id: d-rj9j8a740966dhs3kbya
-    state: absent
+    disk_id: xxxxxxxxxx
+    status: absent
   tasks:
     - name: detach disk
       ecs_disk:
@@ -262,8 +262,7 @@ EXAMPLES = '''
         acs_secret_access_key: '{{ acs_secret_access_key }}'
         region: '{{ region }}'
         disk_id: '{{ disk_id }}'
-        state: '{{ state }}'
+        status: '{{ status }}'
       register: result
     - debug: var=result
-
 '''

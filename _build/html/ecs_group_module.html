@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>ecs_disk - Create, Query or Delete Security Group &mdash; Aliyun Ansible Documentation</title>
+  <title>ecs_group - Create, Query or Delete Security Group &mdash; Aliyun Ansible Documentation</title>
   
 
   
@@ -153,7 +153,7 @@
         
           <li><a href="list_of_all_modules.html">All Modules</a> &raquo;</li>
         
-      <li>ecs_disk - Create, Query or Delete Security Group</li>
+      <li>ecs_group - Create, Query or Delete Security Group</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -170,8 +170,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="ecs-disk-create-query-or-delete-security-group">
-<span id="ecs-disk"></span><h1>ecs_disk - Create, Query or Delete Security Group<a class="headerlink" href="#ecs-disk-create-query-or-delete-security-group" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="ecs-group-create-query-or-delete-security-group">
+<span id="ecs-group"></span><h1>ecs_group - Create, Query or Delete Security Group<a class="headerlink" href="#ecs-group-create-query-or-delete-security-group" title="Permalink to this headline">¶</a></h1>
 <div class="contents local topic" id="contents">
 <ul class="simple">
 <li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
@@ -275,9 +275,8 @@
 <td>nic_type<br/><div style="font-size: small;"></div></td>
 <td>no</td>
 <td>internet</td>
-    <td><ul></ul></td>
-    <td><div>Network type</div></br>
-    <div style="font-size: small;">aliases: internet, intranet<div></td></tr>
+    <td><ul><li>internet</li><li>intranet</li></ul></td>
+    <td><div>Network type</div></td></tr>
         <tr>
 <td>policy<br/><div style="font-size: small;"></div></td>
 <td>no</td>
@@ -381,7 +380,7 @@
         <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">security_group_name</span><span class="p p-Indicator">:</span> <span class="s">&#39;AliyunSG&#39;</span>
       <span class="l l-Scalar l-Scalar-Plain">register</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">result_details</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">debug</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">var=result_details.group_id</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">debug</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">var=result_details</span>
 
 
 <span class="l l-Scalar l-Scalar-Plain">Basic provisioning example authorize security group</span>
@@ -397,7 +396,7 @@
       <span class="l l-Scalar l-Scalar-Plain">ecs_group</span><span class="p p-Indicator">:</span>
         <span class="l l-Scalar l-Scalar-Plain">acs_access_key_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_secret_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
-        <span class="l l-Scalar l-Scalar-Plain">security_group_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;sg-wz98gmai3qwhpmlmw42&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">security_group_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
         <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">rules</span><span class="p p-Indicator">:</span>
           <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">ip_protocol</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">tcp</span>
@@ -406,7 +405,7 @@
         <span class="l l-Scalar l-Scalar-Plain">rules_egress</span><span class="p p-Indicator">:</span>
           <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">proto</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">all</span>
             <span class="l l-Scalar l-Scalar-Plain">port_range</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">-1/-1</span>
-            <span class="l l-Scalar l-Scalar-Plain">dest_group_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;sg-wz98gmai3qwhpmlmw42c&#39;</span>
+            <span class="l l-Scalar l-Scalar-Plain">dest_group_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
             <span class="l l-Scalar l-Scalar-Plain">nic_type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">intranet</span>
       <span class="l l-Scalar l-Scalar-Plain">register</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">result_details</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">debug</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">var=result_details</span>
@@ -426,7 +425,7 @@
         <span class="l l-Scalar l-Scalar-Plain">acs_access_key_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_secret_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">security_group_name</span><span class="p p-Indicator">:</span> <span class="s">&#39;AliyunSG&#39;</span>
-        <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="s">&#39;an</span><span class="nv"> </span><span class="s">example</span><span class="nv"> </span><span class="s">EC2</span><span class="nv"> </span><span class="s">group&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="s">&#39;an</span><span class="nv"> </span><span class="s">example</span><span class="nv"> </span><span class="s">ECS</span><span class="nv"> </span><span class="s">group&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">rules</span><span class="p p-Indicator">:</span>
           <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">ip_protocol</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">tcp</span>
@@ -438,8 +437,8 @@
         <span class="l l-Scalar l-Scalar-Plain">rules_egress</span><span class="p p-Indicator">:</span>
           <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">proto</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">all</span>
             <span class="l l-Scalar l-Scalar-Plain">port_range</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">-1/-1</span>
-            <span class="l l-Scalar l-Scalar-Plain">dest_group_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;sg-wz98gmai3qwhpmlmw42c&#39;</span>
-            <span class="l l-Scalar l-Scalar-Plain">group_owner_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;contact@click2cloud.net&#39;</span>
+            <span class="l l-Scalar l-Scalar-Plain">dest_group_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+            <span class="l l-Scalar l-Scalar-Plain">group_owner_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
             <span class="l l-Scalar l-Scalar-Plain">priority</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">10</span>
             <span class="l l-Scalar l-Scalar-Plain">policy</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">accept</span>
             <span class="l l-Scalar l-Scalar-Plain">nic_type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">intranet</span>
@@ -456,8 +455,8 @@
     <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
     <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">us-west-1</span>
     <span class="l l-Scalar l-Scalar-Plain">security_group_ids</span><span class="p p-Indicator">:</span>
-     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">sg-rj9akooukwik6xil4n53</span>
-    <span class="l l-Scalar l-Scalar-Plain">state</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">absent</span>
+     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">status</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">absent</span>
   <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">delete security grp</span>
       <span class="l l-Scalar l-Scalar-Plain">ecs_group</span><span class="p p-Indicator">:</span>
@@ -465,7 +464,7 @@
         <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_secret_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">security_group_ids</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">security_group_ids</span> <span class="cp">}}</span><span class="s">&#39;</span>
-        <span class="l l-Scalar l-Scalar-Plain">state</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">state</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">status</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">status</span> <span class="cp">}}</span><span class="s">&#39;</span>
       <span class="l l-Scalar l-Scalar-Plain">register</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">result</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">debug</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">var=result</span>
 
@@ -478,14 +477,14 @@
     <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
     <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
     <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-beijing</span>
-    <span class="l l-Scalar l-Scalar-Plain">state</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">getinfo</span>
+    <span class="l l-Scalar l-Scalar-Plain">status</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">getinfo</span>
   <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Querying Security group list</span>
       <span class="l l-Scalar l-Scalar-Plain">ecs_group</span><span class="p p-Indicator">:</span>
         <span class="l l-Scalar l-Scalar-Plain">acs_access_key_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_secret_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
-        <span class="l l-Scalar l-Scalar-Plain">state</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">state</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">status</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">status</span> <span class="cp">}}</span><span class="s">&#39;</span>
       <span class="l l-Scalar l-Scalar-Plain">register</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">result</span>
 </pre></div>
 </div>
@@ -531,7 +530,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017 Alibaba, Inc.
-      Last updated on Feb 03, 2017.
+      Last updated on Feb 06, 2017.
 
     </p>
   </div>

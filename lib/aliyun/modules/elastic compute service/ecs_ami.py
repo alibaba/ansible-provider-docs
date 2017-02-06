@@ -150,7 +150,7 @@ EXAMPLES = '''
     acs_access_key: xxxxxxxxxx
     acs_secret_access_key: xxxxxxxxxx
     region: cn-hongkong
-    instance_id: i-2zeaelo8l9hhu10gs02q
+    instance_id: xxxxxxxxxx
   tasks:
     - name: create image form ecs instance
       ecs_ami:
@@ -169,8 +169,8 @@ EXAMPLES = '''
     acs_access_key: xxxxxxxxxx
     acs_secret_access_key: xxxxxxxxxx
     region: cn-hongkong
-    snapshot_id: s-j6ccfgptbi05ha1csvw9
-    state: present
+    snapshot_id: xxxxxxxxxx
+    status: present
   tasks:
     - name: create image using snapshot
       ecs_ami:
@@ -178,7 +178,7 @@ EXAMPLES = '''
         acs_secret_access_key: '{{ acs_secret_access_key }}'
         region: '{{ region }}'
         snapshot_id: '{{ snapshot_id }}'
-        state: '{{ state }}'
+        status: '{{ status }}'
       register: result
     - debug: var=result
 
@@ -191,10 +191,10 @@ EXAMPLES = '''
     acs_secret_access_key: xxxxxxxxxx
     region: cn-hongkong
     disk_mapping:
-      - device: /dev/xvdb-z
+      - device: /dev/xvda
         disk_size: 5
-        snapshot_id: s-j6cbabmbtvnzxrzzjsns
-    state: present
+        snapshot_id: xxxxxxxxxx
+    status: present
   tasks:
     - name: create image using disk mapping
       ecs_ami:
@@ -202,7 +202,7 @@ EXAMPLES = '''
         acs_secret_access_key: '{{ acs_secret_access_key }}'
         region: '{{ region }}'
         disk_mapping: '{{ disk_mapping }}'
-        state: '{{ state }}'
+        status: '{{ status }}'
       register: result
     - debug: var=result
 
@@ -221,13 +221,13 @@ EXAMPLES = '''
       - tag_key: key
         tag_value: value
     disk_mapping:
-      - device: /dev/xvdb-z
+      - device: /dev/xvda
         disk_size: 5
-        snapshot_id: s-j6cbabmbtvnzxrzzjsns
-    state: present
+        snapshot_id: xxxxxxxxxx
+    status: present
     wait: false
     wait_timeout: 10
-    launch_permission: ['1077970544931979']
+    launch_permission: xxxxxxxxxx
   tasks:
     - name: create image
       ecs_ami:
@@ -239,7 +239,7 @@ EXAMPLES = '''
         description: '{{ description }}'
         images_tags: '{{ images_tags }}'
         disk_mapping: '{{ disk_mapping }}'
-        state: '{{ state }}'
+        status: '{{ status }}'
         wait: '{{ wait }}'
         wait_timeout: '{{ wait_timeout }}'
         launch_permission: '{{ launch_permission }}'
@@ -258,8 +258,8 @@ EXAMPLES = '''
     acs_access_key: xxxxxxxxxx
     acs_secret_access_key: xxxxxxxxxx
     region: us-west-1
-    image_id: m-rj9fpm1mc6a68zmntjtu
-    state: absent
+    image_id: xxxxxxxxxx
+    status: absent
   tasks:
     - name: delete image
       ecs_ami:
@@ -267,7 +267,7 @@ EXAMPLES = '''
         acs_secret_access_key: '{{ acs_secret_access_key }}'
         region: '{{ region }}'
         image_id: '{{ image_id }}'
-        state: '{{ state }}'
+        status: '{{ status }}'
       register: result
     - debug: var=result
 '''

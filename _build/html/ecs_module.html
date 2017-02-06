@@ -349,7 +349,7 @@
 <td>no</td>
 <td></td>
     <td><ul></ul></td>
-    <td><div>Private IP address for the new instance.</div></td></tr>
+    <td><div>Private IP address of the instance, which cannot be specified separately.</div></td></tr>
         <tr>
 <td>region<br/><div style="font-size: small;"></div></td>
 <td>no</td>
@@ -409,10 +409,10 @@
 <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">basic provisioning example</span>
   <span class="l l-Scalar l-Scalar-Plain">hosts</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
   <span class="l l-Scalar l-Scalar-Plain">vars</span><span class="p p-Indicator">:</span>
-    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">XXXXXXXXXXXXXX</span>
-    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">XXXXXXXXXXXXXX</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
     <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-beijing</span>
-    <span class="l l-Scalar l-Scalar-Plain">zone</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-beijing</span>
+    <span class="l l-Scalar l-Scalar-Plain">zone</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-beijing-a</span>
     <span class="l l-Scalar l-Scalar-Plain">image</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">ubuntu1404_64_40G_cloudinit_20160727.raw</span>
     <span class="l l-Scalar l-Scalar-Plain">instance_type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">ecs.n1.small</span>
     <span class="l l-Scalar l-Scalar-Plain">assign_public_ip</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
@@ -432,15 +432,13 @@
 <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">basic provisioning example</span>
   <span class="l l-Scalar l-Scalar-Plain">hosts</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
   <span class="l l-Scalar l-Scalar-Plain">vars</span><span class="p p-Indicator">:</span>
-    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">XXXXXXXXXXXXXX</span>
-    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">XXXXXXXXXXXXXX</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
     <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-beijing</span>
-    <span class="l l-Scalar l-Scalar-Plain">zone</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-beijing</span>
     <span class="l l-Scalar l-Scalar-Plain">image</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">ubuntu1404_64_40G_cloudinit_20160727.raw</span>
     <span class="l l-Scalar l-Scalar-Plain">instance_type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">ecs.n1.small</span>
-    <span class="l l-Scalar l-Scalar-Plain">vswitch_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">vsw-j6co2uknrmopj4ypgdnq4</span>
+    <span class="l l-Scalar l-Scalar-Plain">vswitch_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
     <span class="l l-Scalar l-Scalar-Plain">assign_public_ip</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
-
   <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">vpc network</span>
       <span class="l l-Scalar l-Scalar-Plain">ecs</span><span class="p p-Indicator">:</span>
@@ -457,15 +455,14 @@
 <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">advanced provisioning example</span>
   <span class="l l-Scalar l-Scalar-Plain">hosts</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
   <span class="l l-Scalar l-Scalar-Plain">vars</span><span class="p p-Indicator">:</span>
-    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">XXXXXXXXXXXXXX</span>
-    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">XXXXXXXXXXXXXX</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
     <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-beijing</span>
-    <span class="l l-Scalar l-Scalar-Plain">zone</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-beijing</span>
     <span class="l l-Scalar l-Scalar-Plain">image</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">ubuntu1404_64_40G_cloudinit_20160727.raw</span>
     <span class="l l-Scalar l-Scalar-Plain">instance_type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">ecs.n1.small</span>
-    <span class="l l-Scalar l-Scalar-Plain">group_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">sg-25y6ag32b</span>
+    <span class="l l-Scalar l-Scalar-Plain">group_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
     <span class="l l-Scalar l-Scalar-Plain">host_name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">myhost</span>
-    <span class="l l-Scalar l-Scalar-Plain">password</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">mypassword</span>
+    <span class="l l-Scalar l-Scalar-Plain">password</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Admin123</span>
   <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">tagging and host name password</span>
       <span class="l l-Scalar l-Scalar-Plain">ecs</span><span class="p p-Indicator">:</span>
@@ -488,13 +485,12 @@
 <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">advanced provisioning example</span>
   <span class="l l-Scalar l-Scalar-Plain">hosts</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
   <span class="l l-Scalar l-Scalar-Plain">vars</span><span class="p p-Indicator">:</span>
-    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">XXXXXXXXXXXXXX</span>
-    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">XXXXXXXXXXXXXX</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
     <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-beijing</span>
-    <span class="l l-Scalar l-Scalar-Plain">zone</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-beijing</span>
     <span class="l l-Scalar l-Scalar-Plain">image</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">ubuntu1404_64_40G_cloudinit_20160727.raw</span>
     <span class="l l-Scalar l-Scalar-Plain">instance_type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">ecs.n1.small</span>
-    <span class="l l-Scalar l-Scalar-Plain">group_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">sg-25y6ag32b</span>
+    <span class="l l-Scalar l-Scalar-Plain">group_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
     <span class="l l-Scalar l-Scalar-Plain">instance_name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">myinstance</span>
     <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">my description</span>
   <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
@@ -518,10 +514,9 @@
 <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">advanced provisioning example</span>
   <span class="l l-Scalar l-Scalar-Plain">hosts</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
   <span class="l l-Scalar l-Scalar-Plain">vars</span><span class="p p-Indicator">:</span>
-    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">XXXXXXXXXXXXXX</span>
-    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">XXXXXXXXXXXXXX</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
     <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-beijing</span>
-    <span class="l l-Scalar l-Scalar-Plain">zone</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-beijing</span>
     <span class="l l-Scalar l-Scalar-Plain">image</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">ubuntu1404_64_40G_cloudinit_20160727.raw</span>
     <span class="l l-Scalar l-Scalar-Plain">instance_type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">ecs.n1.small</span>
   <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
@@ -544,12 +539,17 @@
 <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">advanced provisioning example</span>
   <span class="l l-Scalar l-Scalar-Plain">hosts</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
   <span class="l l-Scalar l-Scalar-Plain">vars</span><span class="p p-Indicator">:</span>
-    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">XXXXXXXXXXXXXX</span>
-    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">XXXXXXXXXXXXXX</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
     <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-beijing</span>
-    <span class="l l-Scalar l-Scalar-Plain">zone</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-beijing</span>
     <span class="l l-Scalar l-Scalar-Plain">image</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">ubuntu1404_64_40G_cloudinit_20160727.raw</span>
     <span class="l l-Scalar l-Scalar-Plain">instance_type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">ecs.n1.small</span>
+    <span class="l l-Scalar l-Scalar-Plain">io_optimized</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+    <span class="l l-Scalar l-Scalar-Plain">system_disk</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">disk_category</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cloud_efficiency</span>
+      <span class="l l-Scalar l-Scalar-Plain">disk_size</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">100</span>
+      <span class="l l-Scalar l-Scalar-Plain">disk_name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">DiskName</span>
+      <span class="l l-Scalar l-Scalar-Plain">disk_description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Disk Description</span>
   <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">additional volume</span>
       <span class="l l-Scalar l-Scalar-Plain">ecs</span><span class="p p-Indicator">:</span>
@@ -558,19 +558,15 @@
         <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">image</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">image</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">instance_type</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">instance_type</span> <span class="cp">}}</span><span class="s">&#39;</span>
-        <span class="l l-Scalar l-Scalar-Plain">io_optimized</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
-        <span class="l l-Scalar l-Scalar-Plain">system_disk</span><span class="p p-Indicator">:</span>
-            <span class="l l-Scalar l-Scalar-Plain">disk_category</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cloud</span>
-            <span class="l l-Scalar l-Scalar-Plain">disk_size</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">50</span>
-            <span class="l l-Scalar l-Scalar-Plain">disk_name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">DiskName</span>
-            <span class="l l-Scalar l-Scalar-Plain">disk_description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Invalid System Disk Size</span>
+        <span class="l l-Scalar l-Scalar-Plain">io_optimized</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">io_optimized</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">system_disk</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">system_disk</span> <span class="cp">}}</span><span class="s">&#39;</span>
 
 <span class="c1"># example with prepaid internet charge type configuration</span>
 <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">advanced provisioning example</span>
   <span class="l l-Scalar l-Scalar-Plain">hosts</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
   <span class="l l-Scalar l-Scalar-Plain">vars</span><span class="p p-Indicator">:</span>
-    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">XXXXXXXXXXXXXX</span>
-    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">XXXXXXXXXXXXXX</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
     <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-beijing</span>
     <span class="l l-Scalar l-Scalar-Plain">image</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">ubuntu1404_64_40G_cloudinit_20160727.raw</span>
     <span class="l l-Scalar l-Scalar-Plain">instance_type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">ecs.n1.small</span>
@@ -594,8 +590,8 @@
 <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">modify attribute example</span>
   <span class="l l-Scalar l-Scalar-Plain">hosts</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
   <span class="l l-Scalar l-Scalar-Plain">vars</span><span class="p p-Indicator">:</span>
-    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">XXXXXXXXXXXXXX</span>
-    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">XXXXXXXXXXXXXX</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
     <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-beijing</span>
   <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">modify attribute of multiple instances</span>
@@ -604,16 +600,16 @@
         <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_secret_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">attributes</span><span class="p p-Indicator">:</span>
-            <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">id</span><span class="p p-Indicator">:</span>  <span class="l l-Scalar l-Scalar-Plain">i-rj9be6tlwmae1995uq5t</span>
-              <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">InstanceName1</span>
-              <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">volume attribute1</span>
-              <span class="l l-Scalar l-Scalar-Plain">password</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">mypassword1</span>
-              <span class="l l-Scalar l-Scalar-Plain">host_name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">hostName1</span>
-            <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">id</span><span class="p p-Indicator">:</span>  <span class="l l-Scalar l-Scalar-Plain">i-rj9be6tlwmdfsfsd3543</span>
-              <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">InstanceName2</span>
-              <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">volume attribute2</span>
-              <span class="l l-Scalar l-Scalar-Plain">password</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">mypassword2</span>
-              <span class="l l-Scalar l-Scalar-Plain">host_name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">hostcomes2</span>
+            <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">id</span><span class="p p-Indicator">:</span>  <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+              <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">InstanceName</span>
+              <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">volume attributes</span>
+              <span class="l l-Scalar l-Scalar-Plain">password</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Admin123</span>
+              <span class="l l-Scalar l-Scalar-Plain">host_name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">hostName</span>
+            <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">id</span><span class="p p-Indicator">:</span>  <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+              <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">InstanceName</span>
+              <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">volume attributes</span>
+              <span class="l l-Scalar l-Scalar-Plain">password</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Admin123</span>
+              <span class="l l-Scalar l-Scalar-Plain">host_name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">hostcomes</span>
 
 <span class="c1">#</span>
 <span class="c1"># querying instance status</span>
@@ -621,15 +617,15 @@
 <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">query instance status</span>
   <span class="l l-Scalar l-Scalar-Plain">hosts</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
   <span class="l l-Scalar l-Scalar-Plain">vars</span><span class="p p-Indicator">:</span>
-    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">XXXXXXXXXXXXXX</span>
-    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">XXXXXXXXXXXXXX</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
     <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-beijing</span>
-    <span class="l l-Scalar l-Scalar-Plain">zone</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-beijing</span>
+    <span class="l l-Scalar l-Scalar-Plain">zone</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-beijing-a</span>
     <span class="l l-Scalar l-Scalar-Plain">status</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">getstatus</span>
     <span class="l l-Scalar l-Scalar-Plain">pagenumber</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
     <span class="l l-Scalar l-Scalar-Plain">pagesize</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">10</span>
   <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">query instance status from the particular region</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">query instance status from the particular zone</span>
       <span class="l l-Scalar l-Scalar-Plain">ecs</span><span class="p p-Indicator">:</span>
         <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_secret_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
@@ -645,14 +641,14 @@
 <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">start or terminate instance</span>
   <span class="l l-Scalar l-Scalar-Plain">hosts</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
   <span class="l l-Scalar l-Scalar-Plain">vars</span><span class="p p-Indicator">:</span>
-    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">XXXXXXXXXXXXXX</span>
-    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">XXXXXXXXXXXXXX</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
     <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-shenzhen</span>
-    <span class="l l-Scalar l-Scalar-Plain">instance_ids</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">i-94dehop6n</span>
+    <span class="l l-Scalar l-Scalar-Plain">instance_ids</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
     <span class="l l-Scalar l-Scalar-Plain">instance_tags</span><span class="p p-Indicator">:</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">tag_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xz_test</span>
       <span class="l l-Scalar l-Scalar-Plain">tag_value</span><span class="p p-Indicator">:</span> <span class="s">&#39;1.20&#39;</span>
-    <span class="l l-Scalar l-Scalar-Plain">state</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">running</span>
+    <span class="l l-Scalar l-Scalar-Plain">status</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">running</span>
   <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">start instance</span>
       <span class="l l-Scalar l-Scalar-Plain">ecs_model</span><span class="p p-Indicator">:</span>
@@ -661,7 +657,7 @@
         <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">instance_ids</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">instance_ids</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">instance_tags</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">instance_tags</span> <span class="cp">}}</span><span class="s">&#39;</span>
-        <span class="l l-Scalar l-Scalar-Plain">state</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">state</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">status</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">status</span> <span class="cp">}}</span><span class="s">&#39;</span>
 
 <span class="c1">#</span>
 <span class="c1"># stop or restarted instance</span>
@@ -669,15 +665,15 @@
 <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">start stop restart instance</span>
   <span class="l l-Scalar l-Scalar-Plain">hosts</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
   <span class="l l-Scalar l-Scalar-Plain">vars</span><span class="p p-Indicator">:</span>
-    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">XXXXXXXXXXXXXX</span>
-    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">XXXXXXXXXXXXXX</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
     <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-shenzhen</span>
-    <span class="l l-Scalar l-Scalar-Plain">instance_ids</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">i-94dehop6n</span>
+    <span class="l l-Scalar l-Scalar-Plain">instance_ids</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
     <span class="l l-Scalar l-Scalar-Plain">instance_tags</span><span class="p p-Indicator">:</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">tag_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xz_test</span>
       <span class="l l-Scalar l-Scalar-Plain">tag_value</span><span class="p p-Indicator">:</span> <span class="s">&#39;1.20&#39;</span>
     <span class="l l-Scalar l-Scalar-Plain">force</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
-    <span class="l l-Scalar l-Scalar-Plain">state</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">restarted</span>
+    <span class="l l-Scalar l-Scalar-Plain">status</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">restarted</span>
   <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Restart instance</span>
       <span class="l l-Scalar l-Scalar-Plain">ecs_model</span><span class="p p-Indicator">:</span>
@@ -686,7 +682,7 @@
         <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">instance_ids</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">instance_ids</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">instance_tags</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">instance_tags</span> <span class="cp">}}</span><span class="s">&#39;</span>
-        <span class="l l-Scalar l-Scalar-Plain">state</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">state</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">status</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">status</span> <span class="cp">}}</span><span class="s">&#39;</span>
 
 <span class="c1">#</span>
 <span class="c1"># add an instance to security group</span>
@@ -694,11 +690,11 @@
 <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Add an instance to security group</span>
   <span class="l l-Scalar l-Scalar-Plain">hosts</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
   <span class="l l-Scalar l-Scalar-Plain">vars</span><span class="p p-Indicator">:</span>
-    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">XXXXXXXXXXXXXX</span>
-    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">XXXXXXXXXXXXXX</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
     <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-shenzhen</span>
-    <span class="l l-Scalar l-Scalar-Plain">instance_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">i-94dehop6n</span>
-    <span class="l l-Scalar l-Scalar-Plain">group_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">sg-25y6ag32b</span>
+    <span class="l l-Scalar l-Scalar-Plain">instance_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">group_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
     <span class="l l-Scalar l-Scalar-Plain">sg_action</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">join</span>
   <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Add an instance to security group</span>
@@ -716,11 +712,11 @@
 <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Remove an instance from security group</span>
   <span class="l l-Scalar l-Scalar-Plain">hosts</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
   <span class="l l-Scalar l-Scalar-Plain">vars</span><span class="p p-Indicator">:</span>
-    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">XXXXXXXXXXXXXX</span>
-    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">XXXXXXXXXXXXXX</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
     <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-shenzhen</span>
-    <span class="l l-Scalar l-Scalar-Plain">instance_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">i-94dehop6n</span>
-    <span class="l l-Scalar l-Scalar-Plain">group_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">sg-25y6ag32b</span>
+    <span class="l l-Scalar l-Scalar-Plain">instance_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">group_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
     <span class="l l-Scalar l-Scalar-Plain">sg_action</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">leave</span>
   <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Remove an instance from security group</span>
@@ -775,7 +771,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017 Alibaba, Inc.
-      Last updated on Feb 03, 2017.
+      Last updated on Feb 06, 2017.
 
     </p>
   </div>

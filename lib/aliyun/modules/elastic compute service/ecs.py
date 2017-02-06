@@ -162,7 +162,7 @@ options:
       aliases: []
   private_ip:
       description:
-        - Private IP address for the new instance.
+        - Private IP address of the instance, which cannot be specified separately.
       required: false
       default: null
       aliases: []
@@ -226,7 +226,7 @@ notes:
     C(ACS_REGION) or C(ACS_DEFAULT_REGION) or C(ECS_REGION)
 '''
 
-EXAMPLES = '''
+EXAMPLES ='''
 #
 # provisioning new ecs instance
 #
@@ -235,10 +235,10 @@ EXAMPLES = '''
 - name: basic provisioning example
   hosts: localhost
   vars:
-    acs_access_key: XXXXXXXXXXXXXX
-    acs_secret_access_key: XXXXXXXXXXXXXX
+    acs_access_key: xxxxxxxxxx
+    acs_secret_access_key: xxxxxxxxxx
     region: cn-beijing
-    zone: cn-beijing
+    zone: cn-beijing-a
     image: ubuntu1404_64_40G_cloudinit_20160727.raw
     instance_type: ecs.n1.small
     assign_public_ip: yes
@@ -258,15 +258,13 @@ EXAMPLES = '''
 - name: basic provisioning example
   hosts: localhost
   vars:
-    acs_access_key: XXXXXXXXXXXXXX
-    acs_secret_access_key: XXXXXXXXXXXXXX
+    acs_access_key: xxxxxxxxxx
+    acs_secret_access_key: xxxxxxxxxx
     region: cn-beijing
-    zone: cn-beijing
     image: ubuntu1404_64_40G_cloudinit_20160727.raw
     instance_type: ecs.n1.small
-    vswitch_id: vsw-j6co2uknrmopj4ypgdnq4
+    vswitch_id: xxxxxxxxxx
     assign_public_ip: no
-
   tasks:
     - name: vpc network
       ecs:
@@ -283,15 +281,14 @@ EXAMPLES = '''
 - name: advanced provisioning example
   hosts: localhost
   vars:
-    acs_access_key: XXXXXXXXXXXXXX
-    acs_secret_access_key: XXXXXXXXXXXXXX
+    acs_access_key: xxxxxxxxxx
+    acs_secret_access_key: xxxxxxxxxx
     region: cn-beijing
-    zone: cn-beijing
     image: ubuntu1404_64_40G_cloudinit_20160727.raw
     instance_type: ecs.n1.small
-    group_id: sg-25y6ag32b
+    group_id: xxxxxxxxxx
     host_name: myhost
-    password: mypassword
+    password: Admin123
   tasks:
     - name: tagging and host name password
       ecs:
@@ -314,13 +311,12 @@ EXAMPLES = '''
 - name: advanced provisioning example
   hosts: localhost
   vars:
-    acs_access_key: XXXXXXXXXXXXXX
-    acs_secret_access_key: XXXXXXXXXXXXXX
+    acs_access_key: xxxxxxxxxx
+    acs_secret_access_key: xxxxxxxxxx
     region: cn-beijing
-    zone: cn-beijing
     image: ubuntu1404_64_40G_cloudinit_20160727.raw
     instance_type: ecs.n1.small
-    group_id: sg-25y6ag32b
+    group_id: xxxxxxxxxx
     instance_name: myinstance
     description: my description
   tasks:
@@ -344,10 +340,9 @@ EXAMPLES = '''
 - name: advanced provisioning example
   hosts: localhost
   vars:
-    acs_access_key: XXXXXXXXXXXXXX
-    acs_secret_access_key: XXXXXXXXXXXXXX
+    acs_access_key: xxxxxxxxxx
+    acs_secret_access_key: xxxxxxxxxx
     region: cn-beijing
-    zone: cn-beijing
     image: ubuntu1404_64_40G_cloudinit_20160727.raw
     instance_type: ecs.n1.small
   tasks:
@@ -370,12 +365,17 @@ EXAMPLES = '''
 - name: advanced provisioning example
   hosts: localhost
   vars:
-    acs_access_key: XXXXXXXXXXXXXX
-    acs_secret_access_key: XXXXXXXXXXXXXX
+    acs_access_key: xxxxxxxxxx
+    acs_secret_access_key: xxxxxxxxxx
     region: cn-beijing
-    zone: cn-beijing
     image: ubuntu1404_64_40G_cloudinit_20160727.raw
     instance_type: ecs.n1.small
+    io_optimized: yes
+    system_disk:
+      disk_category: cloud_efficiency
+      disk_size: 100
+      disk_name: DiskName
+      disk_description: Disk Description
   tasks:
     - name: additional volume
       ecs:
@@ -384,19 +384,15 @@ EXAMPLES = '''
         region: '{{ region }}'
         image: '{{ image }}'
         instance_type: '{{ instance_type }}'
-        io_optimized: yes
-        system_disk:
-            disk_category: cloud
-            disk_size: 50
-            disk_name: DiskName
-            disk_description: Invalid System Disk Size
+        io_optimized: '{{ io_optimized }}'
+        system_disk: '{{ system_disk }}'
 
 # example with prepaid internet charge type configuration
 - name: advanced provisioning example
   hosts: localhost
   vars:
-    acs_access_key: XXXXXXXXXXXXXX
-    acs_secret_access_key: XXXXXXXXXXXXXX
+    acs_access_key: xxxxxxxxxx
+    acs_secret_access_key: xxxxxxxxxx
     region: cn-beijing
     image: ubuntu1404_64_40G_cloudinit_20160727.raw
     instance_type: ecs.n1.small
@@ -420,8 +416,8 @@ EXAMPLES = '''
 - name: modify attribute example
   hosts: localhost
   vars:
-    acs_access_key: XXXXXXXXXXXXXX
-    acs_secret_access_key: XXXXXXXXXXXXXX
+    acs_access_key: xxxxxxxxxx
+    acs_secret_access_key: xxxxxxxxxx
     region: cn-beijing
   tasks:
     - name: modify attribute of multiple instances
@@ -430,16 +426,16 @@ EXAMPLES = '''
         acs_secret_access_key: '{{ acs_secret_access_key }}'
         region: '{{ region }}'
         attributes:
-            - id:  i-rj9be6tlwmae1995uq5t
-              name: InstanceName1
-              description: volume attribute1
-              password: mypassword1
-              host_name: hostName1
-            - id:  i-rj9be6tlwmdfsfsd3543
-              name: InstanceName2
-              description: volume attribute2
-              password: mypassword2
-              host_name: hostcomes2
+            - id:  xxxxxxxxxx
+              name: InstanceName
+              description: volume attributes
+              password: Admin123
+              host_name: hostName
+            - id:  xxxxxxxxxx
+              name: InstanceName
+              description: volume attributes
+              password: Admin123
+              host_name: hostcomes
 
 #
 # querying instance status
@@ -447,15 +443,15 @@ EXAMPLES = '''
 - name: query instance status
   hosts: localhost
   vars:
-    acs_access_key: XXXXXXXXXXXXXX
-    acs_secret_access_key: XXXXXXXXXXXXXX
+    acs_access_key: xxxxxxxxxx
+    acs_secret_access_key: xxxxxxxxxx
     region: cn-beijing
-    zone: cn-beijing
+    zone: cn-beijing-a
     status: getstatus
     pagenumber: 1
     pagesize: 10
   tasks:
-    - name: query instance status from the particular region
+    - name: query instance status from the particular zone
       ecs:
         acs_access_key: '{{ acs_access_key }}'
         acs_secret_access_key: '{{ acs_secret_access_key }}'
@@ -471,14 +467,14 @@ EXAMPLES = '''
 - name: start or terminate instance
   hosts: localhost
   vars:
-    acs_access_key: XXXXXXXXXXXXXX
-    acs_secret_access_key: XXXXXXXXXXXXXX
+    acs_access_key: xxxxxxxxxx
+    acs_secret_access_key: xxxxxxxxxx
     region: cn-shenzhen
-    instance_ids: i-94dehop6n
+    instance_ids: xxxxxxxxxx
     instance_tags:
     - tag_key: xz_test
       tag_value: '1.20'
-    state: running
+    status: running
   tasks:
     - name: start instance
       ecs_model:
@@ -487,7 +483,7 @@ EXAMPLES = '''
         region: '{{ region }}'
         instance_ids: '{{ instance_ids }}'
         instance_tags: '{{ instance_tags }}'
-        state: '{{ state }}'
+        status: '{{ status }}'
 
 #
 # stop or restarted instance
@@ -495,15 +491,15 @@ EXAMPLES = '''
 - name: start stop restart instance
   hosts: localhost
   vars:
-    acs_access_key: XXXXXXXXXXXXXX
-    acs_secret_access_key: XXXXXXXXXXXXXX
+    acs_access_key: xxxxxxxxxx
+    acs_secret_access_key: xxxxxxxxxx
     region: cn-shenzhen
-    instance_ids: i-94dehop6n
+    instance_ids: xxxxxxxxxx
     instance_tags:
     - tag_key: xz_test
       tag_value: '1.20'
     force: False
-    state: restarted
+    status: restarted
   tasks:
     - name: Restart instance
       ecs_model:
@@ -512,7 +508,7 @@ EXAMPLES = '''
         region: '{{ region }}'
         instance_ids: '{{ instance_ids }}'
         instance_tags: '{{ instance_tags }}'
-        state: '{{ state }}'
+        status: '{{ status }}'
 
 #
 # add an instance to security group
@@ -520,11 +516,11 @@ EXAMPLES = '''
 - name: Add an instance to security group
   hosts: localhost
   vars:
-    acs_access_key: XXXXXXXXXXXXXX
-    acs_secret_access_key: XXXXXXXXXXXXXX
+    acs_access_key: xxxxxxxxxx
+    acs_secret_access_key: xxxxxxxxxx
     region: cn-shenzhen
-    instance_id: i-94dehop6n
-    group_id: sg-25y6ag32b
+    instance_id: xxxxxxxxxx
+    group_id: xxxxxxxxxx
     sg_action: join
   tasks:
     - name: Add an instance to security group
@@ -542,11 +538,11 @@ EXAMPLES = '''
 - name: Remove an instance from security group
   hosts: localhost
   vars:
-    acs_access_key: XXXXXXXXXXXXXX
-    acs_secret_access_key: XXXXXXXXXXXXXX
+    acs_access_key: xxxxxxxxxx
+    acs_secret_access_key: xxxxxxxxxx
     region: cn-shenzhen
-    instance_id: i-94dehop6n
-    group_id: sg-25y6ag32b
+    instance_id: xxxxxxxxxx
+    group_id: xxxxxxxxxx
     sg_action: leave
   tasks:
     - name: Remove an instance from security group
