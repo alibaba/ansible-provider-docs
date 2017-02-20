@@ -26,9 +26,9 @@ DOCUMENTATION = '''
 ---
 module: ecs_ami
 version_added: "1.0"
-short_description: Create or Delete User-defined Image in ECS
+short_description: Create or Delete User-defined Image
 description:
-    - Creates or delete User-defined Images in ecs
+    - Creates or deletes User-defined Images
 options:
   acs_access_key:
     description:
@@ -121,8 +121,8 @@ options:
       choices: []
   image_id:
       description:
-        - ID of an image
-      required: true
+        - ID of an image. Parameter is B(required) while deleting user defined image.
+      required: false
       default: null
       aliases: []
 
@@ -231,7 +231,7 @@ EXAMPLES = '''
   tasks:
     - name: create image
       ecs_ami:
-        acs_access_key_id: '{{ acs_access_key }}'
+        acs_access_key: '{{ acs_access_key }}'
         acs_secret_access_key: '{{ acs_secret_access_key }}'
         region: '{{ region }}'
         image_name: '{{ image_name }}'
@@ -263,7 +263,7 @@ EXAMPLES = '''
   tasks:
     - name: delete image
       ecs_ami:
-        acs_access_key_id: '{{ acs_access_key }}'
+        acs_access_key: '{{ acs_access_key }}'
         acs_secret_access_key: '{{ acs_secret_access_key }}'
         region: '{{ region }}'
         image_id: '{{ image_id }}'

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>ecs_ami - Create or Delete User-defined Image in ECS &mdash; Aliyun Ansible Documentation</title>
+  <title>ecs_ami - Create or Delete User-defined Image &mdash; Aliyun Ansible Documentation</title>
   
 
   
@@ -36,7 +36,7 @@
     <link rel="top" title="Aliyun Ansible Documentation" href="index.html"/>
         <link rel="up" title="All Modules" href="list_of_all_modules.html"/>
         <link rel="next" title="ecs_disk - Create, Attach, Detach or Delete a disk" href="ecs_disk_module.html"/>
-        <link rel="prev" title="ecs - Create, Start, Stop, Restart or Terminate an Instance in ECS" href="ecs_module.html"/> 
+        <link rel="prev" title="ecs - Create, Start, Stop, Restart or Terminate an Instance in ECS. Add or Remove Instance to/from a Security Group" href="ecs_module.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -89,8 +89,8 @@
                 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="modules_by_category.html">Module Index</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="list_of_all_modules.html">All Modules</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="ecs_module.html">ecs - Create, Start, Stop, Restart or Terminate an Instance in ECS</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">ecs_ami - Create or Delete User-defined Image in ECS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ecs_module.html">ecs - Create, Start, Stop, Restart or Terminate an Instance in ECS. Add or Remove Instance to/from a Security Group</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">ecs_ami - Create or Delete User-defined Image</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#synopsis">Synopsis</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#requirements-on-host-that-executes-module">Requirements (on host that executes module)</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#options">Options</a></li>
@@ -153,7 +153,7 @@
         
           <li><a href="list_of_all_modules.html">All Modules</a> &raquo;</li>
         
-      <li>ecs_ami - Create or Delete User-defined Image in ECS</li>
+      <li>ecs_ami - Create or Delete User-defined Image</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -170,8 +170,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="ecs-ami-create-or-delete-user-defined-image-in-ecs">
-<span id="ecs-ami"></span><h1>ecs_ami - Create or Delete User-defined Image in ECS<a class="headerlink" href="#ecs-ami-create-or-delete-user-defined-image-in-ecs" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="ecs-ami-create-or-delete-user-defined-image">
+<span id="ecs-ami"></span><h1>ecs_ami - Create or Delete User-defined Image<a class="headerlink" href="#ecs-ami-create-or-delete-user-defined-image" title="Permalink to this headline">¶</a></h1>
 <div class="contents local topic" id="contents">
 <ul class="simple">
 <li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
@@ -188,7 +188,7 @@
 <div class="section" id="synopsis">
 <h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Creates or delete User-defined Images in ecs</li>
+<li>Creates or deletes User-defined Images</li>
 </ul>
 </div>
 <div class="section" id="requirements-on-host-that-executes-module">
@@ -238,10 +238,10 @@
     <td><div>An optional list of device hashes/dictionaries with custom configurations.</div><div>keys allowed are - device (required=false;) - Disk Device Name value /dev/xvda start to /dev/xvdz, /dev/xvda default system disk is a snapshot of /dev/xvdb-z is only a snapshot of the data disk - snapshot_id (required=false;) - Snapshot Id - disk_size (required=false;) - Size of the disk, in the range [5-2000GB]</div></td></tr>
         <tr>
 <td>image_id<br/><div style="font-size: small;"></div></td>
-<td>yes</td>
+<td>no</td>
 <td></td>
     <td><ul></ul></td>
-    <td><div>ID of an image</div></td></tr>
+    <td><div>ID of an image. Parameter is <b>required</b> while deleting user defined image.</div></td></tr>
         <tr>
 <td>image_name<br/><div style="font-size: small;"></div></td>
 <td>no</td>
@@ -367,7 +367,7 @@
     <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
     <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-hongkong</span>
     <span class="l l-Scalar l-Scalar-Plain">disk_mapping</span><span class="p p-Indicator">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">device</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/dev/xvdb-z</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">device</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/dev/xvda</span>
         <span class="l l-Scalar l-Scalar-Plain">disk_size</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">5</span>
         <span class="l l-Scalar l-Scalar-Plain">snapshot_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
     <span class="l l-Scalar l-Scalar-Plain">status</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
@@ -397,17 +397,17 @@
       <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">tag_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">key</span>
         <span class="l l-Scalar l-Scalar-Plain">tag_value</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">value</span>
     <span class="l l-Scalar l-Scalar-Plain">disk_mapping</span><span class="p p-Indicator">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">device</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/dev/xvdb-z</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">device</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/dev/xvda</span>
         <span class="l l-Scalar l-Scalar-Plain">disk_size</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">5</span>
         <span class="l l-Scalar l-Scalar-Plain">snapshot_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
     <span class="l l-Scalar l-Scalar-Plain">status</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
     <span class="l l-Scalar l-Scalar-Plain">wait</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
     <span class="l l-Scalar l-Scalar-Plain">wait_timeout</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">10</span>
-    <span class="l l-Scalar l-Scalar-Plain">launch_permission</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="s">&#39;1077970544931979&#39;</span><span class="p p-Indicator">]</span>
+    <span class="l l-Scalar l-Scalar-Plain">launch_permission</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
   <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">create image</span>
       <span class="l l-Scalar l-Scalar-Plain">ecs_ami</span><span class="p p-Indicator">:</span>
-        <span class="l l-Scalar l-Scalar-Plain">acs_access_key_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_secret_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">image_name</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">image_name</span> <span class="cp">}}</span><span class="s">&#39;</span>
@@ -439,7 +439,7 @@
   <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">delete image</span>
       <span class="l l-Scalar l-Scalar-Plain">ecs_ami</span><span class="p p-Indicator">:</span>
-        <span class="l l-Scalar l-Scalar-Plain">acs_access_key_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_secret_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">image_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">image_id</span> <span class="cp">}}</span><span class="s">&#39;</span>
@@ -480,7 +480,7 @@
         <a href="ecs_disk_module.html" class="btn btn-neutral float-right" title="ecs_disk - Create, Attach, Detach or Delete a disk" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="ecs_module.html" class="btn btn-neutral" title="ecs - Create, Start, Stop, Restart or Terminate an Instance in ECS" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="ecs_module.html" class="btn btn-neutral" title="ecs - Create, Start, Stop, Restart or Terminate an Instance in ECS. Add or Remove Instance to/from a Security Group" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -490,7 +490,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017 Alibaba, Inc.
-      Last updated on Feb 06, 2017.
+      Last updated on Feb 20, 2017.
 
     </p>
   </div>

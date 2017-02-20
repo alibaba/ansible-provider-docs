@@ -36,7 +36,7 @@
     <link rel="top" title="Aliyun Ansible Documentation" href="index.html"/>
         <link rel="up" title="All Modules" href="list_of_all_modules.html"/>
         <link rel="next" title="ecs_group - Create, Query or Delete Security Group" href="ecs_group_module.html"/>
-        <link rel="prev" title="ecs_ami - Create or Delete User-defined Image in ECS" href="ecs_ami_module.html"/> 
+        <link rel="prev" title="ecs_ami - Create or Delete User-defined Image" href="ecs_ami_module.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -89,8 +89,8 @@
                 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="modules_by_category.html">Module Index</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="list_of_all_modules.html">All Modules</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="ecs_module.html">ecs - Create, Start, Stop, Restart or Terminate an Instance in ECS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ecs_ami_module.html">ecs_ami - Create or Delete User-defined Image in ECS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ecs_module.html">ecs - Create, Start, Stop, Restart or Terminate an Instance in ECS. Add or Remove Instance to/from a Security Group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ecs_ami_module.html">ecs_ami - Create or Delete User-defined Image</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">ecs_disk - Create, Attach, Detach or Delete a disk</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#synopsis">Synopsis</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#requirements-on-host-that-executes-module">Requirements (on host that executes module)</a></li>
@@ -228,7 +228,7 @@
 <td>delete_with_instance<br/><div style="font-size: small;"></div></td>
 <td>no</td>
 <td>none</td>
-    <td><ul></ul></td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
     <td><div>Whether or not the disk is released along with the instance. True/Yes indicates that when the instance is released, this disk will be released with it.False/No indicates that when the instance is released, this disk will be retained.</div></br>
     <div style="font-size: small;">aliases: delete_on_termination<div></td></tr>
         <tr>
@@ -249,15 +249,15 @@
 <td>disk_category<br/><div style="font-size: small;"></div></td>
 <td>no</td>
 <td>cloud</td>
-    <td><ul><li>cloud - general cloud disk</li><li>cloud_efficiency - efficiency cloud disk</li><li>cloud_ssd - cloud SSD</li></ul></td>
+    <td><ul><li>cloud</li><li>cloud_efficiency</li><li>cloud_ssd</li></ul></td>
     <td><div>Category of the data disk</div></br>
     <div style="font-size: small;">aliases: volume_type, disk_type<div></td></tr>
         <tr>
 <td>disk_id<br/><div style="font-size: small;"></div></td>
-<td>yes</td>
+<td>no</td>
 <td></td>
     <td><ul></ul></td>
-    <td><div>The disk ID. The disk and Instance must be in the same zone.</div></br>
+    <td><div>The disk ID. The disk and Instance must be in the same zone. Parameter is <b>required</b> while attaching disk.</div></br>
     <div style="font-size: small;">aliases: vol_id, id<div></td></tr>
         <tr>
 <td>disk_name<br/><div style="font-size: small;"></div></td>
@@ -275,10 +275,10 @@
     <div style="font-size: small;">aliases: tags<div></td></tr>
         <tr>
 <td>instance_id<br/><div style="font-size: small;"></div></td>
-<td>yes</td>
+<td>no</td>
 <td></td>
     <td><ul></ul></td>
-    <td><div>The specified instance ID.</div></br>
+    <td><div>The specified instance ID. Parameter is <b>required</b> while attaching disk.</div></br>
     <div style="font-size: small;">aliases: instance<div></td></tr>
         <tr>
 <td>region<br/><div style="font-size: small;"></div></td>
@@ -291,7 +291,7 @@
 <td>size<br/><div style="font-size: small;"></div></td>
 <td>no</td>
 <td></td>
-    <td><ul><li>cloud - 5 ~ 2000</li><li>cloud_efficiency - 20 ~ 2048</li><li>cloud_ssd - 20 ~ 2048</li></ul></td>
+    <td><ul></ul></td>
     <td><div>Size of the system disk, in GB.The value should be equal to or greater than the size of the specific SnapshotId.</div></br>
     <div style="font-size: small;">aliases: volume_size, disk_size<div></td></tr>
         <tr>
@@ -310,10 +310,10 @@
     <div style="font-size: small;">aliases: state<div></td></tr>
         <tr>
 <td>zone_id<br/><div style="font-size: small;"></div></td>
-<td>yes</td>
+<td>no</td>
 <td></td>
     <td><ul></ul></td>
-    <td><div>Aliyun availability zone ID in which to launch the instance</div></br>
+    <td><div>Aliyun availability zone ID in which to launch the instance. Parameter is <b>required</b> while creating disk.</div></br>
     <div style="font-size: small;">aliases: zone, availability_zone, acs_zone, ecs_zone, zone<div></td></tr>
     </table>
 </br></div>
@@ -338,7 +338,7 @@
   <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">create disk</span>
       <span class="l l-Scalar l-Scalar-Plain">ecs_disk</span><span class="p p-Indicator">:</span>
-        <span class="l l-Scalar l-Scalar-Plain">acs_access_key_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_secret_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">zone</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">zone</span> <span class="cp">}}</span><span class="s">&#39;</span>
@@ -365,7 +365,7 @@
   <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">create disk</span>
       <span class="l l-Scalar l-Scalar-Plain">ecs_disk</span><span class="p p-Indicator">:</span>
-        <span class="l l-Scalar l-Scalar-Plain">acs_access_key_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_secret_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">zone</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">zone</span> <span class="cp">}}</span><span class="s">&#39;</span>
@@ -395,7 +395,7 @@
   <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Attach Disk to instance</span>
       <span class="l l-Scalar l-Scalar-Plain">ecs_disk</span><span class="p p-Indicator">:</span>
-        <span class="l l-Scalar l-Scalar-Plain">acs_access_key_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_secret_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">status</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">status</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
@@ -420,7 +420,7 @@
   <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">detach disk</span>
       <span class="l l-Scalar l-Scalar-Plain">ecs_disk</span><span class="p p-Indicator">:</span>
-        <span class="l l-Scalar l-Scalar-Plain">acs_access_key_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_secret_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">disk_id</span> <span class="cp">}}</span><span class="s">&#39;</span>
@@ -442,7 +442,7 @@
   <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">detach disk</span>
       <span class="l l-Scalar l-Scalar-Plain">ecs_disk</span><span class="p p-Indicator">:</span>
-        <span class="l l-Scalar l-Scalar-Plain">acs_access_key_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_secret_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">disk_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">disk_id</span> <span class="cp">}}</span><span class="s">&#39;</span>
@@ -483,7 +483,7 @@
         <a href="ecs_group_module.html" class="btn btn-neutral float-right" title="ecs_group - Create, Query or Delete Security Group" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="ecs_ami_module.html" class="btn btn-neutral" title="ecs_ami - Create or Delete User-defined Image in ECS" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="ecs_ami_module.html" class="btn btn-neutral" title="ecs_ami - Create or Delete User-defined Image" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -493,7 +493,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017 Alibaba, Inc.
-      Last updated on Feb 06, 2017.
+      Last updated on Feb 20, 2017.
 
     </p>
   </div>

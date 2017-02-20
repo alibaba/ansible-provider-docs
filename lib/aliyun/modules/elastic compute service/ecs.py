@@ -26,9 +26,10 @@ DOCUMENTATION = '''
 ---
 module: ecs
 version_added: "1.0"
-short_description: Create, Start, Stop, Restart or Terminate an Instance in ECS
+short_description: Create, Start, Stop, Restart or Terminate an Instance in ECS. Add or Remove Instance to/from a Security Group
 description:
-    - Creates or terminates ecs instances.
+    - Creates, starts, stops, restarts or terminates ecs instances.
+    - Adds or removes ecs instances to/from security group.
 options:
   acs_access_key:
     description:
@@ -54,24 +55,24 @@ options:
     required: false
     default: 'present'
     aliases: ['state']
-    choices: ['present', 'pending', 'running', 'stopped', 'restarted', 'absent', 'getstatus']
+    choices: ['present', 'pending', 'running', 'stopped', 'restarted', 'absent', 'getinfo', 'getstatus']
   zone_id:
     description: Aliyun availability zone ID in which to launch the instance
     required: false
     default: null
-    aliases: [ 'acs_zone', 'ecs_zone', 'zone']
+    aliases: [ 'acs_zone', 'ecs_zone', 'zone'] 
   image_id:
-    description: Image ID to use for the instance.
-    required: true
+    description: Image ID to use for the instance. Parameter is B(required) when provisioning new ecs instance
+    required: false
     default: null
     aliases: ['image']
   instance_type:
-    description: Instance type to use for the instance.
-    required: true
+    description: Instance type to use for the instance. Parameter is B(required) when provisioning new ecs instance
+    required: false
     default: null
     aliases: [ 'type' ]
   group_id:
-    description: Security group id to use with the instance
+    description: Security group id to use with the instance. Parameter is B(required) while joining or leaving security group
     required: false
     default: null
     aliases: []
@@ -102,7 +103,7 @@ options:
        - keys allowed are
             - charge_type (required=false; default="PayByBandwidth", choices=["PayByBandwidth", "PayByTraffic"])
             - max_bandwidth_in(required=false, default=200)
-            - max_bandwidth_out(required=false, default=0).
+            - max_bandwidth_out(required=false, default=0)
     required: false
     default: null
     aliases: []
@@ -131,32 +132,28 @@ options:
       description:
         - A list of hash/dictionaries of volumes to add to the new instance; '[{"key":"value", "key":"value"}]';
         - keys allowed are
-            - device_category (required=false; default="cloud"; choices=["cloud", "cloud_efficiency", "cloud_ssd", "ephemeral_ssd"] )
-            - device_size (required=false; default=null; choices=depends on disk_category)
-            - device_size (required=false; default=null; choices=depends on disk_category)
-            - device_name (required=false; default=null)
-            - device_description (required=false; default=null)
+            - disk_category (required=false; default="cloud"; choices=["cloud", "cloud_efficiency", "cloud_ssd", "ephemeral_ssd"] )
+            - disk_size (required=false; default=null; choices=depends on disk_category)
+            - disk_name (required=false; default=null)
+            - disk_description (required=false; default=null)
             - delete_on_termination (required=false, default="true")
-            - snapshot (required=false; default=null), volume_type (str), iops (int) - device_type is deprecated use volume_type, iops must be set when volume_type='io1', ephemeral and snapshot are mutually exclusive.
+            - snapshot_id (required=false; default=null), volume_type (str), iops (int) - device_type is deprecated use volume_type, iops must be set when volume_type='io1', ephemeral and snapshot are mutually exclusive.
       required: false
       default: null
       aliases: ['volumes']
   count:
-      description:
-        - The number of the new instance.
+      description: The number of the new instance.
       required: false
       default: 1
       aliases: []
   allocate_public_ip:
-      description:
-        - Whether allocate a public ip for the new instance.
+      description: Whether allocate a public ip for the new instance.
       required: false
       default: "yes"
       aliases: ['assign_public_ip']
       choices: ["yes", "no"]
   bind_eip:
-      description:
-        - ID of Elastic IP Address bind to the new instance.
+      description: ID of Elastic IP Address bind to the new instance.
       required: false
       default: null
       aliases: []
@@ -182,13 +179,13 @@ options:
       description:
         - The charge duration of the instance, the value is vaild when instance_charge_type is "PrePaid".
       required: false
-      choices: [1-12]
+      choices: [1~9,12,24,36]
       default: null
   auto_renew:
       description:
         - Whether automate renew the charge of the instance.
       required: false
-      choices: ["true", "false"]
+      choices: ["yes", "no"]
       default: "no"
   auto_renew_period:
       description:
@@ -215,6 +212,30 @@ options:
       required: false
       choices: []
       default: "300"
+  attributes:
+      description:
+        - A list of hash/dictionaries of instance attributes; '[{"key":"value", "key":"value"}]';. Parameter is B(required) when modifying an ecs instance
+        - keys allowed are
+            - id (required=true; default=null; description=ID of an ECS instance )
+            - name (required=false; default=null; description=Name of the instance to modify)
+            - description (required=false; default=null; description=Description of the instance to use)
+            - password (required=false; default=null; description=The password to login instance)
+            - host_name (required=false; default=null; description=Instance host name)
+      required: false
+      choices: []
+      default: null
+  instance_id:
+      description:
+        - A list of instance ids. Parameter is B(required) while starting, stopping, restarting, terminating, joining or leaving security group
+      required: false
+      default: null
+      aliases: ["instance_ids"]
+  sg_action:
+      description:
+        - The action of operating security group. Parameter is B(required) while joining or leaving security group
+      required: false
+      choices: ["join", "leave"]
+      default: null
 requirements:
   - "python >= 2.7"
   - aliyun-python-sdk-core, aliyun-python-sdk-ecs, ecsutils and footmark
@@ -226,7 +247,7 @@ notes:
     C(ACS_REGION) or C(ACS_DEFAULT_REGION) or C(ECS_REGION)
 '''
 
-EXAMPLES ='''
+EXAMPLES = '''
 #
 # provisioning new ecs instance
 #
@@ -288,7 +309,7 @@ EXAMPLES ='''
     instance_type: ecs.n1.small
     group_id: xxxxxxxxxx
     host_name: myhost
-    password: Admin123
+    password: mypassword
   tasks:
     - name: tagging and host name password
       ecs:
@@ -356,7 +377,7 @@ EXAMPLES ='''
         assign_public_ip: yes
         volumes:
           - disk_name: /dev/sdb
-            snapshot_id: snap-abcdef12
+            snapshot_id: xxxxxxxxxx
             disk_category: cloud_efficiency
             disk_size: 100
             delete_on_termination: true
@@ -429,12 +450,12 @@ EXAMPLES ='''
             - id:  xxxxxxxxxx
               name: InstanceName
               description: volume attributes
-              password: Admin123
+              password: mypassword
               host_name: hostName
             - id:  xxxxxxxxxx
               name: InstanceName
               description: volume attributes
-              password: Admin123
+              password: mypassword
               host_name: hostcomes
 
 #
@@ -553,5 +574,4 @@ EXAMPLES ='''
         instance_id: '{{ instance_id }}'
         group_id: '{{ group_id }}'
         sg_action: '{{ sg_action }}'
-
 '''

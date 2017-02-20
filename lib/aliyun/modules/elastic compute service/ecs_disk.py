@@ -57,8 +57,8 @@ options:
     choices: ['present', 'absent']
   zone_id:
     description:
-      - Aliyun availability zone ID in which to launch the instance
-    required: true
+      - Aliyun availability zone ID in which to launch the instance. Parameter is B(required) while creating disk.
+    required: false
     default: null
     aliases: ['zone', 'availability_zone', 'acs_zone', 'ecs_zone' , 'zone']
   disk_name:
@@ -79,14 +79,13 @@ options:
     required: false
     default: cloud
     aliases: ['volume_type', 'disk_type']
-    choices: ['cloud - general cloud disk', 'cloud_efficiency - efficiency cloud disk', 'cloud_ssd - cloud SSD']
+    choices: ['cloud', 'cloud_efficiency', 'cloud_ssd']
   size:
     description:
       - Size of the system disk, in GB.The value should be equal to or greater than the size of the specific SnapshotId. 
     required: false
     default: null
     aliases: ['volume_size', 'disk_size']
-    choices: ['cloud - 5 ~ 2000', 'cloud_efficiency - 20 ~ 2048', 'cloud_ssd - 20 ~ 2048']
   snapshot_id:
     description:
       - Snapshots are used to create the data disk After this parameter is specified, Size is ignored. The actual size of the created disk is the size of the specified snapshot Snapshots from on or before July 15, 2013 cannot be used to create a disk
@@ -101,14 +100,14 @@ options:
     aliases: ['tags']
   instance_id:
     description:
-      - The specified instance ID.
-    required: true
+      - The specified instance ID. Parameter is B(required) while attaching disk.
+    required: false
     default: null
     aliases: ['instance']
   disk_id:
     description:
-      - The disk ID. The disk and Instance must be in the same zone.
-    required: true
+      - The disk ID. The disk and Instance must be in the same zone. Parameter is B(required) while attaching disk.
+    required: false
     default: null
     aliases: ['vol_id', 'id']
   device:
@@ -123,7 +122,7 @@ options:
     required: false
     default: none
     aliases: ['delete_on_termination']
-    choices: []
+    choices: ["yes", "no"]
 requirements:
   - "python >= 2.7"
   - aliyun-python-sdk-core, aliyun-python-sdk-ecs, ecsutils and footmark
@@ -154,7 +153,7 @@ EXAMPLES = '''
   tasks:
     - name: create disk
       ecs_disk:
-        acs_access_key_id: '{{ acs_access_key }}'
+        acs_access_key: '{{ acs_access_key }}'
         acs_secret_access_key: '{{ acs_secret_access_key }}'
         region: '{{ region }}'
         zone: '{{ zone }}'
@@ -181,7 +180,7 @@ EXAMPLES = '''
   tasks:
     - name: create disk
       ecs_disk:
-        acs_access_key_id: '{{ acs_access_key }}'
+        acs_access_key: '{{ acs_access_key }}'
         acs_secret_access_key: '{{ acs_secret_access_key }}'
         region: '{{ region }}'
         zone: '{{ zone }}'
@@ -211,7 +210,7 @@ EXAMPLES = '''
   tasks:
     - name: Attach Disk to instance
       ecs_disk:
-        acs_access_key_id: '{{ acs_access_key }}'
+        acs_access_key: '{{ acs_access_key }}'
         acs_secret_access_key: '{{ acs_secret_access_key }}'
         status: '{{ status }}'
         region: '{{ region }}'
@@ -236,7 +235,7 @@ EXAMPLES = '''
   tasks:
     - name: detach disk
       ecs_disk:
-        acs_access_key_id: '{{ acs_access_key }}'
+        acs_access_key: '{{ acs_access_key }}'
         acs_secret_access_key: '{{ acs_secret_access_key }}'
         region: '{{ region }}'
         id: '{{ disk_id }}'
@@ -258,7 +257,7 @@ EXAMPLES = '''
   tasks:
     - name: detach disk
       ecs_disk:
-        acs_access_key_id: '{{ acs_access_key }}'
+        acs_access_key: '{{ acs_access_key }}'
         acs_secret_access_key: '{{ acs_secret_access_key }}'
         region: '{{ region }}'
         disk_id: '{{ disk_id }}'
