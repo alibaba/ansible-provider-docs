@@ -94,42 +94,17 @@ options:
     choices: []
   rules:
     description:
-      - List of firewall inbound rules to enforce in this group.
-      - keys allowed are
-            - ip_protocol (required=true; choices=["tcp", "udp", "icmp", "gre", "all"]; aliases=['proto']; description=IP protocol)
-            - port_range(required=true; description=The range of port numbers)
-            - source_group_id(required=false; aliases=['group_id']; description=The source security group id)  
-            - source_group_owner_id(required=false; aliases=['group_owner_id']; description=The source security group owner id)
-            - source_cidr_ip(required=false; aliases=['cidr_ip']; description=The source IP address range)
-            - policy(required=false; choices=["accept", "drop"]; description=Authorizatio policy)
-            - priority(required=false; choices=["1-100"]; default=1; description=Authorization policy priority)
-            - nic_type(required=false; choices=["internet", "intranet"]; default=internet; description=Network type)
+      - List of firewall inbound rules to enforce in this group. (see example)
     required: false
     default: null
     aliases: []
     choices: []
   rules_egress:
     description:
-      - List of firewall outbound rules to enforce in this group.
-      - keys allowed are
-            - ip_protocol (required=true; choices=["tcp", "udp", "icmp", "gre", "all"]; aliases=['proto']; description=IP protocol)
-            - port_range(required=true; description=The range of port numbers)
-            - dest_group_id(required=false; aliases=['group_id']; description=The destination security group id)  
-            - dest_group_owner_id(required=false; aliases=['group_owner_id']; description=The destination security group owner id)
-            - dest_cidr_ip(required=false; aliases=['cidr_ip']; description=The destination IP address range)
-            - policy(required=false; choices=["accept", "drop"]; description=Authorizatio policy)
-            - priority(required=false; choices=["1-100"]; default=1; description=Authorization policy priority)
-            - nic_type(required=false; choices=["internet", "intranet"]; default=internet; description=Network type)
+      - List of firewall outbound rules to enforce in this group. (see example)
     required: false
     default: null
     aliases: []
-    choices: []
-  dest_cidr_ip:
-    description:
-      - The target IP address range (CIDR format is used to specify the IP address range). The default value is 0.0.0.0/0 (which means no restriction will be applied). Other supported formats include 10.159.6.18/12. Only IPv4 is supported.
-    default: null
-    required: false
-    aliases: ['cidr_ip']
     choices: []
 requirements:
   - "python >= 2.7"

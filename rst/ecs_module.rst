@@ -1,8 +1,8 @@
 .. _ecs:
 
 
-ecs - Create, Start, Stop, Restart or Terminate an Instance in ECS
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ecs - Create, Start, Stop, Restart or Terminate an Instance in ECS. Add or Remove Instance to/from a Security Group
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 
@@ -14,7 +14,8 @@ ecs - Create, Start, Stop, Restart or Terminate an Instance in ECS
 Synopsis
 --------
 
-* Creates or terminates ecs instances.
+* Creates, starts, stops, restarts or terminates ecs instances.
+* Adds or removes ecs instances to/from security group.
 
 
 Requirements (on host that executes module)
@@ -59,10 +60,16 @@ Options
         <td><div>Whether allocate a public ip for the new instance.</div></br>
         <div style="font-size: small;">aliases: assign_public_ip<div></td></tr>
             <tr>
+    <td>attributes<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td></td>
+        <td><ul></ul></td>
+        <td><div>A list of hash/dictionaries of instance attributes; '[{"key":"value", "key":"value"}]';. Parameter is <b>required</b> when modifying an ecs instance (see example)</div></td></tr>
+            <tr>
     <td>auto_renew<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td>no</td>
-        <td><ul><li>true</li><li>false</li></ul></td>
+        <td><ul><li>yes</li><li>no</li></ul></td>
         <td><div>Whether automate renew the charge of the instance.</div></td></tr>
             <tr>
     <td>auto_renew_period<br/><div style="font-size: small;"></div></td>
@@ -93,14 +100,20 @@ Options
     <td>no</td>
     <td></td>
         <td><ul></ul></td>
-        <td><div>A list of hash/dictionaries of volumes to add to the new instance; '[{"key":"value", "key":"value"}]';</div><div>keys allowed are - device_category (required=false; default="cloud"; choices=["cloud", "cloud_efficiency", "cloud_ssd", "ephemeral_ssd"] ) - device_size (required=false; default=null; choices=depends on disk_category) - device_size (required=false; default=null; choices=depends on disk_category) - device_name (required=false; default=null) - device_description (required=false; default=null) - delete_on_termination (required=false, default="true") - snapshot (required=false; default=null), volume_type (str), iops (int) - device_type is deprecated use volume_type, iops must be set when volume_type='io1', ephemeral and snapshot are mutually exclusive.</div></br>
+        <td><div>A list of hash/dictionaries of volumes to add to the new instance; '[{"key":"value", "key":"value"}]'; (see example)</div></br>
         <div style="font-size: small;">aliases: volumes<div></td></tr>
+            <tr>
+    <td>force<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td>False</td>
+        <td><ul><li>True</li><li>False</li></ul></td>
+        <td><div>{u'Whether force to operation, currently used fo states': u'stopped, restarted.'}</div></td></tr>
             <tr>
     <td>group_id<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td></td>
         <td><ul></ul></td>
-        <td><div>Security group id to use with the instance</div></td></tr>
+        <td><div>Security group id to use with the instance. Parameter is <b>required</b> while joining or leaving security group</div></td></tr>
             <tr>
     <td>host_name<br/><div style="font-size: small;"></div></td>
     <td>no</td>
@@ -116,10 +129,10 @@ Options
         <div style="font-size: small;">aliases: id<div></td></tr>
             <tr>
     <td>image_id<br/><div style="font-size: small;"></div></td>
-    <td>yes</td>
+    <td>no</td>
     <td></td>
         <td><ul></ul></td>
-        <td><div>Image ID to use for the instance.</div></br>
+        <td><div>Image ID to use for the instance. Parameter is <b>required</b> when provisioning new ecs instance</div></br>
         <div style="font-size: small;">aliases: image<div></td></tr>
             <tr>
     <td>instance_charge_type<br/><div style="font-size: small;"></div></td>
@@ -127,6 +140,13 @@ Options
     <td>PostPaid</td>
         <td><ul><li>PrePaid</li><li>PostPaid</li></ul></td>
         <td><div>The charge type of the instance.</div></td></tr>
+            <tr>
+    <td>instance_id<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td></td>
+        <td><ul></ul></td>
+        <td><div>A list of instance ids. Parameter is <b>required</b> while starting, stopping, restarting, terminating, joining or leaving security group</div></br>
+        <div style="font-size: small;">aliases: instance_ids<div></td></tr>
             <tr>
     <td>instance_name<br/><div style="font-size: small;"></div></td>
     <td>no</td>
@@ -142,23 +162,35 @@ Options
         <div style="font-size: small;">aliases: tags<div></td></tr>
             <tr>
     <td>instance_type<br/><div style="font-size: small;"></div></td>
-    <td>yes</td>
+    <td>no</td>
     <td></td>
         <td><ul></ul></td>
-        <td><div>Instance type to use for the instance.</div></br>
+        <td><div>Instance type to use for the instance. Parameter is <b>required</b> when provisioning new ecs instance</div></br>
         <div style="font-size: small;">aliases: type<div></td></tr>
             <tr>
     <td>internet_data<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td></td>
         <td><ul></ul></td>
-        <td><div>A hash/dictionaries of internet to the new instance; '{"key":"value"}';</div><div>keys allowed are - charge_type (required=false; default="PayByBandwidth", choices=["PayByBandwidth", "PayByTraffic"]) - max_bandwidth_in(required=false, default=200) - max_bandwidth_out(required=false, default=0).</div></td></tr>
+        <td><div>A hash/dictionaries of internet to the new instance; '{"key":"value"}'; (see example)</div></td></tr>
             <tr>
     <td>io_optimized<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td>no</td>
         <td><ul><li>yes</li><li>no</li></ul></td>
         <td><div>Whether instance is using optimized volumes.</div></td></tr>
+            <tr>
+    <td>page_number<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td>1</td>
+        <td><ul></ul></td>
+        <td><div>Page number of the instance status list</div></td></tr>
+            <tr>
+    <td>page_size<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td>10</td>
+        <td><ul></ul></td>
+        <td><div>Sets the number of lines per page for queries per page</div></td></tr>
             <tr>
     <td>password<br/><div style="font-size: small;"></div></td>
     <td>no</td>
@@ -169,14 +201,14 @@ Options
     <td>period<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td></td>
-        <td><ul><li>1-12</li></ul></td>
+        <td><ul><li>1~9</li><li>12</li><li>24</li><li>36</li></ul></td>
         <td><div>The charge duration of the instance, the value is vaild when instance_charge_type is "PrePaid".</div></td></tr>
             <tr>
     <td>private_ip<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td></td>
         <td><ul></ul></td>
-        <td><div>Private IP address for the new instance.</div></td></tr>
+        <td><div>Private IP address of the instance, which cannot be specified separately.</div></td></tr>
             <tr>
     <td>region<br/><div style="font-size: small;"></div></td>
     <td>no</td>
@@ -185,10 +217,16 @@ Options
         <td><div>The Aliyun Cloud region to use. If not specified then the value of the `ACS_REGION`, `ACS_DEFAULT_REGION` or `ECS_REGION` environment variable, if any, is used.</div></br>
         <div style="font-size: small;">aliases: acs_region, ecs_region<div></td></tr>
             <tr>
+    <td>sg_action<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td></td>
+        <td><ul><li>join</li><li>leave</li></ul></td>
+        <td><div>The action of operating security group. Parameter is <b>required</b> while joining or leaving security group</div></td></tr>
+            <tr>
     <td>status<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td>present</td>
-        <td><ul><li>present</li><li>pending</li><li>running</li><li>stopped</li><li>restarted</li><li>absent</li><li>getstatus</li></ul></td>
+        <td><ul><li>present</li><li>pending</li><li>running</li><li>stopped</li><li>restarted</li><li>absent</li><li>getinfo</li><li>getstatus</li></ul></td>
         <td><div>The state of the instance after operating.</div></br>
         <div style="font-size: small;">aliases: state<div></td></tr>
             <tr>
@@ -196,7 +234,7 @@ Options
     <td>no</td>
     <td></td>
         <td><ul></ul></td>
-        <td><div>A hash/dictionaries of system disk to the new instance; '{"key":"value"}';</div><div>keys allowed are - disk_category (required=false; default="cloud"; choices=["cloud", "cloud_efficiency", "cloud_ssd", "ephemeral_ssd"] ) - disk_size (required=false; default=max[40, ImageSize]; choices=[40-500] ) - disk_name (required=false; default=null) - disk_description (required=false; default=null)</div></td></tr>
+        <td><div>A hash/dictionaries of system disk to the new instance; '{"key":"value"}'; (see example)</div></td></tr>
             <tr>
     <td>vswitch_id<br/><div style="font-size: small;"></div></td>
     <td>no</td>
@@ -241,10 +279,10 @@ Examples
     - name: basic provisioning example
       hosts: localhost
       vars:
-        acs_access_key: XXXXXXXXXXXXXX
-        acs_secret_access_key: XXXXXXXXXXXXXX
+        acs_access_key: xxxxxxxxxx
+        acs_secret_access_key: xxxxxxxxxx
         region: cn-beijing
-        zone: cn-beijing
+        zone: cn-beijing-a
         image: ubuntu1404_64_40G_cloudinit_20160727.raw
         instance_type: ecs.n1.small
         assign_public_ip: yes
@@ -264,15 +302,13 @@ Examples
     - name: basic provisioning example
       hosts: localhost
       vars:
-        acs_access_key: XXXXXXXXXXXXXX
-        acs_secret_access_key: XXXXXXXXXXXXXX
+        acs_access_key: xxxxxxxxxx
+        acs_secret_access_key: xxxxxxxxxx
         region: cn-beijing
-        zone: cn-beijing
         image: ubuntu1404_64_40G_cloudinit_20160727.raw
         instance_type: ecs.n1.small
-        vswitch_id: vsw-j6co2uknrmopj4ypgdnq4
+        vswitch_id: xxxxxxxxxx
         assign_public_ip: no
-    
       tasks:
         - name: vpc network
           ecs:
@@ -289,13 +325,12 @@ Examples
     - name: advanced provisioning example
       hosts: localhost
       vars:
-        acs_access_key: XXXXXXXXXXXXXX
-        acs_secret_access_key: XXXXXXXXXXXXXX
+        acs_access_key: xxxxxxxxxx
+        acs_secret_access_key: xxxxxxxxxx
         region: cn-beijing
-        zone: cn-beijing
         image: ubuntu1404_64_40G_cloudinit_20160727.raw
         instance_type: ecs.n1.small
-        group_id: sg-25y6ag32b
+        group_id: xxxxxxxxxx
         host_name: myhost
         password: mypassword
       tasks:
@@ -320,13 +355,12 @@ Examples
     - name: advanced provisioning example
       hosts: localhost
       vars:
-        acs_access_key: XXXXXXXXXXXXXX
-        acs_secret_access_key: XXXXXXXXXXXXXX
+        acs_access_key: xxxxxxxxxx
+        acs_secret_access_key: xxxxxxxxxx
         region: cn-beijing
-        zone: cn-beijing
         image: ubuntu1404_64_40G_cloudinit_20160727.raw
         instance_type: ecs.n1.small
-        group_id: sg-25y6ag32b
+        group_id: xxxxxxxxxx
         instance_name: myinstance
         description: my description
       tasks:
@@ -350,10 +384,9 @@ Examples
     - name: advanced provisioning example
       hosts: localhost
       vars:
-        acs_access_key: XXXXXXXXXXXXXX
-        acs_secret_access_key: XXXXXXXXXXXXXX
+        acs_access_key: xxxxxxxxxx
+        acs_secret_access_key: xxxxxxxxxx
         region: cn-beijing
-        zone: cn-beijing
         image: ubuntu1404_64_40G_cloudinit_20160727.raw
         instance_type: ecs.n1.small
       tasks:
@@ -367,7 +400,7 @@ Examples
             assign_public_ip: yes
             volumes:
               - disk_name: /dev/sdb
-                snapshot_id: snap-abcdef12
+                snapshot_id: xxxxxxxxxx
                 disk_category: cloud_efficiency
                 disk_size: 100
                 delete_on_termination: true
@@ -376,12 +409,17 @@ Examples
     - name: advanced provisioning example
       hosts: localhost
       vars:
-        acs_access_key: XXXXXXXXXXXXXX
-        acs_secret_access_key: XXXXXXXXXXXXXX
+        acs_access_key: xxxxxxxxxx
+        acs_secret_access_key: xxxxxxxxxx
         region: cn-beijing
-        zone: cn-beijing
         image: ubuntu1404_64_40G_cloudinit_20160727.raw
         instance_type: ecs.n1.small
+        io_optimized: yes
+        system_disk:
+          disk_category: cloud_efficiency
+          disk_size: 100
+          disk_name: DiskName
+          disk_description: Disk Description
       tasks:
         - name: additional volume
           ecs:
@@ -390,19 +428,15 @@ Examples
             region: '{{ region }}'
             image: '{{ image }}'
             instance_type: '{{ instance_type }}'
-            io_optimized: yes
-            system_disk:
-                disk_category: cloud
-                disk_size: 50
-                disk_name: DiskName
-                disk_description: Invalid System Disk Size
+            io_optimized: '{{ io_optimized }}'
+            system_disk: '{{ system_disk }}'
     
     # example with prepaid internet charge type configuration
     - name: advanced provisioning example
       hosts: localhost
       vars:
-        acs_access_key: XXXXXXXXXXXXXX
-        acs_secret_access_key: XXXXXXXXXXXXXX
+        acs_access_key: xxxxxxxxxx
+        acs_secret_access_key: xxxxxxxxxx
         region: cn-beijing
         image: ubuntu1404_64_40G_cloudinit_20160727.raw
         instance_type: ecs.n1.small
@@ -426,8 +460,8 @@ Examples
     - name: modify attribute example
       hosts: localhost
       vars:
-        acs_access_key: XXXXXXXXXXXXXX
-        acs_secret_access_key: XXXXXXXXXXXXXX
+        acs_access_key: xxxxxxxxxx
+        acs_secret_access_key: xxxxxxxxxx
         region: cn-beijing
       tasks:
         - name: modify attribute of multiple instances
@@ -436,16 +470,16 @@ Examples
             acs_secret_access_key: '{{ acs_secret_access_key }}'
             region: '{{ region }}'
             attributes:
-                - id:  i-rj9be6tlwmae1995uq5t
-                  name: InstanceName1
-                  description: volume attribute1
-                  password: mypassword1
-                  host_name: hostName1
-                - id:  i-rj9be6tlwmdfsfsd3543
-                  name: InstanceName2
-                  description: volume attribute2
-                  password: mypassword2
-                  host_name: hostcomes2
+                - id:  xxxxxxxxxx
+                  name: InstanceName
+                  description: volume attributes
+                  password: mypassword
+                  host_name: hostName
+                - id:  xxxxxxxxxx
+                  name: InstanceName
+                  description: volume attributes
+                  password: mypassword
+                  host_name: hostcomes
     
     #
     # querying instance status
@@ -453,15 +487,15 @@ Examples
     - name: query instance status
       hosts: localhost
       vars:
-        acs_access_key: XXXXXXXXXXXXXX
-        acs_secret_access_key: XXXXXXXXXXXXXX
+        acs_access_key: xxxxxxxxxx
+        acs_secret_access_key: xxxxxxxxxx
         region: cn-beijing
-        zone: cn-beijing
+        zone: cn-beijing-a
         status: getstatus
         pagenumber: 1
         pagesize: 10
       tasks:
-        - name: query instance status from the particular region
+        - name: query instance status from the particular zone
           ecs:
             acs_access_key: '{{ acs_access_key }}'
             acs_secret_access_key: '{{ acs_secret_access_key }}'
@@ -477,14 +511,14 @@ Examples
     - name: start or terminate instance
       hosts: localhost
       vars:
-        acs_access_key: XXXXXXXXXXXXXX
-        acs_secret_access_key: XXXXXXXXXXXXXX
+        acs_access_key: xxxxxxxxxx
+        acs_secret_access_key: xxxxxxxxxx
         region: cn-shenzhen
-        instance_ids: i-94dehop6n
+        instance_ids: xxxxxxxxxx
         instance_tags:
         - tag_key: xz_test
           tag_value: '1.20'
-        state: running
+        status: running
       tasks:
         - name: start instance
           ecs_model:
@@ -493,7 +527,7 @@ Examples
             region: '{{ region }}'
             instance_ids: '{{ instance_ids }}'
             instance_tags: '{{ instance_tags }}'
-            state: '{{ state }}'
+            status: '{{ status }}'
     
     #
     # stop or restarted instance
@@ -501,15 +535,15 @@ Examples
     - name: start stop restart instance
       hosts: localhost
       vars:
-        acs_access_key: XXXXXXXXXXXXXX
-        acs_secret_access_key: XXXXXXXXXXXXXX
+        acs_access_key: xxxxxxxxxx
+        acs_secret_access_key: xxxxxxxxxx
         region: cn-shenzhen
-        instance_ids: i-94dehop6n
+        instance_ids: xxxxxxxxxx
         instance_tags:
         - tag_key: xz_test
           tag_value: '1.20'
         force: False
-        state: restarted
+        status: restarted
       tasks:
         - name: Restart instance
           ecs_model:
@@ -518,7 +552,7 @@ Examples
             region: '{{ region }}'
             instance_ids: '{{ instance_ids }}'
             instance_tags: '{{ instance_tags }}'
-            state: '{{ state }}'
+            status: '{{ status }}'
     
     #
     # add an instance to security group
@@ -526,11 +560,11 @@ Examples
     - name: Add an instance to security group
       hosts: localhost
       vars:
-        acs_access_key: XXXXXXXXXXXXXX
-        acs_secret_access_key: XXXXXXXXXXXXXX
+        acs_access_key: xxxxxxxxxx
+        acs_secret_access_key: xxxxxxxxxx
         region: cn-shenzhen
-        instance_id: i-94dehop6n
-        group_id: sg-25y6ag32b
+        instance_id: xxxxxxxxxx
+        group_id: xxxxxxxxxx
         sg_action: join
       tasks:
         - name: Add an instance to security group
@@ -548,11 +582,11 @@ Examples
     - name: Remove an instance from security group
       hosts: localhost
       vars:
-        acs_access_key: XXXXXXXXXXXXXX
-        acs_secret_access_key: XXXXXXXXXXXXXX
+        acs_access_key: xxxxxxxxxx
+        acs_secret_access_key: xxxxxxxxxx
         region: cn-shenzhen
-        instance_id: i-94dehop6n
-        group_id: sg-25y6ag32b
+        instance_id: xxxxxxxxxx
+        group_id: xxxxxxxxxx
         sg_action: leave
       tasks:
         - name: Remove an instance from security group
@@ -563,7 +597,6 @@ Examples
             instance_id: '{{ instance_id }}'
             group_id: '{{ group_id }}'
             sg_action: '{{ sg_action }}'
-    
 
 
 Notes

@@ -237,7 +237,7 @@
 <td>no</td>
 <td></td>
     <td><ul></ul></td>
-    <td><div>A list of hash/dictionaries of instance attributes; '[{"key":"value", "key":"value"}]';. Parameter is <b>required</b> when modifying an ecs instance</div><div>keys allowed are - id (required=true; default=null; description=ID of an ECS instance ) - name (required=false; default=null; description=Name of the instance to modify) - description (required=false; default=null; description=Description of the instance to use) - password (required=false; default=null; description=The password to login instance) - host_name (required=false; default=null; description=Instance host name)</div></td></tr>
+    <td><div>A list of hash/dictionaries of instance attributes; '[{"key":"value", "key":"value"}]';. Parameter is <b>required</b> when modifying an ecs instance (see example)</div></td></tr>
         <tr>
 <td>auto_renew<br/><div style="font-size: small;"></div></td>
 <td>no</td>
@@ -273,8 +273,14 @@
 <td>no</td>
 <td></td>
     <td><ul></ul></td>
-    <td><div>A list of hash/dictionaries of volumes to add to the new instance; '[{"key":"value", "key":"value"}]';</div><div>keys allowed are - disk_category (required=false; default="cloud"; choices=["cloud", "cloud_efficiency", "cloud_ssd", "ephemeral_ssd"] ) - disk_size (required=false; default=null; choices=depends on disk_category) - disk_name (required=false; default=null) - disk_description (required=false; default=null) - delete_on_termination (required=false, default="true") - snapshot_id (required=false; default=null), volume_type (str), iops (int) - device_type is deprecated use volume_type, iops must be set when volume_type='io1', ephemeral and snapshot are mutually exclusive.</div></br>
+    <td><div>A list of hash/dictionaries of volumes to add to the new instance; '[{"key":"value", "key":"value"}]'; (see example)</div></br>
     <div style="font-size: small;">aliases: volumes<div></td></tr>
+        <tr>
+<td>force<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td>False</td>
+    <td><ul><li>True</li><li>False</li></ul></td>
+    <td><div>{u'Whether force to operation, currently used fo states': u'stopped, restarted.'}</div></td></tr>
         <tr>
 <td>group_id<br/><div style="font-size: small;"></div></td>
 <td>no</td>
@@ -339,13 +345,25 @@
 <td>no</td>
 <td></td>
     <td><ul></ul></td>
-    <td><div>A hash/dictionaries of internet to the new instance; '{"key":"value"}';</div><div>keys allowed are - charge_type (required=false; default="PayByBandwidth", choices=["PayByBandwidth", "PayByTraffic"]) - max_bandwidth_in(required=false, default=200) - max_bandwidth_out(required=false, default=0)</div></td></tr>
+    <td><div>A hash/dictionaries of internet to the new instance; '{"key":"value"}'; (see example)</div></td></tr>
         <tr>
 <td>io_optimized<br/><div style="font-size: small;"></div></td>
 <td>no</td>
 <td>no</td>
     <td><ul><li>yes</li><li>no</li></ul></td>
     <td><div>Whether instance is using optimized volumes.</div></td></tr>
+        <tr>
+<td>page_number<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td>1</td>
+    <td><ul></ul></td>
+    <td><div>Page number of the instance status list</div></td></tr>
+        <tr>
+<td>page_size<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td>10</td>
+    <td><ul></ul></td>
+    <td><div>Sets the number of lines per page for queries per page</div></td></tr>
         <tr>
 <td>password<br/><div style="font-size: small;"></div></td>
 <td>no</td>
@@ -389,7 +407,7 @@
 <td>no</td>
 <td></td>
     <td><ul></ul></td>
-    <td><div>A hash/dictionaries of system disk to the new instance; '{"key":"value"}';</div><div>keys allowed are - disk_category (required=false; default="cloud"; choices=["cloud", "cloud_efficiency", "cloud_ssd", "ephemeral_ssd"] ) - disk_size (required=false; default=max[40, ImageSize]; choices=[40-500] ) - disk_name (required=false; default=null) - disk_description (required=false; default=null)</div></td></tr>
+    <td><div>A hash/dictionaries of system disk to the new instance; '{"key":"value"}'; (see example)</div></td></tr>
         <tr>
 <td>vswitch_id<br/><div style="font-size: small;"></div></td>
 <td>no</td>
@@ -791,7 +809,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017 Alibaba, Inc.
-      Last updated on Feb 20, 2017.
+      Last updated on Feb 21, 2017.
 
     </p>
   </div>

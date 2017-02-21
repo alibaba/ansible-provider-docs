@@ -87,11 +87,7 @@ options:
     aliases: []
   disk_mapping:
     description:
-      - An optional list of device hashes/dictionaries with custom configurations.
-      - keys allowed are
-          - device (required=false;) - Disk Device Name value /dev/xvda start to /dev/xvdz, /dev/xvda default system disk is a snapshot of /dev/xvdb-z is only a snapshot of the data disk
-          - snapshot_id (required=false;) - Snapshot Id
-          - disk_size (required=false;) - Size of the disk, in the range [5-2000GB]
+      - An optional list of device hashes/dictionaries with custom configurations (see example).
     required: false
     default: null
     aliases: []

@@ -1,8 +1,8 @@
-.. _ecs_disk:
+.. _ecs_group:
 
 
-ecs_disk - Create, Query or Delete Security Group
-+++++++++++++++++++++++++++++++++++++++++++++++++
+ecs_group - Create, Query or Delete Security Group
+++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 
@@ -56,28 +56,7 @@ Options
     <td>no</td>
     <td></td>
         <td><ul></ul></td>
-        <td><div>The description of the security group, which is a string of 2 to 256 characters. It cannot begin with http:// or https://.</div></td></tr>
-            <tr>
-    <td>dest_cidr_ip<br/><div style="font-size: small;"></div></td>
-    <td>no</td>
-    <td></td>
-        <td><ul></ul></td>
-        <td><div>The target IP address range (CIDR format is used to specify the IP address range). The default value is 0.0.0.0/0 (which means no restriction will be applied). Other supported formats include 10.159.6.18/12. Only IPv4 is supported.</div></br>
-        <div style="font-size: small;">aliases: cidr_ip<div></td></tr>
-            <tr>
-    <td>dest_group_id<br/><div style="font-size: small;"></div></td>
-    <td>no</td>
-    <td></td>
-        <td><ul></ul></td>
-        <td><div>The target security group ID within the same region. Either the dest_group_id or dest_cidr_ip must be set. If both are set, then dest_cidr_ip is authorized by default. If this field is specified, but no dest_cidr_ip is specified, the nic_type can only select intranet</div></br>
-        <div style="font-size: small;">aliases: group_id<div></td></tr>
-            <tr>
-    <td>dest_group_owner_id<br/><div style="font-size: small;"></div></td>
-    <td>no</td>
-    <td></td>
-        <td><ul></ul></td>
-        <td><div>The Alibaba Cloud user account Id of the target security group when security groups are authorized across accounts. This parameter is optional. If it is not set, then authorization is performed for security groups of the same account. This parameter is invalid if DestCidrIp has already been set.</div></br>
-        <div style="font-size: small;">aliases: group_owner_id<div></td></tr>
+        <td><div>The description of the security group.</div></td></tr>
             <tr>
     <td>group_id<br/><div style="font-size: small;"></div></td>
     <td>no</td>
@@ -92,38 +71,6 @@ Options
         <td><ul></ul></td>
         <td><div>A list of hash/dictionaries of group tags, ['{"tag_key":"value", "tag_value":"value"}'], tag_key must be not null when tag_value isn't null</div></td></tr>
             <tr>
-    <td>ip_protocol<br/><div style="font-size: small;"></div></td>
-    <td>yes</td>
-    <td></td>
-        <td><ul></ul></td>
-        <td><div>IP protocol, with a values tcp | udp | icmp | gre | all .all indicates support for all the four protocols</div></br>
-        <div style="font-size: small;">aliases: proto<div></td></tr>
-            <tr>
-    <td>nic_type<br/><div style="font-size: small;"></div></td>
-    <td>no</td>
-    <td>internet</td>
-        <td><ul></ul></td>
-        <td><div>Network type</div></br>
-        <div style="font-size: small;">aliases: internet, intranet<div></td></tr>
-            <tr>
-    <td>policy<br/><div style="font-size: small;"></div></td>
-    <td>no</td>
-    <td>accept</td>
-        <td><ul><li>accept</li><li>drop</li></ul></td>
-        <td><div>Authorization policy</div></td></tr>
-            <tr>
-    <td>port_range<br/><div style="font-size: small;"></div></td>
-    <td>yes</td>
-    <td></td>
-        <td><ul></ul></td>
-        <td><div>The range of port numbers relevant to the IP protocol When the protocol is 'tcp' or 'udp', the default port number range is 1-65535. For example, '1/200' means that the range of the port numbers is 1-200. If the input value is '200/1', the interface call reports an error. When the protocol is 'icmp', the port number range is -1/-1. When the protocol is 'gre', the port number range is -1/-1. When the protocol is all the port number range is -1/-1.</div></td></tr>
-            <tr>
-    <td>priority<br/><div style="font-size: small;"></div></td>
-    <td>no</td>
-    <td>1</td>
-        <td><ul><li>1-100</li></ul></td>
-        <td><div>Authorization policy priority</div></td></tr>
-            <tr>
     <td>region<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td></td>
@@ -135,41 +82,20 @@ Options
     <td>no</td>
     <td></td>
         <td><ul></ul></td>
-        <td><div>List of firewall inbound rules to enforce in this group. If none are supplied, a default all-out rule is assumed. If an empty list is supplied, no inbound rules will be enabled. Each rule contains four attributes as specified in Inbound Security Group Rules</div></td></tr>
+        <td><div>List of firewall inbound rules to enforce in this group. (see example)</div></td></tr>
             <tr>
     <td>rules_egress<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td></td>
         <td><ul></ul></td>
-        <td><div>List of firewall outbound rules to enforce in this group. If none are supplied, a default all-out rule is assumed. If an empty list is supplied, no outbound rules will be enabled.Each rule contains four attributes as specified in Outbound Security Group Rules</div></td></tr>
+        <td><div>List of firewall outbound rules to enforce in this group. (see example)</div></td></tr>
             <tr>
     <td>security_group_name<br/><div style="font-size: small;"></div></td>
-    <td>yes</td>
+    <td>no</td>
     <td></td>
         <td><ul></ul></td>
-        <td><div>The security group name. [2, 128] English or Chinese characters, must begin with an uppercase/lowercase letter or Chinese character. Can contain numbers, ".", "_" or "-". It cannot begin with http:// or https://.</div></br>
+        <td><div>The security group name.</div></br>
         <div style="font-size: small;">aliases: name<div></td></tr>
-            <tr>
-    <td>source_cidr_ip<br/><div style="font-size: small;"></div></td>
-    <td>no</td>
-    <td></td>
-        <td><ul></ul></td>
-        <td><div>The source IP address range (CIDR format is used to specify the IP address range). The default value is 0.0.0.0/0 (which means no restriction will be applied). Other supported formats include 10.159.6.18/12. Only IPv4 is supported.</div></br>
-        <div style="font-size: small;">aliases: cidr_ip<div></td></tr>
-            <tr>
-    <td>source_group_id<br/><div style="font-size: small;"></div></td>
-    <td>no</td>
-    <td></td>
-        <td><ul></ul></td>
-        <td><div>The security group ID. Either the source_group_id or cidr_ip parameter must be set. If both are set, then source_cidr_ip is authorized by default. If source_group_id is specified and source_cidr_ip is not specified, nic_type must be set to intranet</div></br>
-        <div style="font-size: small;">aliases: group_id<div></td></tr>
-            <tr>
-    <td>source_group_owner_id<br/><div style="font-size: small;"></div></td>
-    <td>no</td>
-    <td></td>
-        <td><ul></ul></td>
-        <td><div>When the cross-user security group authorization, the source security group belongs to the user's Ali cloud account Id. The parameter is optional, if not set, the default is the same account between the security group authorization. source_cidr_ip This parameter has no effect if it has been set.</div></br>
-        <div style="font-size: small;">aliases: group_owner_id<div></td></tr>
             <tr>
     <td>status<br/><div style="font-size: small;"></div></td>
     <td>no</td>
@@ -208,12 +134,12 @@ Examples
       tasks:
         - name: create security grp
           ecs_group:
-            acs_access_key_id: '{{ acs_access_key }}'
+            acs_access_key: '{{ acs_access_key }}'
             acs_secret_access_key: '{{ acs_secret_access_key }}'
             region: '{{ region }}'
             security_group_name: 'AliyunSG'
           register: result_details
-        - debug: var=result_details.group_id
+        - debug: var=result_details
     
     
     Basic provisioning example authorize security group
@@ -227,9 +153,9 @@ Examples
       tasks:
         - name: authorize security group
           ecs_group:
-            acs_access_key_id: '{{ acs_access_key }}'
+            acs_access_key: '{{ acs_access_key }}'
             acs_secret_access_key: '{{ acs_secret_access_key }}'
-            security_group_id: 'sg-wz98gmai3qwhpmlmw42'
+            security_group_id: xxxxxxxxxx
             region: '{{ region }}'
             rules:
               - ip_protocol: tcp
@@ -238,7 +164,7 @@ Examples
             rules_egress:
               - proto: all
                 port_range: -1/-1
-                dest_group_id: 'sg-wz98gmai3qwhpmlmw42c'
+                dest_group_id: xxxxxxxxxx
                 nic_type: intranet
           register: result_details
         - debug: var=result_details
@@ -255,10 +181,10 @@ Examples
       tasks:
         - name: create and authorize security grp
           ecs_group:
-            acs_access_key_id: '{{ acs_access_key }}'
+            acs_access_key: '{{ acs_access_key }}'
             acs_secret_access_key: '{{ acs_secret_access_key }}'
             security_group_name: 'AliyunSG'
-            description: 'an example EC2 group'
+            description: 'an example ECS group'
             region: '{{ region }}'
             rules:
               - ip_protocol: tcp
@@ -270,8 +196,8 @@ Examples
             rules_egress:
               - proto: all
                 port_range: -1/-1
-                dest_group_id: 'sg-wz98gmai3qwhpmlmw42c'
-                group_owner_id: 'contact@click2cloud.net'
+                dest_group_id: xxxxxxxxxx
+                group_owner_id: xxxxxxxxxx
                 priority: 10
                 policy: accept
                 nic_type: intranet
@@ -288,16 +214,16 @@ Examples
         acs_secret_access_key: xxxxxxxxxx
         region: us-west-1
         security_group_ids:
-         - sg-rj9akooukwik6xil4n53
-        state: absent
+         - xxxxxxxxxx
+        status: absent
       tasks:
         - name: delete security grp
           ecs_group:
-            acs_access_key_id: '{{ acs_access_key }}'
+            acs_access_key: '{{ acs_access_key }}'
             acs_secret_access_key: '{{ acs_secret_access_key }}'
             region: '{{ region }}'
             security_group_ids: '{{ security_group_ids }}'
-            state: '{{ state }}'
+            status: '{{ status }}'
           register: result
         - debug: var=result
     
@@ -310,14 +236,14 @@ Examples
         acs_access_key: xxxxxxxxxx
         acs_secret_access_key: xxxxxxxxxx
         region: cn-beijing
-        state: getinfo
+        status: getinfo
       tasks:
         - name: Querying Security group list
           ecs_group:
-            acs_access_key_id: '{{ acs_access_key }}'
+            acs_access_key: '{{ acs_access_key }}'
             acs_secret_access_key: '{{ acs_secret_access_key }}'
             region: '{{ region }}'
-            state: '{{ state }}'
+            status: '{{ status }}'
           register: result
 
 

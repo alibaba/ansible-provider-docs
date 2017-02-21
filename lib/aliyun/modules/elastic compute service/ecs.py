@@ -99,11 +99,7 @@ options:
     aliases: []
   internet_data:
     description:
-       - A hash/dictionaries of internet to the new instance; '{"key":"value"}';
-       - keys allowed are
-            - charge_type (required=false; default="PayByBandwidth", choices=["PayByBandwidth", "PayByTraffic"])
-            - max_bandwidth_in(required=false, default=200)
-            - max_bandwidth_out(required=false, default=0)
+       - A hash/dictionaries of internet to the new instance; '{"key":"value"}'; (see example)
     required: false
     default: null
     aliases: []
@@ -119,25 +115,13 @@ options:
     aliases: []
   system_disk:
     description:
-        - A hash/dictionaries of system disk to the new instance; '{"key":"value"}';
-        - keys allowed are
-            - disk_category (required=false; default="cloud"; choices=["cloud", "cloud_efficiency", "cloud_ssd", "ephemeral_ssd"] )
-            - disk_size (required=false; default=max[40, ImageSize]; choices=[40-500] )
-            - disk_name (required=false; default=null)
-            - disk_description (required=false; default=null)
+        - A hash/dictionaries of system disk to the new instance; '{"key":"value"}'; (see example)
     required: false
     default: null
     aliases: []
   disks:
       description:
-        - A list of hash/dictionaries of volumes to add to the new instance; '[{"key":"value", "key":"value"}]';
-        - keys allowed are
-            - disk_category (required=false; default="cloud"; choices=["cloud", "cloud_efficiency", "cloud_ssd", "ephemeral_ssd"] )
-            - disk_size (required=false; default=null; choices=depends on disk_category)
-            - disk_name (required=false; default=null)
-            - disk_description (required=false; default=null)
-            - delete_on_termination (required=false, default="true")
-            - snapshot_id (required=false; default=null), volume_type (str), iops (int) - device_type is deprecated use volume_type, iops must be set when volume_type='io1', ephemeral and snapshot are mutually exclusive.
+        - A list of hash/dictionaries of volumes to add to the new instance; '[{"key":"value", "key":"value"}]'; (see example)
       required: false
       default: null
       aliases: ['volumes']
@@ -214,13 +198,7 @@ options:
       default: "300"
   attributes:
       description:
-        - A list of hash/dictionaries of instance attributes; '[{"key":"value", "key":"value"}]';. Parameter is B(required) when modifying an ecs instance
-        - keys allowed are
-            - id (required=true; default=null; description=ID of an ECS instance )
-            - name (required=false; default=null; description=Name of the instance to modify)
-            - description (required=false; default=null; description=Description of the instance to use)
-            - password (required=false; default=null; description=The password to login instance)
-            - host_name (required=false; default=null; description=Instance host name)
+        - A list of hash/dictionaries of instance attributes; '[{"key":"value", "key":"value"}]';. Parameter is B(required) when modifying an ecs instance (see example)
       required: false
       choices: []
       default: null
@@ -230,12 +208,27 @@ options:
       required: false
       default: null
       aliases: ["instance_ids"]
+  force:
+      description:
+        - Whether force to operation, currently used fo states: stopped, restarted.
+      required: false
+      default: "False"
+      choices: ["True", "False"]
+      aliases: []
   sg_action:
       description:
         - The action of operating security group. Parameter is B(required) while joining or leaving security group
       required: false
       choices: ["join", "leave"]
       default: null
+  page_number:
+      description: Page number of the instance status list
+      required: false
+      default: 1
+  page_size:
+    description: Sets the number of lines per page for queries per page
+    required: false
+    default: 10
 requirements:
   - "python >= 2.7"
   - aliyun-python-sdk-core, aliyun-python-sdk-ecs, ecsutils and footmark

@@ -55,7 +55,7 @@ Options
     <td>delete_with_instance<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td>none</td>
-        <td><ul></ul></td>
+        <td><ul><li>yes</li><li>no</li></ul></td>
         <td><div>Whether or not the disk is released along with the instance. True/Yes indicates that when the instance is released, this disk will be released with it.False/No indicates that when the instance is released, this disk will be retained.</div></br>
         <div style="font-size: small;">aliases: delete_on_termination<div></td></tr>
             <tr>
@@ -76,15 +76,15 @@ Options
     <td>disk_category<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td>cloud</td>
-        <td><ul><li>cloud - general cloud disk</li><li>cloud_efficiency - efficiency cloud disk</li><li>cloud_ssd - cloud SSD</li></ul></td>
+        <td><ul><li>cloud</li><li>cloud_efficiency</li><li>cloud_ssd</li></ul></td>
         <td><div>Category of the data disk</div></br>
         <div style="font-size: small;">aliases: volume_type, disk_type<div></td></tr>
             <tr>
     <td>disk_id<br/><div style="font-size: small;"></div></td>
-    <td>yes</td>
+    <td>no</td>
     <td></td>
         <td><ul></ul></td>
-        <td><div>The disk ID. The disk and Instance must be in the same zone.</div></br>
+        <td><div>The disk ID. The disk and Instance must be in the same zone. Parameter is <b>required</b> while attaching disk.</div></br>
         <div style="font-size: small;">aliases: vol_id, id<div></td></tr>
             <tr>
     <td>disk_name<br/><div style="font-size: small;"></div></td>
@@ -102,10 +102,10 @@ Options
         <div style="font-size: small;">aliases: tags<div></td></tr>
             <tr>
     <td>instance_id<br/><div style="font-size: small;"></div></td>
-    <td>yes</td>
+    <td>no</td>
     <td></td>
         <td><ul></ul></td>
-        <td><div>The specified instance ID.</div></br>
+        <td><div>The specified instance ID. Parameter is <b>required</b> while attaching disk.</div></br>
         <div style="font-size: small;">aliases: instance<div></td></tr>
             <tr>
     <td>region<br/><div style="font-size: small;"></div></td>
@@ -118,7 +118,7 @@ Options
     <td>size<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td></td>
-        <td><ul><li>cloud - 5 ~ 2000</li><li>cloud_efficiency - 20 ~ 2048</li><li>cloud_ssd - 20 ~ 2048</li></ul></td>
+        <td><ul></ul></td>
         <td><div>Size of the system disk, in GB.The value should be equal to or greater than the size of the specific SnapshotId.</div></br>
         <div style="font-size: small;">aliases: volume_size, disk_size<div></td></tr>
             <tr>
@@ -137,11 +137,11 @@ Options
         <div style="font-size: small;">aliases: state<div></td></tr>
             <tr>
     <td>zone_id<br/><div style="font-size: small;"></div></td>
-    <td>yes</td>
+    <td>no</td>
     <td></td>
         <td><ul></ul></td>
-        <td><div>Aliyun availability zone ID in which to launch the instance</div></br>
-        <div style="font-size: small;">aliases: zone, availability_zone, acs_zone, ecs_zone<div></td></tr>
+        <td><div>Aliyun availability zone ID in which to launch the instance. Parameter is <b>required</b> while creating disk.</div></br>
+        <div style="font-size: small;">aliases: zone, availability_zone, acs_zone, ecs_zone, zone<div></td></tr>
         </table>
     </br>
 
@@ -164,18 +164,18 @@ Examples
         acs_access_key: xxxxxxxxxx
         acs_secret_access_key: xxxxxxxxxx
         region: cn-beijing
-        zone_id: cn-beijing-b
+        zone: cn-beijing-b
         size: 20
-        state: present
+        status: present
       tasks:
         - name: create disk
           ecs_disk:
-            acs_access_key_id: '{{ acs_access_key }}'
+            acs_access_key: '{{ acs_access_key }}'
             acs_secret_access_key: '{{ acs_secret_access_key }}'
             region: '{{ region }}'
-            zone_id: '{{ zone_id }}'
+            zone: '{{ zone }}'
             size: '{{ size }}'
-            state: '{{ state }}'
+            status: '{{ status }}'
           register: result
         - debug: var=result
     
@@ -187,26 +187,26 @@ Examples
         acs_access_key: xxxxxxxxxx
         acs_secret_access_key: xxxxxxxxxx
         region: cn-hongkong
-        zone_id: cn-hongkong-b
+        zone: cn-hongkong-b
         disk_name: disk_1
         description: data disk_1
         size: 20
-        snapshot_id: s-j6cjdk51ejf0mtdnb7bb
-        disk_category: CLOUD_SSD
-        state: present
+        snapshot_id: xxxxxxxxxx
+        disk_category: cloud_ssd
+        status: present
       tasks:
         - name: create disk
           ecs_disk:
-            acs_access_key_id: '{{ acs_access_key }}'
+            acs_access_key: '{{ acs_access_key }}'
             acs_secret_access_key: '{{ acs_secret_access_key }}'
             region: '{{ region }}'
-            zone_id: '{{ zone_id }}'
+            zone: '{{ zone }}'
             disk_name: '{{ disk_name }}'
             description: '{{ description }}'
             size: '{{ size }}'
             snapshot_id: '{{ snapshot_id }}'
             disk_category: '{{ disk_category }}'
-            state: '{{ state }}'
+            status: '{{ status }}'
           register: result
         - debug: var=result
     
@@ -218,21 +218,21 @@ Examples
       vars:
         acs_access_key: xxxxxxxxxx
         acs_secret_access_key: xxxxxxxxxx
-        state: present
+        status: present
         region: us-west-1
-        instance_id: i-rj95iytyo4d16kxqj58a
-        vol_id: d-rj9j8a740966dhs3kbya
+        instance_id: xxxxxxxxxx
+        disk_id: xxxxxxxxxx
         device: /dev/xvdb
         delete_with_instance: false
       tasks:
         - name: Attach Disk to instance
           ecs_disk:
-            acs_access_key_id: '{{ acs_access_key }}'
+            acs_access_key: '{{ acs_access_key }}'
             acs_secret_access_key: '{{ acs_secret_access_key }}'
-            status: '{{ state }}'
+            status: '{{ status }}'
             region: '{{ region }}'
             instance_id: '{{ instance_id }}'
-            vol_id: '{{ vol_id }}'
+            disk_id: '{{ disk_id }}'
             device: '{{ device }}'
             delete_with_instance: '{{ delete_with_instance }}'
           register: result
@@ -247,16 +247,16 @@ Examples
         acs_access_key: xxxxxxxxxx
         acs_secret_access_key: xxxxxxxxxx
         region: us-west-1
-        disk_id: d-rj9j8a740966dhs3kbya
-        state: present
+        disk_id: xxxxxxxxxx
+        status: present
       tasks:
         - name: detach disk
           ecs_disk:
-            acs_access_key_id: '{{ acs_access_key }}'
+            acs_access_key: '{{ acs_access_key }}'
             acs_secret_access_key: '{{ acs_secret_access_key }}'
             region: '{{ region }}'
             id: '{{ disk_id }}'
-            state: '{{ state }}'
+            status: '{{ status }}'
           register: result
         - debug: var=result
     
@@ -269,19 +269,18 @@ Examples
         acs_access_key: xxxxxxxxxx
         acs_secret_access_key: xxxxxxxxxx
         region: us-west-1
-        disk_id: d-rj9j8a740966dhs3kbya
-        state: absent
+        disk_id: xxxxxxxxxx
+        status: absent
       tasks:
         - name: detach disk
           ecs_disk:
-            acs_access_key_id: '{{ acs_access_key }}'
+            acs_access_key: '{{ acs_access_key }}'
             acs_secret_access_key: '{{ acs_secret_access_key }}'
             region: '{{ region }}'
             disk_id: '{{ disk_id }}'
-            state: '{{ state }}'
+            status: '{{ status }}'
           register: result
         - debug: var=result
-    
 
 
 Notes

@@ -3,8 +3,8 @@ All Modules
 
 .. toctree:: :maxdepth: 1
 
-  ecs - Create, Start, Stop, Restart or Terminate an Instance in ECS <ecs_module>
-  ecs_ami - Create or Delete User-defined Image in ECS <ecs_ami_module>
+  ecs - Create, Start, Stop, Restart or Terminate an Instance in ECS. Add or Remove Instance to/from a Security Group <ecs_module>
+  ecs_ami - Create or Delete User-defined Image <ecs_ami_module>
   ecs_disk - Create, Attach, Detach or Delete a disk <ecs_disk_module>
   ecs_group - Create, Query or Delete Security Group <ecs_group_module>
 
