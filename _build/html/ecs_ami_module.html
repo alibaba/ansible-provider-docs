@@ -86,25 +86,8 @@
           
             
             
-                <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="modules_by_category.html">Module Index</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="list_of_all_modules.html">All Modules</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="ecs_module.html">ecs - Create, Start, Stop, Restart or Terminate an Instance in ECS. Add or Remove Instance to/from a Security Group</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">ecs_ami - Create or Delete User-defined Image</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#synopsis">Synopsis</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#requirements-on-host-that-executes-module">Requirements (on host that executes module)</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#options">Options</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#notes">Notes</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="ecs_disk_module.html">ecs_disk - Create, Attach, Detach or Delete a disk</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ecs_group_module.html">ecs_group - Create, Query or Delete Security Group</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="list_of_elastic compute service_modules.html">Elastic Compute Service Modules</a></li>
-</ul>
-</li>
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="modules_by_category.html">Module Index</a></li>
 </ul>
 
             
@@ -334,8 +317,6 @@
         <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_secret_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">instance_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">instance_id</span> <span class="cp">}}</span><span class="s">&#39;</span>
-      <span class="l l-Scalar l-Scalar-Plain">register</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">result</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">debug</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">var=result</span>
 
 <span class="c1"># basic provisioning example to create image using snapshot</span>
 <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">create image using snapshot</span>
@@ -355,8 +336,6 @@
         <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">snapshot_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">snapshot_id</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">status</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">status</span> <span class="cp">}}</span><span class="s">&#39;</span>
-      <span class="l l-Scalar l-Scalar-Plain">register</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">result</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">debug</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">var=result</span>
 
 <span class="c1"># basic provisioning example to create image using disk mapping</span>
 <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">create image using disk mapping</span>
@@ -379,8 +358,6 @@
         <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">disk_mapping</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">disk_mapping</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">status</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">status</span> <span class="cp">}}</span><span class="s">&#39;</span>
-      <span class="l l-Scalar l-Scalar-Plain">register</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">result</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">debug</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">var=result</span>
 
 <span class="c1"># advanced example to create image with tagging, version and launch permission</span>
 <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">create image</span>
@@ -419,8 +396,6 @@
         <span class="l l-Scalar l-Scalar-Plain">wait</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">wait</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">wait_timeout</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">wait_timeout</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">launch_permission</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">launch_permission</span> <span class="cp">}}</span><span class="s">&#39;</span>
-      <span class="l l-Scalar l-Scalar-Plain">register</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">result</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">debug</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">var=result</span>
 
 <span class="c1">#</span>
 <span class="c1"># provisioning to delete user-defined image</span>
@@ -444,8 +419,6 @@
         <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">image_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">image_id</span> <span class="cp">}}</span><span class="s">&#39;</span>
         <span class="l l-Scalar l-Scalar-Plain">status</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">status</span> <span class="cp">}}</span><span class="s">&#39;</span>
-      <span class="l l-Scalar l-Scalar-Plain">register</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">result</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">debug</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">var=result</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -490,7 +463,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017 Alibaba, Inc.
-      Last updated on Feb 21, 2017.
+      Last updated on Feb 23, 2017.
 
     </p>
   </div>

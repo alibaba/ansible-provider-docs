@@ -1,0 +1,585 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ecs_slb_lb - Create, Delete, Enable or Disable Server Load Balancer in ECS &mdash; Aliyun Ansible Documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="Aliyun Ansible Documentation" href="index.html"/>
+        <link rel="up" title="All Modules" href="list_of_all_modules.html"/>
+        <link rel="next" title="ecs_slb_vsg - Create, set and Delete VServer Group, add, remove, modify VServer Group Backend Server" href="ecs_slb_vsg_module.html"/>
+        <link rel="prev" title="ecs_slb - Creates, Sets and Remove backend servers and Describe backend servers health status of SLB" href="ecs_slb_module.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Aliyun Ansible Documentation
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="modules_by_category.html">Module Index</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Aliyun Ansible Documentation</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules_by_category.html">Module Index</a> &raquo;</li>
+        
+          <li><a href="list_of_all_modules.html">All Modules</a> &raquo;</li>
+        
+      <li>ecs_slb_lb - Create, Delete, Enable or Disable Server Load Balancer in ECS</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="ecs-slb-lb-create-delete-enable-or-disable-server-load-balancer-in-ecs">
+<span id="ecs-slb-lb"></span><h1>ecs_slb_lb - Create, Delete, Enable or Disable Server Load Balancer in ECS<a class="headerlink" href="#ecs-slb-lb-create-delete-enable-or-disable-server-load-balancer-in-ecs" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#requirements-on-host-that-executes-module" id="id2">Requirements (on host that executes module)</a></li>
+<li><a class="reference internal" href="#options" id="id3">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id4">Examples</a></li>
+<li><a class="reference internal" href="#notes" id="id5">Notes</a><ul>
+<li><a class="reference internal" href="#status" id="id6">Status</a></li>
+<li><a class="reference internal" href="#support" id="id7">Support</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Create, Delete, Enable or Disable Server Load Balancer in ECS</li>
+</ul>
+</div>
+<div class="section" id="requirements-on-host-that-executes-module">
+<h2><a class="toc-backref" href="#id2">Requirements (on host that executes module)</a><a class="headerlink" href="#requirements-on-host-that-executes-module" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li>python &gt;= 2.7</li>
+<li>aliyun-python-sdk-core, aliyun-python-sdk-ecs, aliyun-python-sdk-slb, ecsutils and footmark</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id3">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>acs_access_key<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>Aliyun Cloud access key. If not set then the value of the 'ACS_ACCESS_KEY_ID', 'ACS_ACCESS_KEY' or 'ECS_ACCESS_KEY' environment variable is used.</div></br>
+    <div style="font-size: small;">aliases: ecs_access_key, access_key<div></td></tr>
+        <tr>
+<td>acs_secret_access_key<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>Aliyun Cloud secret key. If not set then the value of the 'ACS_SECRET_ACCESS_KEY', 'ACS_SECRET_KEY', or 'ECS_SECRET_KEY' environment variable is used.</div></br>
+    <div style="font-size: small;">aliases: ecs_secret_key, secret_key<div></td></tr>
+        <tr>
+<td>address_type<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td>internet</td>
+    <td><ul><li>internet</li><li>intranet</li></ul></td>
+    <td><div>The address type of the SLB</div></br>
+    <div style="font-size: small;">aliases: scheme<div></td></tr>
+        <tr>
+<td>bandwidth<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td>1</td>
+    <td><ul><li>1-1000 Mbps</li></ul></td>
+    <td><div>Bandwidth peak of the public network instance charged per fixed bandwidth</div></td></tr>
+        <tr>
+<td>instance_ids<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>List of instance ids to attach to this SLB</div></td></tr>
+        <tr>
+<td>internet_charge_type<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td>paybytraffic</td>
+    <td><ul><li>paybybandwidth</li><li>paybytraffic</li></ul></td>
+    <td><div>Charging mode for the public network instance</div></td></tr>
+        <tr>
+<td>listeners<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>List of ports/protocols for this SLB to listen on (see example)</div></td></tr>
+        <tr>
+<td>load_balancer_id<br/><div style="font-size: small;"></div></td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>The List of unique ID of a Server Load Balancer instance</div></br>
+    <div style="font-size: small;">aliases: ecs_slb<div></td></tr>
+        <tr>
+<td>load_balancer_name<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>The name of the server load balancer</div></br>
+    <div style="font-size: small;">aliases: name<div></td></tr>
+        <tr>
+<td>master_zone_id<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>The main usable area ID of the created Load Balancer can be found by the DescribeZone interface</div></td></tr>
+        <tr>
+<td>purge_instance_ids<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td>True</td>
+    <td><ul></ul></td>
+    <td><div>Purge existing instance ids on SLB that are not found in instance_ids</div></td></tr>
+        <tr>
+<td>purge_listeners<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td>True</td>
+    <td><ul></ul></td>
+    <td><div>Purge existing listeners on SLB that are not found in listeners</div></td></tr>
+        <tr>
+<td>region<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>The Aliyun Cloud region to use. If not specified then the value of the 'ACS_REGION', 'ACS_DEFAULT_REGION' or 'ECS_REGION' environment variable, if any, is used.</div></br>
+    <div style="font-size: small;">aliases: acs_region, ecs_region<div></td></tr>
+        <tr>
+<td>slave_zone_id<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>The ID of the standby zone of the created Load Balancer can be found on the DescribeZone interface</div></td></tr>
+        <tr>
+<td>status<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td>present</td>
+    <td><ul><li>present</li><li>absent</li><li>active</li><li>inactive</li></ul></td>
+    <td><div>For creating new Server Load Balancer</div></br>
+    <div style="font-size: small;">aliases: state<div></td></tr>
+        <tr>
+<td>tags<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>An associative array of stickness policy settings. Policy will be applied to all listeners</div></td></tr>
+        <tr>
+<td>validate_certs<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td>yes</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td><div>When set to "no", SSL certificates will not be validated</div></td></tr>
+        <tr>
+<td>vswitch_id<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>The vswitch id of the VPC instance</div></br>
+    <div style="font-size: small;">aliases: subnet_id, subnet<div></td></tr>
+        <tr>
+<td>wait<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td>no</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td><div>Wait for the SLB instance to be 'running' before returning</div></td></tr>
+        <tr>
+<td>wait_timeout<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td>300</td>
+    <td><ul></ul></td>
+    <td><div>how long before wait gives up, in seconds</div></td></tr>
+    </table>
+</br></div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id4">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><div class="highlight-YAML+Jinja"><div class="highlight"><pre><span></span><span class="c1">#</span>
+<span class="c1"># Provisioning new Server Load Balancer</span>
+<span class="c1">#</span>
+
+<span class="c1"># Basic provisioning example to create Load Balancer</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">create server load balancer add listeners and add backend server</span>
+  <span class="l l-Scalar l-Scalar-Plain">hosts</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+  <span class="l l-Scalar l-Scalar-Plain">connection</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">local</span>
+  <span class="l l-Scalar l-Scalar-Plain">vars</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-beijing</span>
+    <span class="l l-Scalar l-Scalar-Plain">load_balancer_name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">demo_slb</span>
+    <span class="l l-Scalar l-Scalar-Plain">address_type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">internet</span>
+    <span class="l l-Scalar l-Scalar-Plain">internet_charge_type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">paybytraffic</span>
+    <span class="l l-Scalar l-Scalar-Plain">state</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+  <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">create server load balancer add listeners and add backend server</span>
+      <span class="l l-Scalar l-Scalar-Plain">ecs_slb_lb</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_secret_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">load_balancer_name</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">load_balancer_name</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">address_type</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">address_type</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">internet_charge_type</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">internet_charge_type</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">state</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">state</span> <span class="cp">}}</span><span class="s">&#39;</span>
+
+<span class="c1"># Advanced provisioning example to create Load Balancer with Listeners and Backend Servers</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">create server load balancer, add listeners and add backend server</span>
+  <span class="l l-Scalar l-Scalar-Plain">hosts</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+  <span class="l l-Scalar l-Scalar-Plain">connection</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">local</span>
+  <span class="l l-Scalar l-Scalar-Plain">vars</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-beijing</span>
+    <span class="l l-Scalar l-Scalar-Plain">master_zone_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-beijing-a</span>
+    <span class="l l-Scalar l-Scalar-Plain">slave_zone_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-beijing-b</span>
+    <span class="l l-Scalar l-Scalar-Plain">load_balancer_name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">demo_slb</span>
+    <span class="l l-Scalar l-Scalar-Plain">scheme</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">internet</span>
+    <span class="l l-Scalar l-Scalar-Plain">internet_charge_type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">paybytraffic</span>
+    <span class="l l-Scalar l-Scalar-Plain">bandwidth</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+    <span class="l l-Scalar l-Scalar-Plain">listeners</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">protocol</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">http</span>
+        <span class="l l-Scalar l-Scalar-Plain">load_balancer_port</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">80</span>
+        <span class="l l-Scalar l-Scalar-Plain">instance_port</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">80</span>
+        <span class="l l-Scalar l-Scalar-Plain">bandwidth</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+        <span class="l l-Scalar l-Scalar-Plain">scheduler</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">wrr</span>
+        <span class="l l-Scalar l-Scalar-Plain">gzip</span><span class="p p-Indicator">:</span> <span class="s">&quot;on&quot;</span>
+        <span class="l l-Scalar l-Scalar-Plain">health_check</span><span class="p p-Indicator">:</span>
+          <span class="l l-Scalar l-Scalar-Plain">ping_port</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">80</span>
+          <span class="l l-Scalar l-Scalar-Plain">ping_path</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/index.html</span>
+          <span class="l l-Scalar l-Scalar-Plain">response_timeout</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">5</span>
+          <span class="l l-Scalar l-Scalar-Plain">interval</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">30</span>
+          <span class="l l-Scalar l-Scalar-Plain">unhealthy_threshold</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+          <span class="l l-Scalar l-Scalar-Plain">healthy_threshold</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">10</span>
+          <span class="l l-Scalar l-Scalar-Plain">http_code</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">http_2xx</span>
+        <span class="l l-Scalar l-Scalar-Plain">stickiness</span><span class="p p-Indicator">:</span>
+          <span class="l l-Scalar l-Scalar-Plain">enabled</span><span class="p p-Indicator">:</span> <span class="s">&quot;on&quot;</span>
+          <span class="l l-Scalar l-Scalar-Plain">session_type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">insert</span>
+          <span class="l l-Scalar l-Scalar-Plain">cookie</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">300</span>
+          <span class="l l-Scalar l-Scalar-Plain">cookie_timeout</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+    <span class="l l-Scalar l-Scalar-Plain">vswitch_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">instance_ids</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">state</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+  <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">create server load balancer add listeners and add backend server</span>
+      <span class="l l-Scalar l-Scalar-Plain">ecs_slb_lb</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_secret_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">master_zone_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">master_zone_id</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">slave_zone_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">slave_zone_id</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">load_balancer_name</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">load_balancer_name</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">scheme</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">scheme</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">internet_charge_type</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">internet_charge_type</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">bandwidth</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">bandwidth</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">listeners</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">listeners</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">instance_ids</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">instance_ids</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">vswitch_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">vswitch_id</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">state</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">state</span> <span class="cp">}}</span><span class="s">&#39;</span>
+
+<span class="c1"># Basic provisioning example to Modify  SLB Internet Specification</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">modify server load balancer internet specification</span>
+  <span class="l l-Scalar l-Scalar-Plain">hosts</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+  <span class="l l-Scalar l-Scalar-Plain">connection</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">local</span>
+  <span class="l l-Scalar l-Scalar-Plain">vars</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-beijing</span>
+    <span class="l l-Scalar l-Scalar-Plain">load_balancer_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">internet_charge_type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">paybytraffic</span>
+    <span class="l l-Scalar l-Scalar-Plain">bandwidth</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">5</span>
+  <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">modify server load balancer internet specification</span>
+      <span class="l l-Scalar l-Scalar-Plain">ecs_slb_lb</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_secret_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">load_balancer_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">load_balancer_id</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">internet_charge_type</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">internet_charge_type</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">bandwidth</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">bandwidth</span> <span class="cp">}}</span><span class="s">&#39;</span>
+
+<span class="c1"># Basic provisioning example to Delete Server Load Balancer</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">delete server load balancer</span>
+  <span class="l l-Scalar l-Scalar-Plain">hosts</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+  <span class="l l-Scalar l-Scalar-Plain">connection</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">local</span>
+  <span class="l l-Scalar l-Scalar-Plain">vars</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-beijing</span>
+    <span class="l l-Scalar l-Scalar-Plain">load_balancer_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">status</span> <span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">absent</span>
+  <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">delete server load balancer</span>
+      <span class="l l-Scalar l-Scalar-Plain">ecs_slb_lb</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_secret_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">load_balancer_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">load_balancer_id</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">status</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">status</span> <span class="cp">}}</span><span class="s">&#39;</span>
+
+<span class="c1"># Basic provisioning example to set  SLB Status</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">set server load balancer status</span>
+  <span class="l l-Scalar l-Scalar-Plain">hosts</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+  <span class="l l-Scalar l-Scalar-Plain">connection</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">local</span>
+  <span class="l l-Scalar l-Scalar-Plain">vars</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-beijing</span>
+    <span class="l l-Scalar l-Scalar-Plain">load_balancer_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">status</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">active</span>
+  <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">set server load balancer</span>
+      <span class="l l-Scalar l-Scalar-Plain">ecs_slb</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_secret_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">load_balancer_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">load_balancer_id</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">status</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">status</span> <span class="cp">}}</span><span class="s">&#39;</span>
+
+<span class="c1"># Basic provisioning example to set Server Load Balancer Name</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">set server load balancer name</span>
+  <span class="l l-Scalar l-Scalar-Plain">hosts</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+  <span class="l l-Scalar l-Scalar-Plain">connection</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">local</span>
+  <span class="l l-Scalar l-Scalar-Plain">vars</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-beijing</span>
+    <span class="l l-Scalar l-Scalar-Plain">load_balancer_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">load_balancer_name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">slb_new_name</span>
+    <span class="l l-Scalar l-Scalar-Plain">status</span> <span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+  <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">set server load balancer name</span>
+      <span class="l l-Scalar l-Scalar-Plain">ecs_slb_lb</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_secret_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">load_balancer_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">load_balancer_id</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">load_balancer_name</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">load_balancer_name</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">status</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">status</span> <span class="cp">}}</span><span class="s">&#39;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="notes">
+<h2><a class="toc-backref" href="#id5">Notes</a><a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If parameters are not set within the module, the following environment variables can be used in decreasing order of precedence <code class="docutils literal"><span class="pre">ACS_ACCESS_KEY_ID</span></code> or <code class="docutils literal"><span class="pre">ACS_ACCESS_KEY</span></code> or <code class="docutils literal"><span class="pre">ECS_ACCESS_KEY</span></code>, <code class="docutils literal"><span class="pre">ACS_SECRET_ACCESS_KEY</span></code> or <code class="docutils literal"><span class="pre">ACS_SECRET_KEY</span></code> or <code class="docutils literal"><span class="pre">ECS_SECRET_KEY</span></code>, <code class="docutils literal"><span class="pre">ACS_REGION</span></code> or <code class="docutils literal"><span class="pre">ACS_DEFAULT_REGION</span></code> or <code class="docutils literal"><span class="pre">ECS_REGION</span></code></p>
+</div>
+<div class="section" id="status">
+<h3><a class="toc-backref" href="#id6">Status</a><a class="headerlink" href="#status" title="Permalink to this headline">¶</a></h3>
+<p>This module is flagged as <strong>stableinterface</strong> which means that the maintainers for this module guarantee that the no backward incompatible interface changes will be made.</p>
+</div>
+<div class="section" id="support">
+<h3><a class="toc-backref" href="#id7">Support</a><a class="headerlink" href="#support" title="Permalink to this headline">¶</a></h3>
+<p>This module is maintained by those with core commit privileges</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="ecs_slb_vsg_module.html" class="btn btn-neutral float-right" title="ecs_slb_vsg - Create, set and Delete VServer Group, add, remove, modify VServer Group Backend Server" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="ecs_slb_module.html" class="btn btn-neutral" title="ecs_slb - Creates, Sets and Remove backend servers and Describe backend servers health status of SLB" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017 Alibaba, Inc.
+      Last updated on Feb 23, 2017.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  false,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
