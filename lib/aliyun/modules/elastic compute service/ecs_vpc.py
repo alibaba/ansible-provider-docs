@@ -62,7 +62,7 @@ options:
   cidr_block:
     description:
       - The CIDR block representing the VPC, e.g. 10.0.0.0/8. Value options- 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
-    required: true
+    required: false
     default: 172.16.0.0/16
     aliases: []
   vpc_name:
@@ -121,7 +121,7 @@ options:
     required: true
     default: null
     aliases: []
-  route_tables:
+  route_entries:
     description:
       - A dictionary array of route tables to add or remove from VPC (see example)
     required: true
@@ -184,9 +184,9 @@ notes:
     C(ACS_REGION) or C(ACS_DEFAULT_REGION) or C(ECS_REGION)
 '''
 
-EXAMPLES = '''
+EXAMPLES = """
 #
-# Provisioning new VPC and VSwitch
+# provisioning to create vpc in VPC
 #
 
 # basic provisioning example to create vpc in VPC
@@ -204,6 +204,7 @@ EXAMPLES = '''
     vswitches:
       - zone_id: 'cn-hongkong-b'
         description: 'dummy'
+        cidr_block: '172.16.0.0/24'
   tasks:
     - name: create vpc
       ecs_vpc:
@@ -215,6 +216,8 @@ EXAMPLES = '''
         vpc_name: '{{ vpc_name }}'
         description: '{{ description }}'
         vswitches: '{{ vswitches }}'
+      register: result
+    - debug: var=result
 
 # basic provisioning example to delete vpc
 - name: delete vpc
@@ -232,6 +235,8 @@ EXAMPLES = '''
         region: '{{ region }}'
         state: absent
         vpc_id: xxxxxxxxxx
+      register: result
+    - debug: var=result
 
 # basic provisioning example to create vswitch
 - name: create vswitch
@@ -257,6 +262,8 @@ EXAMPLES = '''
         vswitches: '{{ vswitches }}'
         vpc_id: '{{ vpc_id }}'
         state: '{{ state }}'
+      register: result
+    - debug: var=result
 
 # basic provisioning example to delete vswitch
 - name: delete vswitch
@@ -266,6 +273,7 @@ EXAMPLES = '''
     acs_access_key: xxxxxxxxxx
     acs_secret_access_key: xxxxxxxxxx
     region: cn-hongkong
+    vpc_id: xxxxxxxxxx
     purge_vswitches:
      - xxxxxxxxxx
     state: present
@@ -275,8 +283,11 @@ EXAMPLES = '''
         acs_access_key: '{{ acs_access_key }}'
         acs_secret_access_key: '{{ acs_secret_access_key }}'
         region: '{{ region }}'
+        vpc_id: '{{ vpc_id }}'
         purge_vswitches: '{{ purge_vswitches }}'
         state: '{{ state }}'
+      register: result
+    - debug: var=result
 
 # basic provisioning example to create custom route
 - name: create vpc
@@ -288,9 +299,8 @@ EXAMPLES = '''
     region: cn-hongkong
     state: present
     vpc_id: xxxxxxxxxx
-    route_tables:
-      - dest: '192.168.3.0/24'
-        destination_cidrblock: '192.168.4.0/24'
+    route_entries:
+      - destination_cidrblock: '192.168.4.0/24'
         next_hop_id: 'xxxxxxxxxx'
   tasks:
     - name: create vpc
@@ -299,8 +309,10 @@ EXAMPLES = '''
         acs_secret_access_key: '{{ acs_secret_access_key }}'
         region: '{{ region }}'
         state: '{{ state }}'
-        route_tables: '{{ route_tables }}'
+        route_entries: '{{ route_entries }}'
         vpc_id: '{{ vpc_id }}'
+      register: result
+    - debug: var=result
 
 # basic provisioning example to delete custom route
 - name: delete route
@@ -324,6 +336,8 @@ EXAMPLES = '''
         purge_routes: '{{ purge_routes }}'
         state: '{{ state }}'
         vpc_id: '{{ vpc_id }}'
+      register: result
+    - debug: var=result
 
 # basic provisioning example to querying vroute
 - name: get vrouter list
@@ -347,6 +361,8 @@ EXAMPLES = '''
         state: '{{ state }}'
         pagenumber: '{{ pagenumber }}'
         pagesize: '{{ pagesize }}'
+      register: result
+    - debug: var=result
 
 # basic provisioning example to querying vswitch
 - name: querying vswitch status
@@ -374,4 +390,7 @@ EXAMPLES = '''
         vswitch_id: '{{ vswitch_id }}'
         page_size: '{{ page_size }}'
         page_number: '{{ page_number }}'
-'''
+      register: result
+    - debug: var=result
+
+"""
