@@ -1,0 +1,826 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>rds - Create instance, Create database, Create read-only instance, Modify rds instance, Changing rds instance type, Restart instance, Switching between primary and standby database, Delete database and Release Instance in RDS. &mdash; Aliyun Ansible Documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="Aliyun Ansible Documentation" href="index.html"/>
+        <link rel="up" title="All Modules" href="list_of_all_modules.html"/>
+        <link rel="next" title="rds_acc_mgmt - Create account, delete account, resetting instance password, resetting account, granting account permission and revoking account permission in RDS." href="rds_acc_mgmt_module.html"/>
+        <link rel="prev" title="oss - Create/Delete Bucket and Objects/Folder. Upload Files in OSS" href="oss_module.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Aliyun Ansible Documentation
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules_by_category.html">Module Index</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="list_of_all_modules.html">All Modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ecs_module.html">ecs - Create, Start, Stop, Restart or Terminate an Instance in ECS. Add or Remove Instance to/from a Security Group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ecs_ami_module.html">ecs_ami - Create or Delete User-defined Image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ecs_disk_module.html">ecs_disk - Create, Attach, Detach or Delete a disk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ecs_group_module.html">ecs_group - Create, Query or Delete Security Group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ecs_slb_module.html">ecs_slb - Creates, Sets and Remove backend servers and Describe backend servers health status of SLB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ecs_slb_lb_module.html">ecs_slb_lb - Create, Delete, Enable or Disable Server Load Balancer in ECS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ecs_slb_vsg_module.html">ecs_slb_vsg - Create, set and Delete VServer Group, add, remove, modify VServer Group Backend Server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ecs_vpc_module.html">ecs_vpc - Create/Delete Vpc and Vswitch, Querying Vswitch and VRouter and Adding Route Entry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ecs_vpc_net_module.html">ecs_vpc_net - Request, Bind, Unbind, Modify and Release EIP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="oss_module.html">oss - Create/Delete Bucket and Objects/Folder. Upload Files in OSS</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">rds - Create instance, Create database, Create read-only instance, Modify rds instance, Changing rds instance type, Restart instance, Switching between primary and standby database, Delete database and Release Instance in RDS.</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#options">Options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="rds_acc_mgmt_module.html">rds_acc_mgmt - Create account, delete account, resetting instance password, resetting account, granting account permission and revoking account permission in RDS.</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="list_of_elastic compute service_modules.html">Elastic Compute Service Modules</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Aliyun Ansible Documentation</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules_by_category.html">Module Index</a> &raquo;</li>
+        
+          <li><a href="list_of_all_modules.html">All Modules</a> &raquo;</li>
+        
+      <li>rds - Create instance, Create database, Create read-only instance, Modify rds instance, Changing rds instance type, Restart instance, Switching between primary and standby database, Delete database and Release Instance in RDS.</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="rds-create-instance-create-database-create-read-only-instance-modify-rds-instance-changing-rds-instance-type-restart-instance-switching-between-primary-and-standby-database-delete-database-and-release-instance-in-rds">
+<span id="rds"></span><h1>rds - Create instance, Create database, Create read-only instance, Modify rds instance, Changing rds instance type, Restart instance, Switching between primary and standby database, Delete database and Release Instance in RDS.<a class="headerlink" href="#rds-create-instance-create-database-create-read-only-instance-modify-rds-instance-changing-rds-instance-type-restart-instance-switching-between-primary-and-standby-database-delete-database-and-release-instance-in-rds" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#options" id="id2">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a><ul>
+<li><a class="reference internal" href="#status" id="id4">Status</a></li>
+<li><a class="reference internal" href="#support" id="id5">Support</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Create instance, Create database, Create read-only instance, Modify rds instance, Changing rds instance type, Restart instance, Switching between primary and standby database, Delete database and Release Instance in RDS.</li>
+</ul>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id2">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border=1 cellpadding=4>
+<tr>
+<th class="head">parameter</th>
+<th class="head">required</th>
+<th class="head">default</th>
+<th class="head">choices</th>
+<th class="head">comments</th>
+</tr>
+        <tr>
+<td>acs_access_key<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>Aliyun Cloud access key. If not set then the value of the `ACS_ACCESS_KEY_ID`, `ACS_ACCESS_KEY` or `ECS_ACCESS_KEY` environment variable is used.</div></br>
+    <div style="font-size: small;">aliases: ecs_access_key, access_key<div></td></tr>
+        <tr>
+<td>acs_secret_access_key<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>Aliyun Cloud secret key. If not set then the value of the `ACS_SECRET_ACCESS_KEY`, `ACS_SECRET_KEY`, or `ECS_SECRET_KEY` environment variable is used.</div></br>
+    <div style="font-size: small;">aliases: ecs_secret_key, secret_key<div></td></tr>
+        <tr>
+<td>allocate_public_ip<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>Whether to allocate public IP.</div></td></tr>
+        <tr>
+<td>backup_retention_period<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>Number of days backups are retained.</div></br>
+    <div style="font-size: small;">aliases: backup_retention<div></td></tr>
+        <tr>
+<td>character_set_name<br/><div style="font-size: small;"></div></td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>Associate the DB instance with a specified character set.</div></td></tr>
+        <tr>
+<td>command<br/><div style="font-size: small;"></div></td>
+<td>yes</td>
+<td>create</td>
+    <td><ul><li>create</li><li>delete</li><li>replicate</li><li>modify</li><li>reboot</li><li>switch</li></ul></td>
+    <td><div>Specifies the action to take.</div></td></tr>
+        <tr>
+<td>connection_mode<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul><li>Performance</li><li>Safe</li></ul></td>
+    <td><div>The connection mode of the rds instance.</div></td></tr>
+        <tr>
+<td>connection_string_ prefix<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>Target connection string.</div></td></tr>
+        <tr>
+<td>current_connection_string<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>Current connection string of an instance.</div></td></tr>
+        <tr>
+<td>db_description<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>Description of a database to create within the instance.  If not specified then no database is created.</div></td></tr>
+        <tr>
+<td>db_engine<br/><div style="font-size: small;"></div></td>
+<td>yes</td>
+<td></td>
+    <td><ul><li>MySQL</li><li>SQLServer</li><li>PostgreSQL</li><li>PPAS</li></ul></td>
+    <td><div>The type of database.</div></td></tr>
+        <tr>
+<td>db_instance_class<br/><div style="font-size: small;"></div></td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>The instance type of the database.</div></br>
+    <div style="font-size: small;">aliases: instance_type<div></td></tr>
+        <tr>
+<td>db_instance_storage<br/><div style="font-size: small;"></div></td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>Size in gigabytes of the initial storage for the DB instance.</div></br>
+    <div style="font-size: small;">aliases: size<div></td></tr>
+        <tr>
+<td>db_name<br/><div style="font-size: small;"></div></td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>Name of a database to create within the instance.  If not specified then no database is created.</div></td></tr>
+        <tr>
+<td>db_tags<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>A hash of db tags, tag_key must be not null when tag_value isn't null.</div></td></tr>
+        <tr>
+<td>engine_version<br/><div style="font-size: small;"></div></td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>Version number of the database engine to use. If not specified, then the current Aliyun RDS default engine version is used.</div></td></tr>
+        <tr>
+<td>force<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>Yes- forced, No- unforced, default value- unforced</div></td></tr>
+        <tr>
+<td>instance_description<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>The description of the DB instance</div></td></tr>
+        <tr>
+<td>instance_id<br/><div style="font-size: small;"></div></td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>ID of the database to change.</div></br>
+    <div style="font-size: small;">aliases: source_instance<div></td></tr>
+        <tr>
+<td>instance_net_type<br/><div style="font-size: small;"></div></td>
+<td>yes</td>
+<td></td>
+    <td><ul><li>Internet</li><li>Intranet</li></ul></td>
+    <td><div>The net type of the DB instance</div></td></tr>
+        <tr>
+<td>instance_network_type<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td>Classic</td>
+    <td><ul><li>VPC</li><li>Classic</li></ul></td>
+    <td><div>The network type of the instance.</div></br>
+    <div style="font-size: small;">aliases: network_type<div></td></tr>
+        <tr>
+<td>maint_window<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>Maintenance window in format of ddd:hh24:mi-ddd:hh24:mi.  (Example: Mon:22:00-Mon:23:15) If not specified then a random maintenance window is assigned.</div></td></tr>
+        <tr>
+<td>node_id<br/><div style="font-size: small;"></div></td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>Unique ID of a node.</div></td></tr>
+        <tr>
+<td>pay_type<br/><div style="font-size: small;"></div></td>
+<td>yes</td>
+<td></td>
+    <td><ul><li>Postpaid</li><li>Prepaid</li></ul></td>
+    <td><div>The pay type of the DB instance.</div></td></tr>
+        <tr>
+<td>period<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul><li>Year</li><li>Month</li></ul></td>
+    <td><div>The type of the Prepaid</div></td></tr>
+        <tr>
+<td>port<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>Target port.</div></td></tr>
+        <tr>
+<td>preferred_backup_period<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>Backup period.</div></br>
+    <div style="font-size: small;">aliases: backup_window<div></td></tr>
+        <tr>
+<td>preferred_backup_time<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>Backup time, in the format ofHH:mmZ- HH:mm Z.This parameter is required if preferred_backup_period and backup_retention_period is passed.</div></td></tr>
+        <tr>
+<td>private_ip_address<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>IP address of an VPC under VSwitchId. If no value is specified, the system will automatically assign a VPC IP address.</div></td></tr>
+        <tr>
+<td>public_connection_string_prefix<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>The public connection string.</div></td></tr>
+        <tr>
+<td>public_port<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>The public connection port.</div></td></tr>
+        <tr>
+<td>region<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>The ACS region to use. If not specified then the value of the ECS_REGION environment variable, if any, is used</div></br>
+    <div style="font-size: small;">aliases: acs_region, ecs_region<div></td></tr>
+        <tr>
+<td>security_ip_list<br/><div style="font-size: small;"></div></td>
+<td>yes</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>IP list that be allowed to access all DBs in the instance. Support CIDR mode.</div></td></tr>
+        <tr>
+<td>used_time<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>The duration of the Prepaid</div></td></tr>
+        <tr>
+<td>vpc_id<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>The ID of the VPC.</div></td></tr>
+        <tr>
+<td>vswitch_id<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>The ID of the VSwitch.</div></td></tr>
+        <tr>
+<td>wait<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td>no</td>
+    <td><ul><li>yes</li><li>Yes</li><li>no</li><li>No</li><li>True</li><li>False</li><li>true</li><li>false</li></ul></td>
+    <td><div>wait for the RDS instance to be in state 'running' before returning.</div></td></tr>
+        <tr>
+<td>wait_timeout<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td>300</td>
+    <td><ul></ul></td>
+    <td><div>how long before wait gives up, in seconds</div></td></tr>
+        <tr>
+<td>zone<br/><div style="font-size: small;"></div></td>
+<td>no</td>
+<td></td>
+    <td><ul></ul></td>
+    <td><div>availability zone in which to launch the instance. Used only when command=create, command=replicate.</div></br>
+    <div style="font-size: small;">aliases: acs_zone, ecs_zone<div></td></tr>
+    </table>
+</br></div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><div class="highlight-YAML+Jinja"><div class="highlight"><pre><span></span><span class="c1">#</span>
+<span class="c1"># provisioning for rds</span>
+<span class="c1">#</span>
+
+<span class="c1"># basic provisioning example to create rds instance</span>
+
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">create rds instance</span>
+  <span class="l l-Scalar l-Scalar-Plain">hosts</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+  <span class="l l-Scalar l-Scalar-Plain">connection</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">local</span>
+  <span class="l l-Scalar l-Scalar-Plain">vars</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-beijing</span>
+    <span class="l l-Scalar l-Scalar-Plain">command</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">create</span>
+    <span class="l l-Scalar l-Scalar-Plain">zone</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-beijing-a</span>
+    <span class="l l-Scalar l-Scalar-Plain">db_engine</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">MySQL</span>
+    <span class="l l-Scalar l-Scalar-Plain">engine_version</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">5.6</span>
+    <span class="l l-Scalar l-Scalar-Plain">db_instance_class</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">rds.mysql.t1.small</span>
+    <span class="l l-Scalar l-Scalar-Plain">db_instance_storage</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">10</span>
+    <span class="l l-Scalar l-Scalar-Plain">instance_net_type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Intranet</span>
+    <span class="l l-Scalar l-Scalar-Plain">instance_description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">ahttp://</span>
+    <span class="l l-Scalar l-Scalar-Plain">security_ip_list</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">192.168.0.2/24</span>
+    <span class="l l-Scalar l-Scalar-Plain">pay_type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Postpaid</span>
+    <span class="l l-Scalar l-Scalar-Plain">connection_mode</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Safe</span>
+    <span class="l l-Scalar l-Scalar-Plain">instance_network_type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">VPC</span>
+    <span class="l l-Scalar l-Scalar-Plain">vpc_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">vswitch_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">private_ip_address</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">192.168.0.25</span>
+    <span class="l l-Scalar l-Scalar-Plain">allocate_public_ip</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+    <span class="l l-Scalar l-Scalar-Plain">public_connection_string_prefix</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">test</span>
+    <span class="l l-Scalar l-Scalar-Plain">public_port</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">3306</span>
+    <span class="l l-Scalar l-Scalar-Plain">db_name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">testmysql</span>
+    <span class="l l-Scalar l-Scalar-Plain">db_description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">test mysql</span>
+    <span class="l l-Scalar l-Scalar-Plain">character_set_name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">utf8</span>
+    <span class="l l-Scalar l-Scalar-Plain">modifying_db_instance_maint_time</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">02:00Z-06:00Z</span>
+    <span class="l l-Scalar l-Scalar-Plain">preferred_backup_time</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">02:00Z-03:00Z</span>
+    <span class="l l-Scalar l-Scalar-Plain">preferred_backup_period</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Monday,Tuesday</span>
+    <span class="l l-Scalar l-Scalar-Plain">backup_retention_period</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">7</span>
+    <span class="l l-Scalar l-Scalar-Plain">wait</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+    <span class="l l-Scalar l-Scalar-Plain">wait_timeout</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">20</span>
+    <span class="l l-Scalar l-Scalar-Plain">db_tags</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">test</span>
+  <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">create rds instance</span>
+      <span class="l l-Scalar l-Scalar-Plain">rds</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_secret_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">zone</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">zone</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">command</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">command</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">db_engine</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">db_engine</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">engine_version</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">engine_version</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">db_instance_class</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">db_instance_class</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">db_instance_storage</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">db_instance_storage</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">instance_net_type</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">instance_net_type</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">instance_description</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">instance_description</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">security_ip_list</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">security_ip_list</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">pay_type</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">pay_type</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">connection_mode</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">connection_mode</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">instance_network_type</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">instance_network_type</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">vpc_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">vpc_id</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">vswitch_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">vswitch_id</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">private_ip_address</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">private_ip_address</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">allocate_public_ip</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">allocate_public_ip</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">public_connection_string_prefix</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">public_connection_string_prefix</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">public_port</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">public_port</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">db_name</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">db_name</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">db_description</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">db_description</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">character_set_name</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">character_set_name</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">modifying_db_instance_maint_time</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">modifying_db_instance_maint_time</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">preferred_backup_time</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">preferred_backup_time</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">preferred_backup_period</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">preferred_backup_period</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">backup_retention_period</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">backup_retention_period</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">db_tags</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">db_tags</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">wait</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">wait</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">wait_timeout</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">wait_timeout</span> <span class="cp">}}</span><span class="s">&#39;</span>
+      <span class="l l-Scalar l-Scalar-Plain">register</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">result</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">debug</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">var=result</span>
+
+<span class="c1"># basic provisioning example to changing rds instance type</span>
+
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">changing rds instance type</span>
+  <span class="l l-Scalar l-Scalar-Plain">hosts</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+  <span class="l l-Scalar l-Scalar-Plain">connection</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">local</span>
+  <span class="l l-Scalar l-Scalar-Plain">vars</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-beijing</span>
+    <span class="l l-Scalar l-Scalar-Plain">command</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">modify</span>
+    <span class="l l-Scalar l-Scalar-Plain">instance_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">db_instance_class</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">rds.mysql.s1.small</span>
+    <span class="l l-Scalar l-Scalar-Plain">db_instance_storage</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">35</span>
+    <span class="l l-Scalar l-Scalar-Plain">pay_type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Postpaid</span>
+  <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">changing rds instance type</span>
+      <span class="l l-Scalar l-Scalar-Plain">rds</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_secret_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">command</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">command</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">instance_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">instance_id</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">db_instance_class</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">db_instance_class</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">db_instance_storage</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">db_instance_storage</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">pay_type</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">pay_type</span> <span class="cp">}}</span><span class="s">&#39;</span>
+      <span class="l l-Scalar l-Scalar-Plain">register</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">result</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">debug</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">var=result</span>
+
+<span class="c1"># basic provisioning example to modify rds instance</span>
+
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">modify rds instance</span>
+  <span class="l l-Scalar l-Scalar-Plain">hosts</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+  <span class="l l-Scalar l-Scalar-Plain">connection</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">local</span>
+  <span class="l l-Scalar l-Scalar-Plain">vars</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-beijing</span>
+    <span class="l l-Scalar l-Scalar-Plain">command</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">modify</span>
+    <span class="l l-Scalar l-Scalar-Plain">instance_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">db_instance_class</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">rds.mysql.t1.small</span>
+    <span class="l l-Scalar l-Scalar-Plain">db_instance_storage</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">45</span>
+    <span class="l l-Scalar l-Scalar-Plain">instance_description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xyz</span>
+    <span class="l l-Scalar l-Scalar-Plain">security_ip_list</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">192.168.0.2/24</span>
+    <span class="l l-Scalar l-Scalar-Plain">pay_type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Postpaid</span>
+    <span class="l l-Scalar l-Scalar-Plain">connection_mode</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Safe</span>
+    <span class="l l-Scalar l-Scalar-Plain">instance_network_type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">VPC</span>
+    <span class="l l-Scalar l-Scalar-Plain">vpc_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">vswitch_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">current_connection_string</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">test.mysql.rds.aliyuncs.com</span>
+    <span class="l l-Scalar l-Scalar-Plain">connection_string_prefix</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">test123</span>
+    <span class="l l-Scalar l-Scalar-Plain">port</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">3390</span>
+    <span class="l l-Scalar l-Scalar-Plain">maint_window</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">02:00Z-06:00Z</span>
+    <span class="l l-Scalar l-Scalar-Plain">preferred_backup_time</span><span class="p p-Indicator">:</span>  <span class="l l-Scalar l-Scalar-Plain">02:00Z-03:00Z</span>
+    <span class="l l-Scalar l-Scalar-Plain">preferred_backup_period</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Monday</span>
+    <span class="l l-Scalar l-Scalar-Plain">backup_retention_period</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">50</span>
+  <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">modify rds instance</span>
+      <span class="l l-Scalar l-Scalar-Plain">rds</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_secret_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">command</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">command</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">instance_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">instance_id</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">db_instance_class</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">db_instance_class</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">db_instance_storage</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">db_instance_storage</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">instance_description</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">instance_description</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">security_ip_list</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">security_ip_list</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">pay_type</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">pay_type</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">connection_mode</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">connection_mode</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">instance_network_type</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">instance_network_type</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">vpc_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">vpc_id</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">vswitch_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">vswitch_id</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">current_connection_string</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">current_connection_string</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">connection_string_prefix</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">connection_string_prefix</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">port</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">port</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">maint_window</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">maint_window</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">preferred_backup_time</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">preferred_backup_time</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">preferred_backup_period</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">preferred_backup_period</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">backup_retention_period</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">backup_retention_period</span> <span class="cp">}}</span><span class="s">&#39;</span>
+      <span class="l l-Scalar l-Scalar-Plain">register</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">result</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">debug</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">var=result</span>
+
+<span class="c1"># basic provisioning example to create database</span>
+
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">create database</span>
+  <span class="l l-Scalar l-Scalar-Plain">hosts</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+  <span class="l l-Scalar l-Scalar-Plain">connection</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">local</span>
+  <span class="l l-Scalar l-Scalar-Plain">vars</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-hongkong</span>
+    <span class="l l-Scalar l-Scalar-Plain">command</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">create</span>
+    <span class="l l-Scalar l-Scalar-Plain">instance_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">db_name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">testdb</span>
+    <span class="l l-Scalar l-Scalar-Plain">db_description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">test</span>
+    <span class="l l-Scalar l-Scalar-Plain">character_set_name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">utf8</span>
+  <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">create database</span>
+      <span class="l l-Scalar l-Scalar-Plain">rds</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_secret_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">command</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">command</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">instance_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">instance_id</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">db_name</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">db_name</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">db_description</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">db_description</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">character_set_name</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">character_set_name</span> <span class="cp">}}</span><span class="s">&#39;</span>
+      <span class="l l-Scalar l-Scalar-Plain">register</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">result</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">debug</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">var=result</span>
+
+<span class="c1"># basic provisioning example to delete database</span>
+
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">delete database</span>
+  <span class="l l-Scalar l-Scalar-Plain">hosts</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+  <span class="l l-Scalar l-Scalar-Plain">connection</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">local</span>
+  <span class="l l-Scalar l-Scalar-Plain">vars</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-hongkong</span>
+    <span class="l l-Scalar l-Scalar-Plain">command</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">delete</span>
+    <span class="l l-Scalar l-Scalar-Plain">instance_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">db_name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">testdb</span>
+  <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">delete database</span>
+      <span class="l l-Scalar l-Scalar-Plain">rds</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_secret_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">command</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">command</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">instance_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">instance_id</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">db_name</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">db_name</span> <span class="cp">}}</span><span class="s">&#39;</span>
+      <span class="l l-Scalar l-Scalar-Plain">register</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">result</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">debug</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">var=result</span>
+
+<span class="c1"># basic provisioning example to switching between primary and standby database of an rds</span>
+
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">switching between primary and standby database</span>
+  <span class="l l-Scalar l-Scalar-Plain">hosts</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+  <span class="l l-Scalar l-Scalar-Plain">connection</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">local</span>
+  <span class="l l-Scalar l-Scalar-Plain">vars</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-hongkong</span>
+    <span class="l l-Scalar l-Scalar-Plain">command</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">switch</span>
+    <span class="l l-Scalar l-Scalar-Plain">instance_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">node_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">force</span><span class="p p-Indicator">:</span> <span class="s">&#39;Yes&#39;</span>
+  <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">switching between primary and standby database</span>
+      <span class="l l-Scalar l-Scalar-Plain">rds</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_secret_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">command</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">command</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">instance_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">instance_id</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">node_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">node_id</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">force</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">force</span> <span class="cp">}}</span><span class="s">&#39;</span>
+      <span class="l l-Scalar l-Scalar-Plain">register</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">result</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">debug</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">var=result</span>
+
+<span class="c1"># basic provisioning example to restarting rds instance</span>
+
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Restarting RDS Instance</span>
+  <span class="l l-Scalar l-Scalar-Plain">hosts</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+  <span class="l l-Scalar l-Scalar-Plain">connection</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">local</span>
+  <span class="l l-Scalar l-Scalar-Plain">vars</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-beijing</span>
+    <span class="l l-Scalar l-Scalar-Plain">command</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">reboot</span>
+    <span class="l l-Scalar l-Scalar-Plain">instance_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+  <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Restarting RDS Instance</span>
+      <span class="l l-Scalar l-Scalar-Plain">rds</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_secret_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">command</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">command</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">instance_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">instance_id</span> <span class="cp">}}</span><span class="s">&#39;</span>
+      <span class="l l-Scalar l-Scalar-Plain">register</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">result</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">debug</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">var=result</span>
+
+<span class="c1"># basic provisioning example to releasing rds instance</span>
+
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Releasing RDS Instance</span>
+  <span class="l l-Scalar l-Scalar-Plain">hosts</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+  <span class="l l-Scalar l-Scalar-Plain">connection</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">local</span>
+  <span class="l l-Scalar l-Scalar-Plain">vars</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+    <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cn-beijing</span>
+    <span class="l l-Scalar l-Scalar-Plain">command</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">delete</span>
+    <span class="l l-Scalar l-Scalar-Plain">instance_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxx</span>
+  <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Releasing RDS Instance</span>
+      <span class="l l-Scalar l-Scalar-Plain">rds</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">acs_secret_access_key</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">acs_secret_access_key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">region</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">region</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">command</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">command</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="l l-Scalar l-Scalar-Plain">instance_id</span><span class="p p-Indicator">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">instance_id</span> <span class="cp">}}</span><span class="s">&#39;</span>
+      <span class="l l-Scalar l-Scalar-Plain">register</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">result</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">debug</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">var=result</span>
+</pre></div>
+</div>
+</div></blockquote>
+<div class="section" id="status">
+<h3><a class="toc-backref" href="#id4">Status</a><a class="headerlink" href="#status" title="Permalink to this headline">¶</a></h3>
+<p>This module is flagged as <strong>stableinterface</strong> which means that the maintainers for this module guarantee that the no backward incompatible interface changes will be made.</p>
+</div>
+<div class="section" id="support">
+<h3><a class="toc-backref" href="#id5">Support</a><a class="headerlink" href="#support" title="Permalink to this headline">¶</a></h3>
+<p>This module is maintained by those with core commit privileges</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="rds_acc_mgmt_module.html" class="btn btn-neutral float-right" title="rds_acc_mgmt - Create account, delete account, resetting instance password, resetting account, granting account permission and revoking account permission in RDS." accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="oss_module.html" class="btn btn-neutral" title="oss - Create/Delete Bucket and Objects/Folder. Upload Files in OSS" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017 Alibaba, Inc.
+      Last updated on Apr 20, 2017.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  false,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

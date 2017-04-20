@@ -138,8 +138,6 @@ Examples
             acs_secret_access_key: '{{ acs_secret_access_key }}'
             region: '{{ region }}'
             security_group_name: 'AliyunSG'
-          register: result_details
-        - debug: var=result_details
     
     
     Basic provisioning example authorize security group
@@ -166,8 +164,6 @@ Examples
                 port_range: -1/-1
                 dest_group_id: xxxxxxxxxx
                 nic_type: intranet
-          register: result_details
-        - debug: var=result_details
     
     
     Provisioning example create and authorize security group
@@ -201,8 +197,6 @@ Examples
                 priority: 10
                 policy: accept
                 nic_type: intranet
-          register: result_details
-        - debug: var=result_details
     
     
     # Provisioning example to delete security group
@@ -224,8 +218,6 @@ Examples
             region: '{{ region }}'
             security_group_ids: '{{ security_group_ids }}'
             status: '{{ status }}'
-          register: result
-        - debug: var=result
     
     
     # Provisioning example to querying security group list
@@ -244,7 +236,6 @@ Examples
             acs_secret_access_key: '{{ acs_secret_access_key }}'
             region: '{{ region }}'
             status: '{{ status }}'
-          register: result
 
 
 Notes

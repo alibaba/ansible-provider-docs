@@ -166,8 +166,6 @@ Examples
             acs_secret_access_key: '{{ acs_secret_access_key }}'
             region: '{{ region }}'
             instance_id: '{{ instance_id }}'
-          register: result
-        - debug: var=result
     
     # basic provisioning example to create image using snapshot
     - name: create image using snapshot
@@ -187,8 +185,6 @@ Examples
             region: '{{ region }}'
             snapshot_id: '{{ snapshot_id }}'
             status: '{{ status }}'
-          register: result
-        - debug: var=result
     
     # basic provisioning example to create image using disk mapping
     - name: create image using disk mapping
@@ -211,8 +207,6 @@ Examples
             region: '{{ region }}'
             disk_mapping: '{{ disk_mapping }}'
             status: '{{ status }}'
-          register: result
-        - debug: var=result
     
     # advanced example to create image with tagging, version and launch permission
     - name: create image
@@ -251,8 +245,6 @@ Examples
             wait: '{{ wait }}'
             wait_timeout: '{{ wait_timeout }}'
             launch_permission: '{{ launch_permission }}'
-          register: result
-        - debug: var=result
     
     #
     # provisioning to delete user-defined image
@@ -276,8 +268,6 @@ Examples
             region: '{{ region }}'
             image_id: '{{ image_id }}'
             status: '{{ status }}'
-          register: result
-        - debug: var=result
 
 
 Notes
