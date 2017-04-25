@@ -1,8 +1,8 @@
 .. _rds:
 
 
-rds - Create instance, Create database, Create read-only instance, Modify rds instance, Changing rds instance type, Restart instance, Switching between primary and standby database, Delete database and Release Instance in RDS.
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+rds - Create instance, Create database, Create read-only instance, Modify rds instance, Change rds instance type, Restart instance, Switch between primary and standby database, Delete database and Release Instance in RDS.
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 
@@ -14,7 +14,7 @@ rds - Create instance, Create database, Create read-only instance, Modify rds in
 Synopsis
 --------
 
-* Create instance, Create database, Create read-only instance, Modify rds instance, Changing rds instance type, Restart instance, Switching between primary and standby database, Delete database and Release Instance in RDS.
+* Create instance, Create database, Create read-only instance, Modify rds instance, Change rds instance type, Restart instance, Switch between primary and standby database, Delete database and Release Instance in RDS.
 
 
 
@@ -83,6 +83,12 @@ Options
     <td></td>
         <td><ul></ul></td>
         <td><div>Target connection string.</div></td></tr>
+            <tr>
+    <td>connection_string_prefix<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td></td>
+        <td><ul></ul></td>
+        <td><div>The public connection string.</div></td></tr>
             <tr>
     <td>current_connection_string<br/><div style="font-size: small;"></div></td>
     <td>no</td>
@@ -215,12 +221,6 @@ Options
         <td><ul></ul></td>
         <td><div>IP address of an VPC under VSwitchId. If no value is specified, the system will automatically assign a VPC IP address.</div></td></tr>
             <tr>
-    <td>public_connection_string_prefix<br/><div style="font-size: small;"></div></td>
-    <td>no</td>
-    <td></td>
-        <td><ul></ul></td>
-        <td><div>The public connection string.</div></td></tr>
-            <tr>
     <td>public_port<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td></td>
@@ -320,7 +320,7 @@ Examples
         db_name: testmysql
         db_description: test mysql
         character_set_name: utf8
-        modifying_db_instance_maint_time: 02:00Z-06:00Z
+        maint_window: 02:00Z-06:00Z
         preferred_backup_time: 02:00Z-03:00Z
         preferred_backup_period: Monday,Tuesday
         backup_retention_period: 7
@@ -350,12 +350,12 @@ Examples
             vswitch_id: '{{ vswitch_id }}'
             private_ip_address: '{{ private_ip_address }}'
             allocate_public_ip: '{{ allocate_public_ip }}'
-            public_connection_string_prefix: '{{ public_connection_string_prefix }}'
+            connection_string_prefix: '{{ connection_string_prefix }}'
             public_port: '{{ public_port }}'
             db_name: '{{ db_name }}'
             db_description: '{{ db_description }}'
             character_set_name: '{{ character_set_name }}'
-            modifying_db_instance_maint_time: '{{ modifying_db_instance_maint_time }}'
+            maint_window: '{{ maint_window }}'
             preferred_backup_time: '{{ preferred_backup_time }}'
             preferred_backup_period: '{{ preferred_backup_period }}'
             backup_retention_period: '{{ backup_retention_period }}'
@@ -365,9 +365,9 @@ Examples
           register: result
         - debug: var=result
     
-    # basic provisioning example to changing rds instance type
+    # basic provisioning example to change rds instance type
     
-    - name: changing rds instance type
+    - name: change rds instance type
       hosts: localhost
       connection: local
       vars:
@@ -380,7 +380,7 @@ Examples
         db_instance_storage: 35
         pay_type: Postpaid
       tasks:
-        - name: changing rds instance type
+        - name: change rds instance type
           rds:
             acs_access_key: '{{ acs_access_key }}'
             acs_secret_access_key: '{{ acs_secret_access_key }}'
@@ -499,9 +499,9 @@ Examples
           register: result
         - debug: var=result
     
-    # basic provisioning example to switching between primary and standby database of an rds
+    # basic provisioning example to switch between primary and standby database of an rds
     
-    - name: switching between primary and standby database
+    - name: Switch between primary and standby database
       hosts: localhost
       connection: local
       vars:
@@ -513,7 +513,7 @@ Examples
         node_id: xxxxxxxxxx
         force: 'Yes'
       tasks:
-        - name: switching between primary and standby database
+        - name: Switch between primary and standby database
           rds:
             acs_access_key: '{{ acs_access_key }}'
             acs_secret_access_key: '{{ acs_secret_access_key }}'
@@ -525,9 +525,9 @@ Examples
           register: result
         - debug: var=result
     
-    # basic provisioning example to restarting rds instance
+    # basic provisioning example to restart rds instance
     
-    - name: Restarting RDS Instance
+    - name: Restart RDS Instance
       hosts: localhost
       connection: local
       vars:
@@ -537,7 +537,7 @@ Examples
         command: reboot
         instance_id: xxxxxxxxxx
       tasks:
-        - name: Restarting RDS Instance
+        - name: Restart RDS Instance
           rds:
             acs_access_key: '{{ acs_access_key }}'
             acs_secret_access_key: '{{ acs_secret_access_key }}'
@@ -547,9 +547,9 @@ Examples
           register: result
         - debug: var=result
     
-    # basic provisioning example to releasing rds instance
+    # basic provisioning example to release rds instance
     
-    - name: Releasing RDS Instance
+    - name: Release RDS Instance
       hosts: localhost
       connection: local
       vars:
@@ -559,7 +559,7 @@ Examples
         command: delete
         instance_id: xxxxxxxxxx
       tasks:
-        - name: Releasing RDS Instance
+        - name: Release RDS Instance
           rds:
             acs_access_key: '{{ acs_access_key }}'
             acs_secret_access_key: '{{ acs_secret_access_key }}'

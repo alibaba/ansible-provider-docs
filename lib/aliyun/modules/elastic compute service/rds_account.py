@@ -25,11 +25,11 @@ ANSIBLE_METADATA = {'status': ['stableinterface'],
 
 DOCUMENTATION = '''
 ---
-module: rds_acc_mgmt
+module: rds_account
 version_added: "1.0"
-short_description: Create account, delete account, resetting instance password, resetting account, granting account permission and revoking account permission in RDS. 
+short_description: Create account, delete account, reset instance password, reset account, grant account permission and revoke account permission in RDS.
 description:
-    - Create account, delete account, resetting instance password, resetting account, granting account permission and revoking account permission in RDS. 
+    - Create account, delete account, reset instance password, reset account, grant account permission and revoke account permission in RDS.
 
 options:
   acs_access_key:
@@ -114,7 +114,7 @@ EXAMPLES = '''
     account_type: normal
   tasks:
     - name: create account
-      rds_acc_mgmt:
+      rds_account:
         acs_access_key: '{{ acs_access_key }}'
         acs_secret_access_key: '{{ acs_secret_access_key }}'
         region: '{{ region }}'
@@ -128,9 +128,9 @@ EXAMPLES = '''
     - debug: var=result
 
 
-# basic provisioning example to resetting an instance password
+# basic provisioning example to reset an instance password
 
-- name: Resetting an instance password
+- name: Reset an instance password
   hosts: localhost
   connection: local
   vars:
@@ -142,8 +142,8 @@ EXAMPLES = '''
     account_name: xxxxxxxxxx
     account_password: testuser@123
   tasks:
-    - name: Resetting an instance password
-      rds_acc_mgmt:
+    - name: Reset an instance password
+      rds_account:
         acs_access_key: '{{ acs_access_key }}'
         acs_secret_access_key: '{{ acs_secret_access_key }}'
         region: '{{ region }}'
@@ -155,9 +155,9 @@ EXAMPLES = '''
     - debug: var=result
 
 
-# basic provisioning example to resetting an account
+# basic provisioning example to reset an account
 
-- name: Resetting an account
+- name: Reset an account
   hosts: localhost
   connection: local
   vars:
@@ -169,8 +169,8 @@ EXAMPLES = '''
     account_name: xxxxxxxxxx
     account_password: testuser@123   
   tasks:
-    - name: Resetting an account
-      rds_acc_mgmt:
+    - name: Reset an account
+      rds_account:
         acs_access_key: '{{ acs_access_key }}'
         acs_secret_access_key: '{{ acs_secret_access_key }}'
         region: '{{ region }}'
@@ -195,7 +195,7 @@ EXAMPLES = '''
     account_name: xxxxxxxxxx
   tasks:
     - name: delete account
-      rds_acc_mgmt:
+      rds_account:
         acs_access_key: '{{ acs_access_key }}'
         acs_secret_access_key: '{{ acs_secret_access_key }}'
         region: '{{ region }}'
@@ -205,9 +205,9 @@ EXAMPLES = '''
       register: result
     - debug: var=result
 
-# basic provisioning example to granting account permission
+# basic provisioning example to grant account permission
 
-- name: granting account permission
+- name: grant account permission
   hosts: localhost
   connection: local
   vars:
@@ -220,8 +220,8 @@ EXAMPLES = '''
     account_name: xxxxxxxxxx
     account_privilege: ReadOnly
   tasks:
-    - name: granting account permission
-      rds_acc_mgmt:
+    - name: grant account permission
+      rds_account:
         acs_access_key: '{{ acs_access_key }}'
         acs_secret_access_key: '{{ acs_secret_access_key }}'
         region: '{{ region }}'
@@ -233,9 +233,9 @@ EXAMPLES = '''
       register: result
     - debug: var=result
 
-# basic provisioning example to revoking account permission
+# basic provisioning example to revoke account permission
 
-- name: revoking account permission
+- name: revoke account permission
   hosts: localhost
   connection: local
   vars:
@@ -247,8 +247,8 @@ EXAMPLES = '''
     db_name: xxxxxxxxxx
     account_name:  xxxxxxxxxx
   tasks:
-    - name: revoking account permission
-      rds_acc_mgmt:
+    - name: revoke account permission
+      rds_account:
         acs_access_key: '{{ acs_access_key }}'
         acs_secret_access_key: '{{ acs_secret_access_key }}'
         region: '{{ region }}'

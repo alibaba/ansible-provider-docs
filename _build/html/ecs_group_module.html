@@ -36,7 +36,7 @@
     <link rel="top" title="Aliyun Ansible Documentation" href="index.html"/>
         <link rel="up" title="All Modules" href="list_of_all_modules.html"/>
         <link rel="next" title="ecs_slb - Creates, Sets and Remove backend servers and Describe backend servers health status of SLB" href="ecs_slb_module.html"/>
-        <link rel="prev" title="ecs_disk - Create, Attach, Detach or Delete a disk" href="ecs_disk_module.html"/> 
+        <link rel="prev" title="ecs_eip - Request, Bind, Unbind, Modify and Release EIP" href="ecs_eip_module.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -92,6 +92,7 @@
 <li class="toctree-l3"><a class="reference internal" href="ecs_module.html">ecs - Create, Start, Stop, Restart or Terminate an Instance in ECS. Add or Remove Instance to/from a Security Group</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ecs_ami_module.html">ecs_ami - Create or Delete User-defined Image</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ecs_disk_module.html">ecs_disk - Create, Attach, Detach or Delete a disk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ecs_eip_module.html">ecs_eip - Request, Bind, Unbind, Modify and Release EIP</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">ecs_group - Create, Query or Delete Security Group</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#synopsis">Synopsis</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#requirements-on-host-that-executes-module">Requirements (on host that executes module)</a></li>
@@ -104,10 +105,9 @@
 <li class="toctree-l3"><a class="reference internal" href="ecs_slb_lb_module.html">ecs_slb_lb - Create, Delete, Enable or Disable Server Load Balancer in ECS</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ecs_slb_vsg_module.html">ecs_slb_vsg - Create, set and Delete VServer Group, add, remove, modify VServer Group Backend Server</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ecs_vpc_module.html">ecs_vpc - Create/Delete Vpc and Vswitch, Querying Vswitch and VRouter and Adding Route Entry</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ecs_vpc_net_module.html">ecs_vpc_net - Request, Bind, Unbind, Modify and Release EIP</a></li>
 <li class="toctree-l3"><a class="reference internal" href="oss_module.html">oss - Create/Delete Bucket and Objects/Folder. Upload Files in OSS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rds_module.html">rds - Create instance, Create database, Create read-only instance, Modify rds instance, Changing rds instance type, Restart instance, Switching between primary and standby database, Delete database and Release Instance in RDS.</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rds_acc_mgmt_module.html">rds_acc_mgmt - Create account, delete account, resetting instance password, resetting account, granting account permission and revoking account permission in RDS.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rds_module.html">rds - Create instance, Create database, Create read-only instance, Modify rds instance, Change rds instance type, Restart instance, Switch between primary and standby database, Delete database and Release Instance in RDS.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rds_account_module.html">rds_account - Create account, delete account, reset instance password, reset account, grant account permission and revoke account permission in RDS.</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="list_of_elastic compute service_modules.html">Elastic Compute Service Modules</a></li>
@@ -446,7 +446,7 @@
         <a href="ecs_slb_module.html" class="btn btn-neutral float-right" title="ecs_slb - Creates, Sets and Remove backend servers and Describe backend servers health status of SLB" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="ecs_disk_module.html" class="btn btn-neutral" title="ecs_disk - Create, Attach, Detach or Delete a disk" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="ecs_eip_module.html" class="btn btn-neutral" title="ecs_eip - Request, Bind, Unbind, Modify and Release EIP" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -456,7 +456,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2017 Alibaba, Inc.
-      Last updated on Apr 20, 2017.
+      Last updated on Apr 25, 2017.
 
     </p>
   </div>
