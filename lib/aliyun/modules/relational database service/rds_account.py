@@ -32,18 +32,24 @@ description:
     - Create account, delete account, reset instance password, reset account, grant account permission and revoke account permission in RDS.
 
 options:
-  acs_access_key:
+  alicloud_access_key:
     description:
-      - Aliyun Cloud access key. If not set then the value of the `ACS_ACCESS_KEY_ID`, `ACS_ACCESS_KEY` or `ECS_ACCESS_KEY` environment variable is used.
-    required: False
+      - Aliyun Cloud access key. If not set then the value of the `ALICLOUD_ACCESS_KEY`, `ACS_ACCESS_KEY_ID`, `ACS_ACCESS_KEY` or `ECS_ACCESS_KEY` environment variable is used.
+    required: false
     default: null
-    aliases: ['ecs_access_key','access_key']
-  acs_secret_access_key:
+    aliases: ['acs_access_key', 'ecs_access_key', 'access_key']
+  alicloud_secret_key:
     description:
-      - Aliyun Cloud secret key. If not set then the value of the `ACS_SECRET_ACCESS_KEY`, `ACS_SECRET_KEY`, or `ECS_SECRET_KEY` environment variable is used.
-    required: False
+      - Aliyun Cloud secret key. If not set then the value of the `ALICLOUD_SECRET_KEY`, `ACS_SECRET_ACCESS_KEY`, `ACS_SECRET_KEY`, or `ECS_SECRET_KEY` environment variable is used.
+    required: false
     default: null
-    aliases: ['ecs_secret_key','secret_key']
+    aliases: ['acs_secret_access_key', 'ecs_secret_key', 'secret_key']
+  alicloud_region:
+    description:
+      - The Aliyun Cloud region to use. If not specified then the value of the `ALICLOUD_REGION`, `ACS_REGION`, `ACS_DEFAULT_REGION` or `ECS_REGION` environment variable, if any, is used.
+    required: false
+    default: null
+    aliases: ['region', 'acs_region', 'ecs_region']
   command:
     description:
       - The state of the instance after operating.
@@ -98,45 +104,40 @@ EXAMPLES = '''
 #
 
 # basic provisioning example to create account
-
 - name: create account
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-hongkong
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-hongkong
     command: create
     db_instance_id: xxxxxxxxxx
     account_name: xxxxxxxxxx
-    account_password: test@123
+    account_password: rohit@123
     description: normal account
     account_type: normal
   tasks:
     - name: create account
       rds_account:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         command: '{{ command }}'
         db_instance_id: '{{ db_instance_id }}'
         account_name: '{{ account_name }}'
         account_password: '{{ account_password }}'
         description: '{{ description }}'
         account_type: '{{ account_type }}'
-      register: result
-    - debug: var=result
-
 
 # basic provisioning example to reset an instance password
-
 - name: Reset an instance password
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-hongkong
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-hongkong
     command: reset_password
     db_instance_id: xxxxxxxxxx
     account_name: xxxxxxxxxx
@@ -144,26 +145,22 @@ EXAMPLES = '''
   tasks:
     - name: Reset an instance password
       rds_account:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         command: '{{ command }}'
         db_instance_id: '{{ db_instance_id }}'
         account_name: '{{ account_name }}'
         account_password: '{{ account_password }}'
-      register: result
-    - debug: var=result
-
 
 # basic provisioning example to reset an account
-
 - name: Reset an account
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-hongkong
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-hongkong
     command: reset
     db_instance_id: xxxxxxxxxx
     account_name: xxxxxxxxxx
@@ -171,49 +168,43 @@ EXAMPLES = '''
   tasks:
     - name: Reset an account
       rds_account:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         command: '{{ command }}'
         db_instance_id: '{{ db_instance_id }}'
         account_name: '{{ account_name }}'
         account_password: '{{ account_password }}'
-      register: result
-    - debug: var=result
 
 # basic provisioning example to delete an account
-
 - name: delete account
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-hongkong
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-hongkong
     command: delete
     db_instance_id: xxxxxxxxxx
     account_name: xxxxxxxxxx
   tasks:
     - name: delete account
       rds_account:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         command: '{{ command }}'
         db_instance_id: '{{ db_instance_id }}'
         account_name: '{{ account_name }}'
-      register: result
-    - debug: var=result
 
 # basic provisioning example to grant account permission
-
 - name: grant account permission
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-hongkong
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-hongkong
     command: grant
     db_instance_id: xxxxxxxxxx
     db_name: xxxxxxxxxx
@@ -222,26 +213,23 @@ EXAMPLES = '''
   tasks:
     - name: grant account permission
       rds_account:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         command: '{{ command }}'
         db_instance_id: '{{ db_instance_id }}'
         db_name: '{{ db_name }}'
         account_name: '{{ account_name }}'
         account_privilege: '{{ account_privilege }}'
-      register: result
-    - debug: var=result
 
 # basic provisioning example to revoke account permission
-
 - name: revoke account permission
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-hongkong
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-hongkong
     command: revoke
     db_instance_id: xxxxxxxxxx
     db_name: xxxxxxxxxx
@@ -249,13 +237,11 @@ EXAMPLES = '''
   tasks:
     - name: revoke account permission
       rds_account:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         command: '{{ command }}'
         db_instance_id: '{{ db_instance_id }}'
         db_name: '{{ db_name }}'
         account_name: '{{ account_name }}'
-      register: result
-    - debug: var=result
 '''

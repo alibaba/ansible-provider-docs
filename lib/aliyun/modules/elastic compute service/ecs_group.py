@@ -32,24 +32,24 @@ short_description: Create, Query or Delete Security Group
 description:
     - Create, Query or Delete Security Group
 options:
-  acs_access_key:
+  alicloud_access_key:
     description:
-      - Aliyun Cloud access key. If not set then the value of the `ACS_ACCESS_KEY_ID`, `ACS_ACCESS_KEY` or `ECS_ACCESS_KEY` environment variable is used.
+      - Aliyun Cloud access key. If not set then the value of the `ALICLOUD_ACCESS_KEY`, `ACS_ACCESS_KEY_ID`, `ACS_ACCESS_KEY` or `ECS_ACCESS_KEY` environment variable is used.
     required: false
     default: null
-    aliases: ['ecs_access_key','access_key']
-  acs_secret_access_key:
+    aliases: ['acs_access_key', 'ecs_access_key', 'access_key']
+  alicloud_secret_key:
     description:
-      - Aliyun Cloud secret key. If not set then the value of the `ACS_SECRET_ACCESS_KEY`, `ACS_SECRET_KEY`, or `ECS_SECRET_KEY` environment variable is used.
+      - Aliyun Cloud secret key. If not set then the value of the `ALICLOUD_SECRET_KEY`, `ACS_SECRET_ACCESS_KEY`, `ACS_SECRET_KEY`, or `ECS_SECRET_KEY` environment variable is used.
     required: false
     default: null
-    aliases: ['ecs_secret_key','secret_key']
-  region:
+    aliases: ['acs_secret_access_key', 'ecs_secret_key', 'secret_key']
+  alicloud_region:
     description:
-      - The Aliyun Cloud region to use. If not specified then the value of the `ACS_REGION`, `ACS_DEFAULT_REGION` or `ECS_REGION` environment variable, if any, is used.
+      - The Aliyun Cloud region to use. If not specified then the value of the `ALICLOUD_REGION`, `ACS_REGION`, `ACS_DEFAULT_REGION` or `ECS_REGION` environment variable, if any, is used.
     required: false
     default: null
-    aliases: [ 'acs_region', 'ecs_region']
+    aliases: ['region', 'acs_region', 'ecs_region']
   status:
     description:
       - For creating new security group and/or authorizing.
@@ -127,15 +127,15 @@ Basic provisioning example to create security group
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-shenzhen
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-shenzhen
   tasks:
     - name: create security grp
       ecs_group:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         security_group_name: 'AliyunSG'
 
 
@@ -144,16 +144,16 @@ Basic provisioning example authorize security group
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-shenzhen
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-shenzhen
   tasks:
     - name: authorize security group
       ecs_group:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
         security_group_id: xxxxxxxxxx
-        region: '{{ region }}'
+        alicloud_region: '{{ alicloud_region }}'
         rules:
           - ip_protocol: tcp
             port_range: 1/122
@@ -170,17 +170,17 @@ Provisioning example create and authorize security group
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-shenzhen
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-shenzhen
   tasks:
     - name: create and authorize security grp
       ecs_group:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
         security_group_name: 'AliyunSG'
         description: 'an example ECS group'
-        region: '{{ region }}'
+        alicloud_region: '{{ alicloud_region }}'
         rules:
           - ip_protocol: tcp
             port_range: 1/122
@@ -203,18 +203,18 @@ Provisioning example create and authorize security group
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: us-west-1
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: us-west-1
     security_group_ids:
      - xxxxxxxxxx
     status: absent
   tasks:
     - name: delete security grp
       ecs_group:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         security_group_ids: '{{ security_group_ids }}'
         status: '{{ status }}'
 
@@ -224,15 +224,15 @@ Provisioning example create and authorize security group
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-beijing
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-beijing
     status: getinfo
   tasks:
     - name: Querying Security group list
       ecs_group:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         status: '{{ status }}'
 '''

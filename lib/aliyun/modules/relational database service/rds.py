@@ -32,37 +32,36 @@ description:
     - Create instance, Create database, Create read-only instance, Modify rds instance, Change rds instance type, Restart instance, Switch between primary and standby database, Delete database and Release Instance in RDS.
 
 options:
-  acs_access_key:
+  alicloud_access_key:
     description:
-      - Aliyun Cloud access key. If not set then the value of the `ACS_ACCESS_KEY_ID`, `ACS_ACCESS_KEY` or `ECS_ACCESS_KEY` environment variable is used.
-    required: False
+      - Aliyun Cloud access key. If not set then the value of the `ALICLOUD_ACCESS_KEY`, `ACS_ACCESS_KEY_ID`, `ACS_ACCESS_KEY` or `ECS_ACCESS_KEY` environment variable is used.
+    required: false
     default: null
-    aliases: ['ecs_access_key','access_key']
-  acs_secret_access_key:
+    aliases: ['acs_access_key', 'ecs_access_key', 'access_key']
+  alicloud_secret_key:
     description:
-      - Aliyun Cloud secret key. If not set then the value of the `ACS_SECRET_ACCESS_KEY`, `ACS_SECRET_KEY`, or `ECS_SECRET_KEY` environment variable is used.
-    required: False
+      - Aliyun Cloud secret key. If not set then the value of the `ALICLOUD_SECRET_KEY`, `ACS_SECRET_ACCESS_KEY`, `ACS_SECRET_KEY`, or `ECS_SECRET_KEY` environment variable is used.
+    required: false
     default: null
-    aliases: ['ecs_secret_key','secret_key']
-  region:
+    aliases: ['acs_secret_access_key', 'ecs_secret_key', 'secret_key']
+  alicloud_region:
     description:
-      -  The ACS region to use. If not specified then the value of the ECS_REGION environment variable,
-        if any, is used
-    required: False
+      - The Aliyun Cloud region to use. If not specified then the value of the `ALICLOUD_REGION`, `ACS_REGION`, `ACS_DEFAULT_REGION` or `ECS_REGION` environment variable, if any, is used.
+    required: false
     default: null
-    aliases: [ 'acs_region', 'ecs_region']
+    aliases: ['region', 'acs_region', 'ecs_region']
   command:
     description:
       - Specifies the action to take.
     required: True
     default: 'create'
     choices: [ 'create', 'delete', 'replicate', 'modify', 'reboot', 'switch' ]
-  zone:
+  alicloud_zone:
     description:
       - availability zone in which to launch the instance. Used only when command=create, command=replicate.
     required: false
     default: null
-    aliases: ['acs_zone', 'ecs_zone']
+    aliases: ['acs_zone', 'ecs_zone', 'zone']
   db_engine:
     description:
       - The type of database.
@@ -123,11 +122,6 @@ options:
   allocate_public_ip:
     description:
       - Whether to allocate public IP.
-    default: null
-    required: false
-  connection_string_prefix:
-    description:
-      - The public connection string.
     default: null
     required: false
   public_port:
@@ -255,35 +249,36 @@ EXAMPLES = """
 # provisioning for rds
 #
 
+
 # basic provisioning example to create rds instance
 
 - name: create rds instance
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-beijing
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-beijing
     command: create
-    zone: cn-beijing-a
-    db_engine: MySQL
+    alicloud_zone: cn-beijing-a
+    db_engine: MySQL 
     engine_version: 5.6
     db_instance_class: rds.mysql.t1.small
-    db_instance_storage: 10
+    db_instance_storage: 10 
     instance_net_type: Intranet
     instance_description: ahttp://
     security_ip_list: 192.168.0.2/24
     pay_type: Postpaid
     connection_mode: Safe
     instance_network_type: VPC
-    vpc_id: xxxxxxxxxx
+    vpc_id: xxxxxxxxxx	
     vswitch_id: xxxxxxxxxx
     private_ip_address: 192.168.0.25
     allocate_public_ip: yes
-    public_connection_string_prefix: test
+    connection_string_prefix: test
     public_port: 3306
     db_name: testmysql
-    db_description: test mysql
+    db_description: test mysql 
     character_set_name: utf8
     maint_window: 02:00Z-06:00Z
     preferred_backup_time: 02:00Z-03:00Z
@@ -291,24 +286,24 @@ EXAMPLES = """
     backup_retention_period: 7
     wait: yes
     wait_timeout: 20
-    db_tags:
+    db_tags:	
       name: test
   tasks:
     - name: create rds instance
       rds:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
-        zone: '{{ zone }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}' 
+        alicloud_region: '{{ alicloud_region }}'
+        alicloud_zone: '{{ alicloud_zone }}'
         command: '{{ command }}'
         db_engine: '{{ db_engine }}'
         engine_version: '{{ engine_version }}'
         db_instance_class: '{{ db_instance_class }}'
-        db_instance_storage: '{{ db_instance_storage }}'
+        db_instance_storage: '{{ db_instance_storage }}'		
         instance_net_type: '{{ instance_net_type }}'
         instance_description: '{{ instance_description }}'
         security_ip_list: '{{ security_ip_list }}'
-        pay_type: '{{ pay_type }}'
+        pay_type: '{{ pay_type }}'  
         connection_mode: '{{ connection_mode }}'
         instance_network_type: '{{ instance_network_type }}'
         vpc_id: '{{ vpc_id }}'
@@ -317,7 +312,7 @@ EXAMPLES = """
         allocate_public_ip: '{{ allocate_public_ip }}'
         connection_string_prefix: '{{ connection_string_prefix }}'
         public_port: '{{ public_port }}'
-        db_name: '{{ db_name }}'
+        db_name: '{{ db_name }}'    
         db_description: '{{ db_description }}'
         character_set_name: '{{ character_set_name }}'
         maint_window: '{{ maint_window }}'
@@ -336,47 +331,47 @@ EXAMPLES = """
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-beijing
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-beijing
     command: modify
     instance_id: xxxxxxxxxx
     db_instance_class: rds.mysql.s1.small
-    db_instance_storage: 35
+    db_instance_storage: 35 
     pay_type: Postpaid
   tasks:
     - name: change rds instance type
       rds:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         command: '{{ command }}'
         instance_id: '{{ instance_id }}'
         db_instance_class: '{{ db_instance_class }}'
         db_instance_storage: '{{ db_instance_storage }}'
         pay_type: '{{ pay_type }}'
       register: result
-    - debug: var=result
+    - debug: var=result   
 
-# basic provisioning example to modify rds instance
-
+# basic provisioning example to modify rds instance   
+ 
 - name: modify rds instance
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-beijing
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-beijing
     command: modify
     instance_id: xxxxxxxxxx
     db_instance_class: rds.mysql.t1.small
-    db_instance_storage: 45
-    instance_description: xyz
+    db_instance_storage: 45    
+    instance_description: xyz 
     security_ip_list: 192.168.0.2/24
     pay_type: Postpaid
     connection_mode: Safe
     instance_network_type: VPC
-    vpc_id: xxxxxxxxxx
+    vpc_id: xxxxxxxxxx	
     vswitch_id: xxxxxxxxxx
     current_connection_string: test.mysql.rds.aliyuncs.com
     connection_string_prefix: test123
@@ -388,16 +383,16 @@ EXAMPLES = """
   tasks:
     - name: modify rds instance
       rds:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         command: '{{ command }}'
         instance_id: '{{ instance_id }}'
         db_instance_class: '{{ db_instance_class }}'
-        db_instance_storage: '{{ db_instance_storage }}'
+        db_instance_storage: '{{ db_instance_storage }}'		
         instance_description: '{{ instance_description }}'
         security_ip_list: '{{ security_ip_list }}'
-        pay_type: '{{ pay_type }}'
+        pay_type: '{{ pay_type }}'      
         connection_mode: '{{ connection_mode }}'
         instance_network_type: '{{ instance_network_type }}'
         vpc_id: '{{ vpc_id }}'
@@ -410,7 +405,7 @@ EXAMPLES = """
         preferred_backup_period: '{{ preferred_backup_period }}'
         backup_retention_period: '{{ backup_retention_period }}'
       register: result
-    - debug: var=result
+    - debug: var=result 
 
 # basic provisioning example to create database
 
@@ -418,9 +413,9 @@ EXAMPLES = """
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-hongkong
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-hongkong
     command: create
     instance_id: xxxxxxxxxx
     db_name: testdb
@@ -429,110 +424,99 @@ EXAMPLES = """
   tasks:
     - name: create database
       rds:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         command: '{{ command }}'
         instance_id: '{{ instance_id }}'
         db_name: '{{ db_name }}'
         db_description: '{{ db_description }}'
         character_set_name: '{{ character_set_name }}'
-      register: result
-    - debug: var=result
-
+    
 # basic provisioning example to delete database
 
 - name: delete database
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-hongkong
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-hongkong
     command: delete
     instance_id: xxxxxxxxxx
     db_name: testdb
   tasks:
     - name: delete database
       rds:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         command: '{{ command }}'
         instance_id: '{{ instance_id }}'
         db_name: '{{ db_name }}'
-      register: result
-    - debug: var=result
-
+    
 # basic provisioning example to switch between primary and standby database of an rds
 
-- name: Switch between primary and standby database
+- name: switch between primary and standby database
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-hongkong
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-hongkong
     command: switch
     instance_id: xxxxxxxxxx
     node_id: xxxxxxxxxx
     force: 'Yes'
   tasks:
-    - name: Switch between primary and standby database
+    - name: switch between primary and standby database
       rds:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         command: '{{ command }}'
         instance_id: '{{ instance_id }}'
         node_id: '{{ node_id }}'
         force: '{{ force }}'
-      register: result
-    - debug: var=result
-
+    
 # basic provisioning example to restart rds instance
 
 - name: Restart RDS Instance
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-beijing
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-beijing
     command: reboot
     instance_id: xxxxxxxxxx
   tasks:
     - name: Restart RDS Instance
       rds:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         command: '{{ command }}'
         instance_id: '{{ instance_id }}'
-      register: result
-    - debug: var=result
-
+    
 # basic provisioning example to release rds instance
 
 - name: Release RDS Instance
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-beijing
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-beijing
     command: delete
     instance_id: xxxxxxxxxx
   tasks:
     - name: Release RDS Instance
       rds:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         command: '{{ command }}'
         instance_id: '{{ instance_id }}'
-      register: result
-    - debug: var=result
-
 """
 

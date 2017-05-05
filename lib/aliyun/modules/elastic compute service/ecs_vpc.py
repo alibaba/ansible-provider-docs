@@ -31,27 +31,24 @@ short_description: Create/Delete Vpc and Vswitch, Querying Vswitch and VRouter a
 description:
     - Create/Delete Vpc and Vswitch, Querying Vswitch and VRouter and Adding Route Entry
 options:
-  acs_access_key:
+  alicloud_access_key:
     description:
-      - Aliyun Cloud access key. If not set then the value of the 'ACS_ACCESS_KEY_ID', 'ACS_ACCESS_KEY'
-        or 'ECS_ACCESS_KEY' environment variable is used.
+      - Aliyun Cloud access key. If not set then the value of the `ALICLOUD_ACCESS_KEY`, `ACS_ACCESS_KEY_ID`, `ACS_ACCESS_KEY` or `ECS_ACCESS_KEY` environment variable is used.
     required: false
     default: null
-    aliases: ['ecs_access_key', 'access_key']
-  acs_secret_access_key:
+    aliases: ['acs_access_key', 'ecs_access_key', 'access_key']
+  alicloud_secret_key:
     description:
-      - Aliyun Cloud secret key. If not set then the value of the 'ACS_SECRET_ACCESS_KEY', 'ACS_SECRET_KEY',
-        or 'ECS_SECRET_KEY' environment variable is used.
+      - Aliyun Cloud secret key. If not set then the value of the `ALICLOUD_SECRET_KEY`, `ACS_SECRET_ACCESS_KEY`, `ACS_SECRET_KEY`, or `ECS_SECRET_KEY` environment variable is used.
     required: false
     default: null
-    aliases: ['ecs_secret_key', 'secret_key']
-  region:
+    aliases: ['acs_secret_access_key', 'ecs_secret_key', 'secret_key']
+  alicloud_region:
     description:
-      - The Aliyun Cloud region to use. If not specified then the value of the 'ACS_REGION', 'ACS_DEFAULT_REGION'
-        or 'ECS_REGION' environment variable, if any, is used.
+      - The Aliyun Cloud region to use. If not specified then the value of the `ALICLOUD_REGION`, `ACS_REGION`, `ACS_DEFAULT_REGION` or `ECS_REGION` environment variable, if any, is used.
     required: false
     default: null
-    aliases: ['acs_region', 'ecs_region']
+    aliases: ['region', 'acs_region', 'ecs_region']
   status:
     description:
       - Create/delete Vpc and Vswitch, Querying Vswitch and VRouter and Adding Route Entry
@@ -186,7 +183,7 @@ notes:
 
 EXAMPLES = """
 #
-# provisioning to create vpc in VPC
+# provisioning to create vpc in VPC 
 #
 
 # basic provisioning example to create vpc in VPC
@@ -194,9 +191,9 @@ EXAMPLES = """
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-hongkong
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-hongkong
     status: present
     cidr_block: 192.168.0.0/16
     vpc_name: Demo_VPC
@@ -208,44 +205,40 @@ EXAMPLES = """
   tasks:
     - name: create vpc
       ecs_vpc:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         status: '{{ status }}'
         cidr_block: '{{ cidr_block }}'
         vpc_name: '{{ vpc_name }}'
         description: '{{ description }}'
         vswitches: '{{ vswitches }}'
-      register: result
-    - debug: var=result
 
 # basic provisioning example to delete vpc
 - name: delete vpc
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-hongkong
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-hongkong
   tasks:
     - name: delete vpc
       ecs_vpc:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         state: absent
         vpc_id: xxxxxxxxxx
-      register: result
-    - debug: var=result
 
 # basic provisioning example to create vswitch
 - name: create vswitch
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-hongkong
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-hongkong
     vpc_id: xxxxxxxxxx
     vswitches:
       - zone_id: cn-hongkong-b
@@ -256,9 +249,9 @@ EXAMPLES = """
   tasks:
     - name: create vswitch
       ecs_vpc:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         vswitches: '{{ vswitches }}'
         vpc_id: '{{ vpc_id }}'
         state: '{{ state }}'
@@ -270,9 +263,9 @@ EXAMPLES = """
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-hongkong
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-hongkong
     vpc_id: xxxxxxxxxx
     purge_vswitches:
      - xxxxxxxxxx
@@ -280,23 +273,21 @@ EXAMPLES = """
   tasks:
     - name: delete vswitch
       ecs_vpc:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         vpc_id: '{{ vpc_id }}'
         purge_vswitches: '{{ purge_vswitches }}'
         state: '{{ state }}'
-      register: result
-    - debug: var=result
 
 # basic provisioning example to create custom route
 - name: create vpc
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-hongkong
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-hongkong
     state: present
     vpc_id: xxxxxxxxxx
     route_entries:
@@ -305,23 +296,21 @@ EXAMPLES = """
   tasks:
     - name: create vpc
       ecs_vpc:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         state: '{{ state }}'
         route_entries: '{{ route_entries }}'
         vpc_id: '{{ vpc_id }}'
-      register: result
-    - debug: var=result
 
 # basic provisioning example to delete custom route
 - name: delete route
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-hongkong
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-hongkong
     vpc_id: vpc-j6cjkmappmgb4fywpbj0u
     purge_routes:
          destination_cidrblock: "192.168.4.0/24"
@@ -330,23 +319,21 @@ EXAMPLES = """
   tasks:
     - name: delete route
       ecs_vpc:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         purge_routes: '{{ purge_routes }}'
         state: '{{ state }}'
         vpc_id: '{{ vpc_id }}'
-      register: result
-    - debug: var=result
 
 # basic provisioning example to querying vroute
 - name: get vrouter list
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-hongkong
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-hongkong
     vrouter_id: xxxxxxxxxx
     pagenumber: 1
     pagesize: 10
@@ -354,26 +341,24 @@ EXAMPLES = """
   tasks:
     - name: get vrouter list
       ecs_vpc:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         vrouter_id: '{{ vrouter_id }}'
         state: '{{ state }}'
         pagenumber: '{{ pagenumber }}'
         pagesize: '{{ pagesize }}'
-      register: result
-    - debug: var=result
 
 # basic provisioning example to querying vswitch
 - name: querying vswitch status
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: ap-southeast-1
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: ap-southeast-1
     status: getinfo_vswitch
-    zone_id: ap-southeast-1a
+    alicloud_zone: ap-southeast-1a
     vpc_id: xxxxxxxxxx
     vswitch_id: xxxxxxxxxx
     page_size: 10
@@ -381,16 +366,13 @@ EXAMPLES = """
   tasks:
     - name: querying instance status
       ecs_vpc:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         status: '{{ status }}'
-        zone_id: '{{ zone_id }}'
+        alicloud_zone: '{{ alicloud_zone }}'
         vpc_id: '{{ vpc_id }}'
         vswitch_id: '{{ vswitch_id }}'
         page_size: '{{ page_size }}'
         page_number: '{{ page_number }}'
-      register: result
-    - debug: var=result
-
 """

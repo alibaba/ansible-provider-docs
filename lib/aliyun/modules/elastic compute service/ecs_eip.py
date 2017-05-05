@@ -31,27 +31,24 @@ short_description: Request, Bind, Unbind, Modify and Release EIP
 description:
     - Request, Bind, Unbind, Modify and Release EIP
 options:
-  acs_access_key:
+  alicloud_access_key:
     description:
-      - Aliyun Cloud access key. If not set then the value of the 'ACS_ACCESS_KEY_ID', 'ACS_ACCESS_KEY'
-        or 'ECS_ACCESS_KEY' environment variable is used.
+      - Aliyun Cloud access key. If not set then the value of the `ALICLOUD_ACCESS_KEY`, `ACS_ACCESS_KEY_ID`, `ACS_ACCESS_KEY` or `ECS_ACCESS_KEY` environment variable is used.
     required: false
     default: null
-    aliases: ['ecs_access_key', 'access_key']
-  acs_secret_access_key:
+    aliases: ['acs_access_key', 'ecs_access_key', 'access_key']
+  alicloud_secret_key:
     description:
-      - Aliyun Cloud secret key. If not set then the value of the 'ACS_SECRET_ACCESS_KEY', 'ACS_SECRET_KEY',
-        or 'ECS_SECRET_KEY' environment variable is used.
+      - Aliyun Cloud secret key. If not set then the value of the `ALICLOUD_SECRET_KEY`, `ACS_SECRET_ACCESS_KEY`, `ACS_SECRET_KEY`, or `ECS_SECRET_KEY` environment variable is used.
     required: false
     default: null
-    aliases: ['ecs_secret_key', 'secret_key']
-  region:
+    aliases: ['acs_secret_access_key', 'ecs_secret_key', 'secret_key']
+  alicloud_region:
     description:
-      - The Aliyun Cloud region to use. If not specified then the value of the 'ACS_REGION', 'ACS_DEFAULT_REGION'
-        or 'ECS_REGION' environment variable, if any, is used.
+      - The Aliyun Cloud region to use. If not specified then the value of the `ALICLOUD_REGION`, `ACS_REGION`, `ACS_DEFAULT_REGION` or `ECS_REGION` environment variable, if any, is used.
     required: false
     default: null
-    aliases: ['acs_region', 'ecs_region']
+    aliases: ['region', 'acs_region', 'ecs_region']
   status:
     description:
       - Status for requesting eip addresses, bind eip, unbind eip, modify eip attributes and release eip
@@ -106,18 +103,18 @@ EXAMPLES = '''
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-hongkong
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-hongkong
     internet_charge_type: PayByTraffic
     bandwidth: 5
     status: present
   tasks:
     - name: requesting eip
       ecs_eip:
-        acs_access_key_id: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         internet_charge_type: '{{ internet_charge_type }}'
         bandwidth: '{{ bandwidth }}'
         status: '{{ status }}'
@@ -127,18 +124,18 @@ EXAMPLES = '''
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-hongkong
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-hongkong
     allocation_id: xxxxxxxxxx
     instance_id: xxxxxxxxxx
     status: join
   tasks:
     - name: Bind eip
       ecs_eip:
-        acs_access_key_id: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         allocation_id: '{{ allocation_id }}'
         instance_id: '{{ instance_id }}'
         status: '{{ status }}'
@@ -148,18 +145,18 @@ EXAMPLES = '''
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-hongkong
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-hongkong
     allocation_id: exxxxxxxxxx
     instance_id: xxxxxxxxxx
     state: leave
   tasks:
     - name: unbind eip
       ecs_eip:
-        acs_access_key_id: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         allocation_id: '{{ allocation_id }}'
         instance_id: '{{ instance_id }}'
         state: '{{ state }}'
@@ -169,18 +166,18 @@ EXAMPLES = '''
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-hongkong
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-hongkong
     allocation_id: xxxxxxxxxx
     bandwidth: 3
     status: present
   tasks:
     - name: Modify eip
       ecs_eip:
-        acs_access_key_id: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         allocation_id: '{{ allocation_id }}'
         bandwidth: '{{ bandwidth }}'
         status: '{{ status }}'
@@ -190,17 +187,17 @@ EXAMPLES = '''
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-hongkong
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-hongkong
     allocation_id: xxxxxxxxxx
     status: absent
   tasks:
     - name: release eip
       ecs_eip:
-        acs_access_key_id: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         allocation_id: '{{ allocation_id }}'
         status: '{{ status }}'
 '''

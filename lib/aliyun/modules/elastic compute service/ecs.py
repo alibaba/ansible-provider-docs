@@ -31,24 +31,24 @@ description:
     - Creates, starts, stops, restarts or terminates ecs instances.
     - Adds or removes ecs instances to/from security group.
 options:
-  acs_access_key:
+  alicloud_access_key:
     description:
-      - Aliyun Cloud access key. If not set then the value of the `ACS_ACCESS_KEY_ID`, `ACS_ACCESS_KEY` or `ECS_ACCESS_KEY` environment variable is used.
+      - Aliyun Cloud access key. If not set then the value of the `ALICLOUD_ACCESS_KEY`, `ACS_ACCESS_KEY_ID`, `ACS_ACCESS_KEY` or `ECS_ACCESS_KEY` environment variable is used.
     required: false
     default: null
-    aliases: ['ecs_access_key','access_key']
-  acs_secret_access_key:
+    aliases: ['acs_access_key', 'ecs_access_key', 'access_key']
+  alicloud_secret_key:
     description:
-      - Aliyun Cloud secret key. If not set then the value of the `ACS_SECRET_ACCESS_KEY`, `ACS_SECRET_KEY`, or `ECS_SECRET_KEY` environment variable is used.
+      - Aliyun Cloud secret key. If not set then the value of the `ALICLOUD_SECRET_KEY`, `ACS_SECRET_ACCESS_KEY`, `ACS_SECRET_KEY`, or `ECS_SECRET_KEY` environment variable is used.
     required: false
     default: null
-    aliases: ['ecs_secret_key','secret_key']
-  region:
+    aliases: ['acs_secret_access_key', 'ecs_secret_key', 'secret_key']
+  alicloud_region:
     description:
-      - The Aliyun Cloud region to use. If not specified then the value of the `ACS_REGION`, `ACS_DEFAULT_REGION` or `ECS_REGION` environment variable, if any, is used.
+      - The Aliyun Cloud region to use. If not specified then the value of the `ALICLOUD_REGION`, `ACS_REGION`, `ACS_DEFAULT_REGION` or `ECS_REGION` environment variable, if any, is used.
     required: false
     default: null
-    aliases: [ 'acs_region', 'ecs_region']
+    aliases: ['region', 'acs_region', 'ecs_region']
   status:
     description:
       - The state of the instance after operating.
@@ -56,11 +56,11 @@ options:
     default: 'present'
     aliases: ['state']
     choices: ['present', 'pending', 'running', 'stopped', 'restarted', 'absent', 'getinfo', 'getstatus']
-  zone_id:
+  alicloud_zone:
     description: Aliyun availability zone ID in which to launch the instance
     required: false
     default: null
-    aliases: [ 'acs_zone', 'ecs_zone', 'zone'] 
+    aliases: ['zone_id', 'acs_zone', 'ecs_zone', 'zone'] 
   image_id:
     description: Image ID to use for the instance. Parameter is B(required) when provisioning new ecs instance
     required: false
@@ -249,20 +249,20 @@ EXAMPLES = '''
 - name: basic provisioning example
   hosts: localhost
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-beijing
-    zone: cn-beijing-a
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-beijing
+    alicloud_zone: cn-beijing-a
     image: ubuntu1404_64_40G_cloudinit_20160727.raw
     instance_type: ecs.n1.small
     assign_public_ip: yes
   tasks:
     - name: classic network
       ecs:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
-        zone: '{{ zone }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
+        alicloud_zone: '{{ alicloud_zone }}'
         image: '{{ image }}'
         instance_type: '{{ instance_type }}'
         count: 2
@@ -272,9 +272,9 @@ EXAMPLES = '''
 - name: basic provisioning example
   hosts: localhost
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-beijing
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-beijing
     image: ubuntu1404_64_40G_cloudinit_20160727.raw
     instance_type: ecs.n1.small
     vswitch_id: xxxxxxxxxx
@@ -282,9 +282,9 @@ EXAMPLES = '''
   tasks:
     - name: vpc network
       ecs:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         image: '{{ image }}'
         instance_type: '{{ instance_type }}'
         vswitch_id: '{{ vswitch_id }}'
@@ -295,9 +295,9 @@ EXAMPLES = '''
 - name: advanced provisioning example
   hosts: localhost
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-beijing
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-beijing
     image: ubuntu1404_64_40G_cloudinit_20160727.raw
     instance_type: ecs.n1.small
     group_id: xxxxxxxxxx
@@ -306,9 +306,9 @@ EXAMPLES = '''
   tasks:
     - name: tagging and host name password
       ecs:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         image: '{{ image }}'
         instance_type: '{{ instance_type }}'
         assign_public_ip: yes
@@ -325,9 +325,9 @@ EXAMPLES = '''
 - name: advanced provisioning example
   hosts: localhost
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-beijing
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-beijing
     image: ubuntu1404_64_40G_cloudinit_20160727.raw
     instance_type: ecs.n1.small
     group_id: xxxxxxxxxx
@@ -336,9 +336,9 @@ EXAMPLES = '''
   tasks:
     - name: internet data configuration and instance details
       ecs:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         image: '{{ image }}'
         instance_type: '{{ instance_type }}'
         group_id: '{{ group_id }}'
@@ -354,17 +354,17 @@ EXAMPLES = '''
 - name: advanced provisioning example
   hosts: localhost
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-beijing
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-beijing
     image: ubuntu1404_64_40G_cloudinit_20160727.raw
     instance_type: ecs.n1.small
   tasks:
     - name: additional volume
       ecs:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         image: '{{ image }}'
         instance_type: '{{ instance_type }}'
         assign_public_ip: yes
@@ -379,9 +379,9 @@ EXAMPLES = '''
 - name: advanced provisioning example
   hosts: localhost
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-beijing
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-beijing
     image: ubuntu1404_64_40G_cloudinit_20160727.raw
     instance_type: ecs.n1.small
     io_optimized: yes
@@ -393,9 +393,9 @@ EXAMPLES = '''
   tasks:
     - name: additional volume
       ecs:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         image: '{{ image }}'
         instance_type: '{{ instance_type }}'
         io_optimized: '{{ io_optimized }}'
@@ -405,17 +405,17 @@ EXAMPLES = '''
 - name: advanced provisioning example
   hosts: localhost
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-beijing
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-beijing
     image: ubuntu1404_64_40G_cloudinit_20160727.raw
     instance_type: ecs.n1.small
   tasks:
     - name: prepaid internet charge type configuration
       ecs:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         image: '{{ image }}'
         instance_type: '{{ instance_type }}'
         assign_public_ip: yes
@@ -424,21 +424,19 @@ EXAMPLES = '''
         auto_renew: yes
         auto_renew_period: 3
 
-#
 # modifying attributes of ecs instance
-#
 - name: modify attribute example
   hosts: localhost
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-beijing
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-beijing
   tasks:
     - name: modify attribute of multiple instances
       ecs:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         attributes:
             - id:  xxxxxxxxxx
               name: InstanceName
@@ -451,39 +449,35 @@ EXAMPLES = '''
               password: mypassword
               host_name: hostcomes
 
-#
 # querying instance status
-#
 - name: query instance status
   hosts: localhost
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-beijing
-    zone: cn-beijing-a
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-beijing
+    alicloud_zone: cn-beijing-a
     status: getstatus
     pagenumber: 1
     pagesize: 10
   tasks:
     - name: query instance status from the particular zone
       ecs:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
-        zone: '{{ zone }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
+        alicloud_zone: '{{ alicloud_zone }}'
         status: '{{ status }}'
         pagenumber: '{{ pagenumber }}'
         pagesize: '{{ pagesize }}'
 
-#
 # start or terminate instance
-#
 - name: start or terminate instance
   hosts: localhost
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-shenzhen
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-shenzhen
     instance_ids: xxxxxxxxxx
     instance_tags:
     - tag_key: xz_test
@@ -492,22 +486,20 @@ EXAMPLES = '''
   tasks:
     - name: start instance
       ecs_model:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         instance_ids: '{{ instance_ids }}'
         instance_tags: '{{ instance_tags }}'
         status: '{{ status }}'
 
-#
 # stop or restarted instance
-#
 - name: start stop restart instance
   hosts: localhost
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-shenzhen
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-shenzhen
     instance_ids: xxxxxxxxxx
     instance_tags:
     - tag_key: xz_test
@@ -517,53 +509,49 @@ EXAMPLES = '''
   tasks:
     - name: Restart instance
       ecs_model:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         instance_ids: '{{ instance_ids }}'
         instance_tags: '{{ instance_tags }}'
         status: '{{ status }}'
 
-#
 # add an instance to security group
-#
 - name: Add an instance to security group
   hosts: localhost
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-shenzhen
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-shenzhen
     instance_id: xxxxxxxxxx
     group_id: xxxxxxxxxx
     sg_action: join
   tasks:
     - name: Add an instance to security group
       ecs_model:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         instance_id: '{{ instance_id }}'
         group_id: '{{ group_id }}'
         sg_action: '{{ sg_action }}'
 
-#
 # remove instance from security group
-#
 - name: Remove an instance from security group
   hosts: localhost
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-shenzhen
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: cn-shenzhen
     instance_id: xxxxxxxxxx
     group_id: xxxxxxxxxx
     sg_action: leave
   tasks:
     - name: Remove an instance from security group
       ecs_model:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         instance_id: '{{ instance_id }}'
         group_id: '{{ group_id }}'
         sg_action: '{{ sg_action }}'
