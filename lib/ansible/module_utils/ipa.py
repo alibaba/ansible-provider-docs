@@ -32,11 +32,11 @@ try:
 except ImportError:
     import simplejson as json
 
-from ansible.module_utils.pycompat24 import get_exception
-from ansible.module_utils.urls import fetch_url
-from ansible.module_utils.six.moves.urllib.parse import quote
+from ansible.module_utils._text import to_bytes, to_native, to_text
 from ansible.module_utils.six import PY3
-from ansible.module_utils._text import to_bytes, to_text
+from ansible.module_utils.six.moves.urllib.parse import quote
+from ansible.module_utils.urls import fetch_url
+
 
 class IPAClient(object):
     def __init__(self, module, host, port, protocol):
@@ -68,9 +68,8 @@ class IPAClient(object):
                             'Content-Type': 'application/json',
                             'Accept': 'application/json',
                             'Cookie': resp.info().get('Set-Cookie')}
-        except Exception:
-            e = get_exception()
-            self._fail('login', str(e))
+        except Exception as e:
+            self._fail('login', to_native(e))
 
     def _fail(self, msg, e):
         if 'message' in e:
@@ -89,9 +88,8 @@ class IPAClient(object):
             status_code = info['status']
             if status_code not in [200, 201, 204]:
                 self._fail(method, info['msg'])
-        except Exception:
-            e = get_exception()
-            self._fail('post %s' % method, str(e))
+        except Exception as e:
+            self._fail('post %s' % method, to_native(e))
 
         if PY3:
             charset = resp.headers.get_content_charset('latin-1')
@@ -104,7 +102,7 @@ class IPAClient(object):
         resp = json.loads(to_text(resp.read(), encoding=charset), encoding=charset)
         err = resp.get('error')
         if err is not None:
-            self._fail('repsonse %s' % method, err)
+            self._fail('response %s' % method, err)
 
         if 'result' in resp:
             result = resp.get('result')
@@ -117,3 +115,43 @@ class IPAClient(object):
                         return {}
             return result
         return None
+
+    def get_diff(self, ipa_data, module_data):
+        result = []
+        for key in module_data.keys():
+            mod_value = module_data.get(key, None)
+            if isinstance(mod_value, list):
+                default = []
+            else:
+                default = None
+            ipa_value = ipa_data.get(key, default)
+            if isinstance(ipa_value, list) and not isinstance(mod_value, list):
+                mod_value = [mod_value]
+            if isinstance(ipa_value, list) and isinstance(mod_value, list):
+                mod_value = sorted(mod_value)
+                ipa_value = sorted(ipa_value)
+            if mod_value != ipa_value:
+                result.append(key)
+        return result
+
+    def modify_if_diff(self, name, ipa_list, module_list, add_method, remove_method, item=None):
+        changed = False
+        diff = list(set(ipa_list) - set(module_list))
+        if len(diff) > 0:
+            changed = True
+            if not self.module.check_mode:
+                if item:
+                    remove_method(name=name, item={item: diff})
+                else:
+                    remove_method(name=name, item=diff)
+
+        diff = list(set(module_list) - set(ipa_list))
+        if len(diff) > 0:
+            changed = True
+            if not self.module.check_mode:
+                if item:
+                    add_method(name=name, item={item: diff})
+                else:
+                    add_method(name=name, item=diff)
+
+        return changed

@@ -33,16 +33,11 @@ sudo apt-get -y install python-pip python-dev dos2unix
 pip install sphinx==1.4.8 sphinx_rtd_theme
 ```
 
-## Formatting pulled files
-Run below command in `ansible-provider-docs` folder to fix this issue.
-```sh
-find . -type f -name '*' -exec dos2unix '{}' +
-```
-
 ## Build the documentation
-To build module documentation you'll need to run below command in `ansible-provider-docs` folder. 
+To build module documentation you'll need to run below command in `ansible-provider-docs/docs/docsite` folder.
 
 ```
+cd docs/docsite
 make webdocs 
 ```
 The generated html files are in `_build/html/` folder
