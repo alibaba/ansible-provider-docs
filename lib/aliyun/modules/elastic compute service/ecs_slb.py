@@ -32,20 +32,18 @@ short_description: Creates, Sets and Remove backend servers and Describe backend
 description:
     - Creates, Sets and Remove backend servers and Describe backend servers health status of SLB
 options:
-  acs_access_key:
+  alicloud_access_key:
     description:
-      - Aliyun Cloud access key. If not set then the value of the 'ACS_ACCESS_KEY_ID', 'ACS_ACCESS_KEY' or
-        'ECS_ACCESS_KEY' environment variable is used.
+      - Aliyun Cloud access key. If not set then the value of the `ALICLOUD_ACCESS_KEY`, `ACS_ACCESS_KEY_ID`, `ACS_ACCESS_KEY` or `ECS_ACCESS_KEY` environment variable is used.
     required: false
     default: null
-    aliases: ['ecs_access_key', 'access_key']
-  acs_secret_access_key:
+    aliases: ['acs_access_key', 'ecs_access_key', 'access_key']
+  alicloud_secret_key:
     description:
-      - Aliyun Cloud secret key. If not set then the value of the 'ACS_SECRET_ACCESS_KEY', 'ACS_SECRET_KEY', or
-        'ECS_SECRET_KEY' environment variable is used.
+      - Aliyun Cloud secret key. If not set then the value of the `ALICLOUD_SECRET_KEY`, `ACS_SECRET_ACCESS_KEY`, `ACS_SECRET_KEY`, or `ECS_SECRET_KEY` environment variable is used.
     required: false
     default: null
-    aliases: ['ecs_secret_key', 'secret_key']
+    aliases: ['acs_secret_access_key', 'ecs_secret_key', 'secret_key']
   status:
     description:
       - Create, set, remove or describe backend server health status of an slb
@@ -88,18 +86,18 @@ EXAMPLES = '''
 # Provisioning new add or remove Backend Server from SLB
 #
 
-Basic example to add backend server to load balancer instance
+# Basic example to add backend server to load balancer instance
 - name: add backend server
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
   tasks:
     - name: add backend server
       ecs_slb:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
         load_balancer_id: 'xxxxxxxxxx'
         backend_servers:
           - server_id: xxxxxxxxxx
@@ -107,18 +105,18 @@ Basic example to add backend server to load balancer instance
           - server_id: xxxxxxxxxx
 
 
-Basic example to set backend server of load balancer instance
+# Basic example to set backend server of load balancer instance
 - name: set backend server
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
   tasks:
     - name: set backend server
       ecs_slb:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
         load_balancer_id: 'xxxxxxxxxx'
         backend_servers:
           - server_id: xxxxxxxxxx
@@ -126,36 +124,36 @@ Basic example to set backend server of load balancer instance
           - server_id: xxxxxxxxxx
             weight: 80
 
-Basic example to remove backend servers from load balancer instance
+# Basic example to remove backend servers from load balancer instance
 - name: remove backend servers
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
   tasks:
     - name: remove backend servers
       ecs_slb:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
         load_balancer_id: 'xxxxxxxxxx'
         status: absent
         backend_servers:
           - xxxxxxxxxx
           - xxxxxxxxxx
 
-Basic example to describe backend server health status of load balancer instance
+# Basic example to describe backend server health status of load balancer instance
 - name: describe backend server health status
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
   tasks:
     - name: describe backend server health status
       ecs_slb:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
         status: check
         load_balancer_id: 'xxxxxxxxxx'
         ports:

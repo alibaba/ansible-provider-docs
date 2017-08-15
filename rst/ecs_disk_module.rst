@@ -176,8 +176,6 @@ Examples
             zone: '{{ zone }}'
             size: '{{ size }}'
             status: '{{ status }}'
-          register: result
-        - debug: var=result
     
     # Advanced example with tagging and snapshot
     - name: create disk
@@ -207,8 +205,6 @@ Examples
             snapshot_id: '{{ snapshot_id }}'
             disk_category: '{{ disk_category }}'
             status: '{{ status }}'
-          register: result
-        - debug: var=result
     
     
     # Example to attach disk to an instance
@@ -235,8 +231,6 @@ Examples
             disk_id: '{{ disk_id }}'
             device: '{{ device }}'
             delete_with_instance: '{{ delete_with_instance }}'
-          register: result
-        - debug: var=result
     
     
     # Example to detach disk from instance
@@ -257,8 +251,6 @@ Examples
             region: '{{ region }}'
             id: '{{ disk_id }}'
             status: '{{ status }}'
-          register: result
-        - debug: var=result
     
     
     # Example to delete disk
@@ -279,8 +271,6 @@ Examples
             region: '{{ region }}'
             disk_id: '{{ disk_id }}'
             status: '{{ status }}'
-          register: result
-        - debug: var=result
 
 
 Notes

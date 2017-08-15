@@ -31,24 +31,24 @@ description:
     - Create, set and Delete VServer Group
     - Add, remove and modify VServer Group Backend Server
 options:
-  acs_access_key:
+  alicloud_access_key:
     description:
-      - Aliyun Cloud access key. If not set then the value of the `ACS_ACCESS_KEY_ID`, `ACS_ACCESS_KEY` or `ECS_ACCESS_KEY` environment variable is used.
+      - Aliyun Cloud access key. If not set then the value of the `ALICLOUD_ACCESS_KEY`, `ACS_ACCESS_KEY_ID`, `ACS_ACCESS_KEY` or `ECS_ACCESS_KEY` environment variable is used.
     required: false
     default: null
-    aliases: ['ecs_access_key','access_key']
-  acs_secret_access_key:
+    aliases: ['acs_access_key', 'ecs_access_key', 'access_key']
+  alicloud_secret_key:
     description:
-      - Aliyun Cloud secret key. If not set then the value of the `ACS_SECRET_ACCESS_KEY`, `ACS_SECRET_KEY`, or `ECS_SECRET_KEY` environment variable is used.
+      - Aliyun Cloud secret key. If not set then the value of the `ALICLOUD_SECRET_KEY`, `ACS_SECRET_ACCESS_KEY`, `ACS_SECRET_KEY`, or `ECS_SECRET_KEY` environment variable is used.
     required: false
     default: null
-    aliases: ['ecs_secret_key','secret_key']
-  region:
+    aliases: ['acs_secret_access_key', 'ecs_secret_key', 'secret_key']
+  alicloud_region:
     description:
-      - The Aliyun Cloud region to use. If not specified then the value of the `ACS_REGION`, `ACS_DEFAULT_REGION` or `ECS_REGION` environment variable, if any, is used.
+      - The Aliyun Cloud region to use. If not specified then the value of the `ALICLOUD_REGION`, `ACS_REGION`, `ACS_DEFAULT_REGION` or `ECS_REGION` environment variable, if any, is used.
     required: false
     default: null
-    aliases: [ 'acs_region', 'ecs_region']
+    aliases: ['region', 'acs_region', 'ecs_region']
   status:
     description:
       - To create VServer Group, provide state as ‘present’
@@ -102,157 +102,158 @@ notes:
     C(ACS_REGION) or C(ACS_DEFAULT_REGION) or C(ECS_REGION)
 '''
 
-EXAMPLES = '''
+EXAMPLES = ''' 
 #
-# Provisioning new VServer Group
+# provisioning to create VServer Group in SLB
 #
 
-Basic provisioning example to create vserver group and add backend server
-- name: create vserver group and add backend server
+# basic provisioning example to create VServer Group in SLB
+- name: Create VServer Group in SLB
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-shenzhen
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: ap-southeast-1
     status: present
     load_balancer_id: xxxxxxxxxx
-    vserver_group_name : test
+    vserver_group_name: test
     backend_servers:
        -  server_id: xxxxxxxxxx
-          port: 8085
-          weight: 95
+          port: 8080
+          weight: 100
   tasks:
-    - name: create vserver group and add backend server
+    - name: Create VServer Group in SLB
       ecs_slb_vsg:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
-        status: '{{ status }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         load_balancer_id: '{{ load_balancer_id }}'
         vserver_group_name: '{{ vserver_group_name }}'
         backend_servers: '{{ backend_servers }}'
 
-Basic provisioning example add backend server to vserver group
-- name: add backend server to vserver group
+# basic provisioning example to set VServer Group Attribute
+- name: Set VServer Group Attribute
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-shenzhen
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: ap-southeast-1
     status: present
+    vserver_group_name: test123
     vserver_group_id: xxxxxxxxxx
     backend_servers:
        -  server_id: xxxxxxxxxx
-          port: 8085
-          weight: 95
+          port: 8080
+          weight: 50
   tasks:
-    - name: add backend server to vserver group
+    - name: Set VServer Group Attribute
       ecs_slb_vsg:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         status: '{{ status }}'
         vserver_group_id: '{{ vserver_group_id }}'
-        backend_servers: '{{ backend_servers }}'
-
-
-Provisioning example set vserver group backend server
-- name: set vserver group backend server
-  hosts: localhost
-  connection: local
-  vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-shenzhen
-    status: present
-    vserver_group_id: xxxxxxxxxx
-    vserver_group_name : testa
-    backend_servers:
-       -  server_id: xxxxxxxxxx
-          port: 8085
-          weight: 95
-  tasks:
-    - name: set vserver group backend server
-      ecs_slb_vsg:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
-        status: '{{ status }}'
-        vserver_group_id: '{{ vserver_group_id}}'
         vserver_group_name: '{{ vserver_group_name }}'
         backend_servers: '{{ backend_servers }}'
 
-
-# Provisioning example to remove vserver group backend server
-- name: remove vserver group backend server
+# basic provisioning example to add VServer Group backend server
+- name: add VServer Group backend server
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-shenzhen
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: ap-southeast-1
+    status: present
+    vserver_group_id: xxxxxxxxxx
+    backend_servers:
+       -  server_id: xxxxxxxxxx
+          port: 8070
+          weight: 100
+  tasks:
+    - name: add VServer Group backend server
+      ecs_slb_vsg:
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
+        status: '{{ status }}'
+        vserver_group_id: '{{ vserver_group_id}}'
+        backend_servers: '{{ backend_servers }}'
+
+# basic provisioning example to remove VServer Group backend server
+- name: remove VServer Group backend server
+  hosts: localhost
+  connection: local
+  vars:
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: ap-southeast-1
     status: present
     vserver_group_id: xxxxxxxxxx
     purge_backend_servers:
        -  server_id: xxxxxxxxxx
-          port: 8085
+          port: 8070
   tasks:
-    - name: remove vserver group backend server
+    - name: remove VServer Group backend server
       ecs_slb_vsg:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         status: '{{ status }}'
         vserver_group_id: '{{ vserver_group_id }}'
         purge_backend_servers: '{{ purge_backend_servers }}'
 
-
-# Provisioning example to modifying vserver group backend server
-- name: modifying vserver group backend server
+# basic provisioning example to modify VServer Group backend server
+- name: modify VServer Group backend server
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-shenzhen
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: ap-southeast-1
     status: present
     vserver_group_id: xxxxxxxxxx
     purge_backend_servers:
        -  server_id: xxxxxxxxxx
-          port: 8085
+          port: 8070
     backend_servers:
        -  server_id: xxxxxxxxxx
-          port: 8085
-          weight: 95
+          port: 8070
+          weight: 90
+       -  server_id: xxxxxxxxxx
+          port: 8090
+          weight: 70
   tasks:
-    - name: modifying vserver group backend server
+    - name: modify VServer Group backend server
       ecs_slb_vsg:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         status: '{{ status }}'
         vserver_group_id: '{{ vserver_group_id }}'
         purge_backend_servers: '{{ purge_backend_servers }}'
         backend_servers: '{{ backend_servers }}'
 
-# Provisioning example to delete vserver group
-- name: delete vserver group
+# basic provisioning example to delete VServer Group
+- name: delete VServer Group
   hosts: localhost
   connection: local
   vars:
-    acs_access_key: xxxxxxxxxx
-    acs_secret_access_key: xxxxxxxxxx
-    region: cn-shenzhen
+    alicloud_access_key: xxxxxxxxxx
+    alicloud_secret_key: xxxxxxxxxx
+    alicloud_region: ap-southeast-1
     status: absent
     vserver_group_id: xxxxxxxxxx
+    load_balancer_id: xxxxxxxxxx
   tasks:
-    - name: delete vserver group
+    - name: delete VServer Group
       ecs_slb_vsg:
-        acs_access_key: '{{ acs_access_key }}'
-        acs_secret_access_key: '{{ acs_secret_access_key }}'
-        region: '{{ region }}'
+        alicloud_access_key: '{{ alicloud_access_key }}'
+        alicloud_secret_key: '{{ alicloud_secret_key }}'
+        alicloud_region: '{{ alicloud_region }}'
         status: '{{ status }}'
+        load_balancer_id: '{{ load_balancer_id }}'
         vserver_group_id: '{{ vserver_group_id }}'
 '''
