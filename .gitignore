@@ -87,3 +87,5 @@ htmlcov/
 .coverage
 # ansible-test coverage results
 test/units/.coverage.*
+
+.idea/*
