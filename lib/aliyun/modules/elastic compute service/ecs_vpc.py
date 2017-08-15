@@ -213,6 +213,8 @@ EXAMPLES = """
         vpc_name: '{{ vpc_name }}'
         description: '{{ description }}'
         vswitches: '{{ vswitches }}'
+      register: result
+    - debug: var=result
 
 # basic provisioning example to delete vpc
 - name: delete vpc
@@ -230,6 +232,8 @@ EXAMPLES = """
         alicloud_region: '{{ alicloud_region }}'
         state: absent
         vpc_id: xxxxxxxxxx
+      register: result
+    - debug: var=result
 
 # basic provisioning example to create vswitch
 - name: create vswitch
@@ -266,6 +270,9 @@ EXAMPLES = """
     alicloud_access_key: xxxxxxxxxx
     alicloud_secret_key: xxxxxxxxxx
     alicloud_region: cn-hongkong
+    acs_access_key: xxxxxxxxxx
+    acs_secret_access_key: xxxxxxxxxx
+    region: cn-hongkong
     vpc_id: xxxxxxxxxx
     purge_vswitches:
      - xxxxxxxxxx
@@ -276,9 +283,14 @@ EXAMPLES = """
         alicloud_access_key: '{{ alicloud_access_key }}'
         alicloud_secret_key: '{{ alicloud_secret_key }}'
         alicloud_region: '{{ alicloud_region }}'
+        acs_access_key: '{{ acs_access_key }}'
+        acs_secret_access_key: '{{ acs_secret_access_key }}'
+        region: '{{ region }}'
         vpc_id: '{{ vpc_id }}'
         purge_vswitches: '{{ purge_vswitches }}'
         state: '{{ state }}'
+      register: result
+    - debug: var=result
 
 # basic provisioning example to create custom route
 - name: create vpc
@@ -302,6 +314,8 @@ EXAMPLES = """
         state: '{{ state }}'
         route_entries: '{{ route_entries }}'
         vpc_id: '{{ vpc_id }}'
+      register: result
+    - debug: var=result
 
 # basic provisioning example to delete custom route
 - name: delete route
@@ -325,6 +339,8 @@ EXAMPLES = """
         purge_routes: '{{ purge_routes }}'
         state: '{{ state }}'
         vpc_id: '{{ vpc_id }}'
+      register: result
+    - debug: var=result
 
 # basic provisioning example to querying vroute
 - name: get vrouter list
@@ -348,6 +364,8 @@ EXAMPLES = """
         state: '{{ state }}'
         pagenumber: '{{ pagenumber }}'
         pagesize: '{{ pagesize }}'
+      register: result
+    - debug: var=result
 
 # basic provisioning example to querying vswitch
 - name: querying vswitch status
@@ -375,4 +393,7 @@ EXAMPLES = """
         vswitch_id: '{{ vswitch_id }}'
         page_size: '{{ page_size }}'
         page_number: '{{ page_number }}'
+      register: result
+    - debug: var=result
+
 """
