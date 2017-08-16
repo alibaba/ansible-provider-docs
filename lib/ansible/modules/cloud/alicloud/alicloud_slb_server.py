@@ -112,7 +112,7 @@ Basic example to remove backend servers from load balancer instance
     - name: remove backend servers
       alicloud_slb_server:
         load_balancer_id: 'xxxxxxxxxx'
-        status: absent
+        state: absent
         backend_servers:
           - xxxxxxxxxx
           - xxxxxxxxxx
@@ -124,7 +124,7 @@ Basic example to describe backend server health status of load balancer instance
   tasks:
     - name: describe backend server health status
       alicloud_slb_server:
-        status: list
+        state: list
         load_balancer_id: 'xxxxxxxxxx'
         ports:
           - '80'
