@@ -30,40 +30,40 @@ module: alicloud_slb_vsg
 version_added: "2.4"
 short_description: Create, Delete VServerGroup and Modify its name or backend servers.
 options:
-  state:
-    description:
-      - The state of the instance after operating.
-    default: present
-    choices: [ 'present', 'absent', 'list']
-  load_balancer_id:
-    description:
-      - The unique ID of an Server Load Balancer instance, It is required when need to create a new vserver group.
-  vserver_group_name:
-    description:
-      - Virtual server group name
-    aliases: [ 'group_name' ]
-  backend_servers:
-    description:
-      - List of backend servers that need to be added.
-    suboptions:
-      instance_id:
-        description:
-          - The ID of backend server.
-        required: true
-      port:
-        description:
-          - Port used to backend server
-        required: true
-        choices: [1~65536]
-      weight:
-        description:
-          - The weigth of the backend server
-        default: 100
-        choices: [1~101]
-  vserver_group_id:
-    description:
-      - Virtual server group id. It is required when need to operate an existing vserver group.
-    aliases: [ 'group_id' ]
+    state:
+      description:
+        - The state of the instance after operating.
+      default: present
+      choices: [ 'present', 'absent', 'list']
+    load_balancer_id:
+      description:
+        - The unique ID of an Server Load Balancer instance, It is required when need to create a new vserver group.
+    vserver_group_name:
+      description:
+        - Virtual server group name
+      aliases: [ 'group_name' ]
+    backend_servers:
+      description:
+        - List of backend servers that need to be added.
+      suboptions:
+        instance_id:
+          description:
+            - The ID of backend server.
+          required: true
+        port:
+          description:
+            - Port used to backend server
+          required: true
+          choices: [1~65536]
+        weight:
+          description:
+            - The weigth of the backend server
+          default: 100
+          choices: [1~101]
+    vserver_group_id:
+      description:
+        - Virtual server group id. It is required when need to operate an existing vserver group.
+      aliases: [ 'group_id' ]
 requirements:
     - "python >= 2.6"
     - "footmark"
