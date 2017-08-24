@@ -29,14 +29,9 @@
 import os
 
 try:
-    import footmark
-    import footmark.ecs
-    import footmark.slb
-    import footmark.vpc
-    import footmark.rds
-    HAS_FOOTMARK = True
+    import footmark.oss
 except ImportError:
-    HAS_FOOTMARK = False
+    raise ImportError('footmark is required for the module')
 
 
 class AnsibleACSError(Exception):
@@ -46,28 +41,26 @@ class AnsibleACSError(Exception):
 def acs_common_argument_spec():
     return dict(
         alicloud_access_key=dict(aliases=['acs_access_key', 'ecs_access_key', 'access_key']),
-        alicloud_secret_key=dict(no_log=True, aliases=['acs_secret_access_key', 'ecs_secret_key', 'secret_key']),
-        alicloud_security_token=dict(aliases=['security_token', 'access_token'], no_log=True),
+        alicloud_secret_key=dict(aliases=['acs_secret_access_key', 'ecs_secret_key', 'secret_key']),
     )
 
 
-def ecs_argument_spec():
+def oss_bucket_argument_spec():
     spec = acs_common_argument_spec()
     spec.update(
         dict(
             alicloud_region=dict(aliases=['acs_region', 'ecs_region', 'region']),
+            bucket=dict(aliases=['bucket_name', 'name'], type='str', required='True')
         )
     )
     return spec
 
 
-def get_acs_connection_info(module):
-
-    # Check module args for credentials, then check environment vars access_key and region
+def get_oss_connection_info(module):
+    """ Check module args for credentials, then check environment vars access_key """
 
     access_key = module.params.get('alicloud_access_key')
     secret_key = module.params.get('alicloud_secret_key')
-    security_token = module.params.get('alicloud_security_token')
     region = module.params.get('alicloud_region')
 
     if not access_key:
@@ -108,86 +101,50 @@ def get_acs_connection_info(module):
         else:
             module.fail_json(msg="region is required")
 
-    if not security_token:
-        if 'ALICLOUD_SECURITY_TOKEN' in os.environ:
-            security_token = os.environ['ALICLOUD_SECURITY_TOKEN']
-        elif 'ACS_SECURITY_TOKEN' in os.environ:
-            security_token = os.environ['ACS_SECURITY_TOKEN']
-        elif 'ECS_SECURITY_TOKEN' in os.environ:
-            security_token = os.environ['ECS_SECURITY_TOKEN']
-        else:
-            # in case security_token came in as empty string
-            security_token = None
+    oss_params = dict(acs_access_key_id=access_key, acs_secret_access_key=secret_key, user_agent='Ansible-Provider-Alicloud')
 
-    ecs_params = dict(acs_access_key_id=access_key, acs_secret_access_key=secret_key, security_token=security_token,
-                      user_agent='Ansible-Provider-Alicloud')
-
-    return region, ecs_params
+    return region, oss_params
 
 
-def connect_to_acs(acs_module, region, **params):
-    conn = acs_module.connect_to_region(region, **params)
-    if not conn:
-        if region not in [acs_module_region.id for acs_module_region in acs_module.regions()]:
-            raise AnsibleACSError(
-                "Region %s does not seem to be available for acs module %s." % (region, acs_module.__name__))
-        else:
-            raise AnsibleACSError(
-                "Unknown problem connecting to region %s for acs module %s." % (region, acs_module.__name__))
+def get_bucket_connection_info(module):
+    """ Check module args for credentials, then check environment vars access_key """
+
+    region, oss_params = get_oss_connection_info(module)
+    bucket_name = module.params.get('bucket')
+
+    if bucket_name is None:
+        module.fail_json(msg="bucket name is required")
+
+    oss_params.update(dict(bucket_name=bucket_name))
+
+    return region, oss_params
+
+
+def connect_to_oss(acs_module, region, **params):
+    conn = acs_module.connect_to_oss(region, **params)
     return conn
 
 
-def ecs_connect(module):
-    """ Return an ecs connection"""
-
-    region, ecs_params = get_acs_connection_info(module)
-    # If we have a region specified, connect to its endpoint.
-    if region:
-        try:
-            ecs = connect_to_acs(footmark.ecs, region, **ecs_params)
-        except AnsibleACSError as e:
-            module.fail_json(msg=str(e))
-    # Otherwise, no region so we fallback to the old connection method
-    return ecs
+def connect_to_oss_bucket(acs_module, region, **params):
+    conn = acs_module.connect_to_bucket(region, **params)
+    return conn
 
 
-def slb_connect(module):
-    """ Return an slb connection"""
+def oss_bucket_connect(module):
+    """ Return an oss bucket connection"""
 
-    region, slb_params = get_acs_connection_info(module)
-    # If we have a region specified, connect to its endpoint.
-    if region:
-        try:
-            slb = connect_to_acs(footmark.slb, region, **slb_params)
-        except AnsibleACSError as e:
-            module.fail_json(msg=str(e))
-    # Otherwise, no region so we fallback to the old connection method
-    return slb
+    region, oss_params = get_bucket_connection_info(module)
+    try:
+        return connect_to_oss_bucket(footmark.oss, region, **oss_params)
+    except AnsibleACSError as e:
+        module.fail_json(msg=str(e))
 
 
-def vpc_connect(module):
-    """ Return an vpc connection"""
+def oss_service_connect(module):
+    """ Return an oss service connection"""
 
-    region, vpc_params = get_acs_connection_info(module)
-    # If we have a region specified, connect to its endpoint.
-    if region:
-        try:
-            vpc = connect_to_acs(footmark.vpc, region, **vpc_params)
-        except AnsibleACSError as e:
-            module.fail_json(msg=str(e))
-    # Otherwise, no region so we fallback to the old connection method
-    return vpc
-
-
-def rds_connect(module):
-    """ Return an rds connection"""
-
-    region, rds_params = get_acs_connection_info(module)
-    # If we have a region specified, connect to its endpoint.
-    if region:
-        try:
-            rds = connect_to_acs(footmark.rds, region, **rds_params)
-        except AnsibleACSError as e:
-            module.fail_json(msg=str(e))
-    # Otherwise, no region so we fallback to the old connection method
-    return rds
+    region, oss_params = get_oss_connection_info(module)
+    try:
+        return connect_to_oss(footmark.oss, region, **oss_params)
+    except AnsibleACSError as e:
+        module.fail_json(msg=str(e))

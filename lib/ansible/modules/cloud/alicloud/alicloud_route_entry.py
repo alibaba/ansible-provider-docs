@@ -1,6 +1,6 @@
 #!/usr/bin/python
-#
 # Copyright (c) 2017 Alibaba Group Holding Limited. He Guimin <heguimin36@163.com.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 #
 # This file is part of Ansible
 #
@@ -17,9 +17,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible. If not, see http://www.gnu.org/licenses/.
 
-ANSIBLE_METADATA = {'metadata_version': '1.0',
-                    'status': ['stableinterface'],
-                    'supported_by': 'curated'}
+ANSIBLE_METADATA = {'metadata_version': '1.1',
+                    'status': ['preview'],
+                    'supported_by': 'community'}
 
 DOCUMENTATION = """
 ---
@@ -34,32 +34,25 @@ options:
     description:
       -  Whether or not to create, delete or query route entry.
     choices: ['present', 'absent', 'list']
-    required: false
-    default: present
+    default: 'present'
   router_id:
     description:
       - The ID of virtual router to which route entry belongs.
     required: true
-    default: null
   destination_cidrblock:
     description:
       - The destination CIDR or Ip address of route entry. Such as:192.168.0.0/24 or 192.168.0.1.
         There is not the same destination cidr_block in the same route table. It is required when creating route entry.
-    required: false
-    default: null
     aliases: ['dest_cidrblock', 'cidr_block']
   nexthop_id:
     description:
       - The next hop ID of route entry. It is required when creating a route entry.
-    required: false
-    default: null
     aliases: ['hop_id']
   nexthop_type:
     description:
       - The next hop type of route entry.
-    required: false
     default: 'Instance'
-    choices: ['Instance', 'Tunnel', 'HaVip', 'RouterInterface']
+    choices: ['Instance', 'Tunnel', 'HaVip', 'RouterInterface', 'VpnGateway']
     aliases: ['hop_type']
 notes:
   - The max items of route entry no more than 48 in the same route table.
@@ -202,12 +195,11 @@ total:
 # import module snippets
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.alicloud_ecs import ecs_argument_spec, vpc_connect
-from footmark.exception import VPCResponseError
 
 HAS_FOOTMARK = False
 
 try:
-    from footmark.exception import ECSResponseError
+    from footmark.exception import VPCResponseError
     HAS_FOOTMARK = True
 except ImportError:
     HAS_FOOTMARK = False
