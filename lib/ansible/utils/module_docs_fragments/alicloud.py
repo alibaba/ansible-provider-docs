@@ -1,5 +1,5 @@
 # !/usr/bin/python
-# Copyright (c) 2017 Alibaba Group Holding Limited. He Guimin <heguimin36@163.com.com>
+# Copyright (c) 2017 Alibaba Group Holding Limited. He Guimin <heguimin36@163.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 #
 # This file is part of Ansible
@@ -25,32 +25,32 @@ class ModuleDocFragment(object):
 options:
   alicloud_access_key:
     description:
-      - Aliyun Cloud access key. If not set then the value of the `ALICLOUD_ACCESS_KEY`, `ACS_ACCESS_KEY_ID`,
-        `ACS_ACCESS_KEY` or `ECS_ACCESS_KEY` environment variable is used.
-    aliases: ['acs_access_key', 'ecs_access_key','access_key']
+      - Aliyun Cloud access key. If not set then the value of environment variable C(ALICLOUD_ACCESS_KEY),
+        C(ALICLOUD_ACCESS_KEY_ID) will be used instead.
+    aliases: ['access_key_id', 'access_key']
   alicloud_secret_key:
     description:
-      - Aliyun Cloud secret key. If not set then the value of the `ALICLOUD_SECRET_KEY`, `ACS_SECRET_ACCESS_KEY`,
-        `ACS_SECRET_KEY`, or `ECS_SECRET_KEY` environment variable is used.
-    aliases: ['acs_secret_access_key', 'ecs_secret_key','secret_key']
+      - Aliyun Cloud secret key. If not set then the value of environment variable C(ALICLOUD_SECRET_KEY),
+        C(ALICLOUD_SECRET_ACCESS_KEY) will be used instead.
+    aliases: ['secret_access_key', 'secret_key']
   alicloud_region:
     description:
-      - The Aliyun Cloud region to use. If not specified then the value of the `ALICLOUD_REGION`, `ACS_REGION`,
-        `ACS_DEFAULT_REGION` or `ECS_REGION` environment variable, if any, is used.
-    aliases: ['acs_region', 'ecs_region', 'region']
+      - The Aliyun Cloud region to use. If not specified then the value of environment variable
+        C(ALICLOUD_REGION), C(ALICLOUD_REGION_ID) will be used instead.
+    aliases: ['region', 'region_id']
 author:
     - "He Guimin (@xiaozhu36)"
 requirements:
-    - "python >= 2.7"
-    - "footmark"
+    - "python >= 2.6"
+    - "footmark >= 1.1.6"
 extends_documentation_fragment:
     - alicloud
 notes:
   - If parameters are not set within the module, the following
     environment variables can be used in decreasing order of precedence
-    C(ALICLOUD_ACCESS_KEY) or C(ACS_ACCESS_KEY_ID) or C(ECS_ACCESS_KEY) or C(ACS_ACCESS_KEY),
-    C(ALICLOUD_SECRET_KEY) or C(ACS_SECRET_ACCESS_KEY) or C(ECS_SECRET_KEY) or C(ACS_SECRET_KEY),
-    C(ALICLOUD_REGION) or C(ECS_REGION) or C(ACS_REGION) or C(ACS_DEFAULT_REGION)
-  - C(ALICLOUD_REGION) or C(ECS_REGION) can be typically be used to specify the
+    C(ALICLOUD_ACCESS_KEY) or C(ALICLOUD_ACCESS_KEY_ID),
+    C(ALICLOUD_SECRET_KEY) or C(ALICLOUD_SECRET_ACCESS_KEY),
+    C(ALICLOUD_REGION) or C(ALICLOUD_REGION_ID)
+  - C(ALICLOUD_REGION) or C(ALICLOUD_REGION_ID) can be typically be used to specify the
     ALICLOUD region, when required, but this can also be configured in the footmark config file
 """
