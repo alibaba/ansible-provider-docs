@@ -68,7 +68,7 @@ options:
       aliases: [ 'group_id' ]
 requirements:
     - "python >= 2.6"
-    - "footmark"
+    - "footmark >= 1.1.13"
 extends_documentation_fragment:
     - alicloud
 author:
@@ -274,6 +274,8 @@ def get_info(obj):
 
 
 def convert_to_utf8(obj):
+    if sys.version_info.major == 3:
+        return obj
     if isinstance(obj, dict):
         res = {}
         for key, value in obj.iteritems():
@@ -284,7 +286,7 @@ def convert_to_utf8(obj):
         for i in obj:
             res.append(convert_to_utf8(i))
         return res
-    elif not isinstance(obj, int):
+    elif type(obj) not in [int, float, bool, complex, long]:
         return obj.encode('utf-8')
     return obj
 
