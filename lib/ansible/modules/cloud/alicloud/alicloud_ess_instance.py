@@ -53,12 +53,16 @@ options:
           'Attached' for the ECS instance is created outside the Auto Scaling service and manually attached to the scaling group.
       choices: [ 'AutoCreated', 'Attached' ]
       default: 'Attached'
+      aliases: [ 'type' ]
 
 author:
     - "He Guimin (@xiaozhu36)"
 requirements:
     - "python >= 2.6"
-    - "footmark >= 1.2.1"
+    - "footmark >= 1.3.0"
+notes:
+  - If both I(instance_ids) and I(creation_type) are not specified, the module will remove all of ECS instnaces in the
+    specified Scaling Group when C(state=absent).
 extends_documentation_fragment:
     - alicloud
 '''
@@ -89,6 +93,12 @@ EXAMPLES = '''
         creation_type: 'AutoCreated'
         group_id: '{{ group_id }}'
         state: absent
+    
+    - name: remove all of ECS instances
+      alicloud_ess_instance:
+        alicloud_region: '{{ alicloud_region }}'
+        group_id: '{{ group_id }}'
+        state: absent
 '''
 
 RETURN = '''
@@ -117,7 +127,7 @@ def main():
         state=dict(type=str, default='present', choices=['present', 'absent']),
         group_id=dict(type=str, required=True),
         instance_ids=dict(type=list),
-        creation_type=dict(type=str, default='Attached', choices=['AutoCreated', 'Attached'])
+        creation_type=dict(type=str, default='Attached', choices=['AutoCreated', 'Attached'], aliases=['type'])
     ))
 
     module = AnsibleModule(argument_spec=argument_spec)
@@ -137,6 +147,7 @@ def main():
     changed = False
     adding = instance_ids
     removing = []
+    all = []
     old = ess.describe_instances(scaling_group_id=group_id)
     if old:
         for inst in old:
@@ -146,6 +157,7 @@ def main():
                     removing.append(inst.id)
             if state == 'absent' and creation_type and inst.creation_type == creation_type:
                 removing.append(inst.id)
+            all.append(inst.id)
 
     if state == 'present':
         if adding:
@@ -155,9 +167,12 @@ def main():
             except Exception as e:
                 module.fail_json(msg="Adding ECS instances to scaling group got an error: {0}.".format(e))
 
+    if not removing:
+        removing = all
+
     if removing:
         try:
-            changed = ess.remove_instances(scaling_group_id=group_id, instance_ids=removing)
+            changed=ess.remove_instances(scaling_group_id=group_id, instance_ids=removing)
         except Exception as e:
             module.fail_json(msg='Removing ECS instances from scaling group got an error: {0}.'.format(e))
 

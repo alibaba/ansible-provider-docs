@@ -126,7 +126,7 @@ author:
     - "He Guimin (@xiaozhu36)"
 requirements:
     - "python >= 2.6"
-    - "footmark >= 1.2.1"
+    - "footmark >= 1.3.0"
 extends_documentation_fragment:
     - alicloud
 '''
@@ -160,7 +160,7 @@ EXAMPLES = '''
 
   tasks:
     - name: launch scaling configuration
-      alicloud_instance:
+      alicloud_ess_configuration:
         alicloud_access_key: '{{ alicloud_access_key }}'
         alicloud_secret_key: '{{ alicloud_secret_key }}'
         alicloud_region: '{{ alicloud_region }}'
@@ -173,7 +173,7 @@ EXAMPLES = '''
         key_name: '{{ key_name }}'
     
     - name: launch scaling configuration with data disks and tags
-      alicloud_instance:
+      alicloud_ess_configuration:
         alicloud_access_key: '{{ alicloud_access_key }}'
         alicloud_secret_key: '{{ alicloud_secret_key }}'
         alicloud_region: '{{ alicloud_region }}'
@@ -188,7 +188,7 @@ EXAMPLES = '''
         tags: '{{ tags }}'
 
     - name: delete specified scaling configuration
-      alicloud_instance:
+      alicloud_ess_configuration:
         alicloud_access_key: '{{ alicloud_access_key }}'
         alicloud_secret_key: '{{ alicloud_secret_key }}'
         alicloud_region: '{{ alicloud_region }}'
@@ -202,7 +202,7 @@ id:
     description: Scaling Configuration ID.
     returned: expect absent
     type: str
-    sample: ["i-35b333d9","i-ddavdaeb3"]
+    sample: "asc-2zeimuvzeil1ybfd2lt3"
 name:
     description: Scaling Configuration name.
     returned: expect absent
@@ -295,7 +295,7 @@ def main():
                                            scaling_configuration_names=[cfg_name])
 
         if cfgs:
-            if len(all_cfgs) > 1:
+            if len(cfgs) > 1:
                 for cfg in cfgs:
                     all_cfgs.append(cfg.id)
                 module.fail_json(msg="There are several scaling configurations in our record based on name {0}: {1}. "
