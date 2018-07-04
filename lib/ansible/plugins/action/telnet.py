@@ -22,6 +22,7 @@ class ActionModule(ActionBase):
             self._display.warning('The telnet task does not support the environment keyword')
 
         result = super(ActionModule, self).run(tmp, task_vars)
+        del tmp  # tmp no longer has any effect
 
         if self._play_context.check_mode:
             # in --check mode, always skip this module execution
@@ -43,7 +44,7 @@ class ActionModule(ActionBase):
             login_prompt = self._task.args.get('login_prompt', "login: ")
             password_prompt = self._task.args.get('password_prompt', "Password: ")
             prompts = self._task.args.get('prompts', "$ ")
-            commands = self._task.args.get('command')
+            commands = self._task.args.get('command') or self._task.args.get('commands')
 
             if isinstance(commands, text_type):
                 commands = commands.split(',')

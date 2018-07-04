@@ -1,0 +1,4 @@
+WARNING: intersphinx inventory 'https://docs.python.org/2/objects.inv' not fetchable due to <class 'urllib2.URLError'>: <urlopen error [SSL: TLSV1_ALERT_PROTOCOL_VERSION] tlsv1 alert protocol version (_ssl.c:590)>
+WARNING: intersphinx inventory 'https://docs.python.org/3/objects.inv' not fetchable due to <class 'urllib2.URLError'>: <urlopen error [SSL: TLSV1_ALERT_PROTOCOL_VERSION] tlsv1 alert protocol version (_ssl.c:590)>
+
+interrupted!

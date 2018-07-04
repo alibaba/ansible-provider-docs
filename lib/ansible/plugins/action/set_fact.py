@@ -33,10 +33,11 @@ class ActionModule(ActionBase):
             task_vars = dict()
 
         result = super(ActionModule, self).run(tmp, task_vars)
+        del tmp  # tmp no longer has any effect
 
         facts = dict()
 
-        cacheable = bool(self._task.args.pop('cacheable', False))
+        cacheable = boolean(self._task.args.pop('cacheable', False))
 
         if self._task.args:
             for (k, v) in iteritems(self._task.args):
@@ -54,5 +55,5 @@ class ActionModule(ActionBase):
 
         result['changed'] = False
         result['ansible_facts'] = facts
-        result['ansible_facts_cacheable'] = cacheable
+        result['_ansible_facts_cacheable'] = cacheable
         return result

@@ -1,20 +1,5 @@
-#
 # (c) 2017, Daniel Korn <korndaniel1@gmail.com>
-#
-# This file is part of Ansible
-#
-# Ansible is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# Ansible is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 
 class ModuleDocFragment(object):
@@ -32,21 +17,19 @@ options:
         description:
           - ManageIQ environment url. C(MIQ_URL) env var if set. otherwise, it is required to pass it.
       username:
-        required: true
         description:
-          - ManageIQ username. C(MIQ_USERNAME) env var if set. otherwise, it is required to pass it.
+          - ManageIQ username. C(MIQ_USERNAME) env var if set. otherwise, required if no token is passed in.
       password:
-        required: true
         description:
-          - ManageIQ password. C(MIQ_PASSWORD) env var if set. otherwise, it is required to pass it.
+          - ManageIQ password. C(MIQ_PASSWORD) env var if set. otherwise, required if no token is passed in.
+      token:
+        description:
+          - ManageIQ token. C(MIQ_TOKEN) env var if set. otherwise, required if no username or password is passed in.
       verify_ssl:
-        required: false
-        default: true
         description:
           - Whether SSL certificates should be verified for HTTPS requests. defaults to True.
+        default: true
       ca_bundle_path:
-        required: false
-        default: null
         description:
           - The path to a CA bundle file or directory with certificates. defaults to None.
 

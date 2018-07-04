@@ -34,7 +34,7 @@ from abc import ABCMeta, abstractmethod
 
 import ansible
 from ansible import constants as C
-from ansible.errors import AnsibleOptionsError
+from ansible.errors import AnsibleOptionsError, AnsibleError
 from ansible.inventory.manager import InventoryManager
 from ansible.module_utils.six import with_metaclass, string_types
 from ansible.module_utils._text import to_bytes, to_text
@@ -112,6 +112,7 @@ class CLI(with_metaclass(ABCMeta, object)):
     # -F (quit-if-one-screen) -R (allow raw ansi control chars)
     # -S (chop long lines) -X (disable termcap init and de-init)
     LESS_OPTS = 'FRSX'
+    SKIP_INVENTORY_DEFAULTS = False
 
     def __init__(self, args, callback=None):
         """
@@ -168,6 +169,23 @@ class CLI(with_metaclass(ABCMeta, object)):
         else:
             display.v(u"No config file found; using defaults")
 
+        # warn about deprecated config options
+        for deprecated in C.config.DEPRECATED:
+            name = deprecated[0]
+            why = deprecated[1]['why']
+            if 'alternatives' in deprecated[1]:
+                alt = ', use %s instead' % deprecated[1]['alternatives']
+            else:
+                alt = ''
+            ver = deprecated[1]['version']
+            display.deprecated("%s option, %s %s" % (name, why, alt), version=ver)
+
+        # Errors with configuration entries
+        if C.config.UNABLE:
+            for unable in C.config.UNABLE:
+                display.error("Unable to set correct type for configuration entry for %s: %s" % (unable, C.config.UNABLE[unable]))
+            raise AnsibleError("Invalid configuration settings")
+
     @staticmethod
     def split_vault_id(vault_id):
         # return (before_@, after_@)
@@ -180,7 +198,9 @@ class CLI(with_metaclass(ABCMeta, object)):
         return ret
 
     @staticmethod
-    def build_vault_ids(vault_ids, vault_password_files=None, ask_vault_pass=None):
+    def build_vault_ids(vault_ids, vault_password_files=None,
+                        ask_vault_pass=None, create_new_password=None,
+                        auto_prompt=True):
         vault_password_files = vault_password_files or []
         vault_ids = vault_ids or []
 
@@ -193,7 +213,11 @@ class CLI(with_metaclass(ABCMeta, object)):
             # used by --vault-id and --vault-password-file
             vault_ids.append(id_slug)
 
-        if ask_vault_pass:
+        # if an action needs an encrypt password (create_new_password=True) and we dont
+        # have other secrets setup, then automatically add a password prompt as well.
+        # prompts cant/shouldnt work without a tty, so dont add prompt secrets
+        if ask_vault_pass or (not vault_ids and auto_prompt):
+
             id_slug = u'%s@%s' % (C.DEFAULT_VAULT_IDENTITY, u'prompt_ask_vault_pass')
             vault_ids.append(id_slug)
 
@@ -202,7 +226,8 @@ class CLI(with_metaclass(ABCMeta, object)):
     # TODO: remove the now unused args
     @staticmethod
     def setup_vault_secrets(loader, vault_ids, vault_password_files=None,
-                            ask_vault_pass=None, create_new_password=False):
+                            ask_vault_pass=None, create_new_password=False,
+                            auto_prompt=True):
         # list of tuples
         vault_secrets = []
 
@@ -210,6 +235,9 @@ class CLI(with_metaclass(ABCMeta, object)):
         # we need to show different prompts. This is for compat with older Towers that expect a
         # certain vault password prompt format, so 'promp_ask_vault_pass' vault_id gets the old format.
         prompt_formats = {}
+
+        # If there are configured default vault identities, they are considered 'first'
+        # so we prepend them to vault_ids (from cli) here
 
         vault_password_files = vault_password_files or []
         if C.DEFAULT_VAULT_PASSWORD_FILE:
@@ -228,7 +256,9 @@ class CLI(with_metaclass(ABCMeta, object)):
 
         vault_ids = CLI.build_vault_ids(vault_ids,
                                         vault_password_files,
-                                        ask_vault_pass)
+                                        ask_vault_pass,
+                                        create_new_password,
+                                        auto_prompt=auto_prompt)
 
         for vault_id_slug in vault_ids:
             vault_id_name, vault_id_value = CLI.split_vault_id(vault_id_slug)
@@ -236,18 +266,24 @@ class CLI(with_metaclass(ABCMeta, object)):
 
                 # --vault-id some_name@prompt_ask_vault_pass --vault-id other_name@prompt_ask_vault_pass will be a little
                 # confusing since it will use the old format without the vault id in the prompt
-                if vault_id_name:
-                    prompted_vault_secret = PromptVaultSecret(prompt_formats=prompt_formats[vault_id_value],
-                                                              vault_id=vault_id_name)
+                built_vault_id = vault_id_name or C.DEFAULT_VAULT_IDENTITY
+
+                # choose the prompt based on --vault-id=prompt or --ask-vault-pass. --ask-vault-pass
+                # always gets the old format for Tower compatibility.
+                # ie, we used --ask-vault-pass, so we need to use the old vault password prompt
+                # format since Tower needs to match on that format.
+                prompted_vault_secret = PromptVaultSecret(prompt_formats=prompt_formats[vault_id_value],
+                                                          vault_id=built_vault_id)
+
+                # a empty or invalid password from the prompt will warn and continue to the next
+                # without erroring globablly
+                try:
                     prompted_vault_secret.load()
-                    vault_secrets.append((vault_id_name, prompted_vault_secret))
-                else:
-                    # ie, we used --ask-vault-pass, so we need to use the old vault password prompt
-                    # format since Tower needs to match on that format.
-                    prompted_vault_secret = PromptVaultSecret(prompt_formats=prompt_formats[vault_id_value],
-                                                              vault_id=C.DEFAULT_VAULT_IDENTITY)
-                    prompted_vault_secret.load()
-                    vault_secrets.append((C.DEFAULT_VAULT_IDENTITY, prompted_vault_secret))
+                except AnsibleError as exc:
+                    display.warning('Error in vault password prompt (%s): %s' % (vault_id_name, exc))
+                    raise
+
+                vault_secrets.append((built_vault_id, prompted_vault_secret))
 
                 # update loader with new secrets incrementally, so we can load a vault password
                 # that is encrypted with a vault secret provided earlier
@@ -258,9 +294,16 @@ class CLI(with_metaclass(ABCMeta, object)):
             display.vvvvv('Reading vault password file: %s' % vault_id_value)
             # read vault_pass from a file
             file_vault_secret = get_file_vault_secret(filename=vault_id_value,
-                                                      vault_id_name=vault_id_name,
+                                                      vault_id=vault_id_name,
                                                       loader=loader)
-            file_vault_secret.load()
+
+            # an invalid password file will error globally
+            try:
+                file_vault_secret.load()
+            except AnsibleError as exc:
+                display.warning('Error in vault password file loading (%s): %s' % (vault_id_name, exc))
+                raise
+
             if vault_id_name:
                 vault_secrets.append((vault_id_name, file_vault_secret))
             else:
@@ -279,14 +322,16 @@ class CLI(with_metaclass(ABCMeta, object)):
         becomepass = None
         become_prompt = ''
 
+        become_prompt_method = "BECOME" if C.AGNOSTIC_BECOME_PROMPT else op.become_method.upper()
+
         try:
             if op.ask_pass:
                 sshpass = getpass.getpass(prompt="SSH password: ")
-                become_prompt = "%s password[defaults to SSH password]: " % op.become_method.upper()
+                become_prompt = "%s password[defaults to SSH password]: " % become_prompt_method
                 if sshpass:
                     sshpass = to_bytes(sshpass, errors='strict', nonstring='simplerepr')
             else:
-                become_prompt = "%s password: " % op.become_method.upper()
+                become_prompt = "%s password: " % become_prompt_method
 
             if op.become_ask_pass:
                 becomepass = getpass.getpass(prompt=become_prompt)
@@ -324,7 +369,7 @@ class CLI(with_metaclass(ABCMeta, object)):
         if self.options.ask_su_pass or self.options.su_user:
             _dep('su')
 
-    def validate_conflicts(self, vault_opts=False, runas_opts=False, fork_opts=False):
+    def validate_conflicts(self, vault_opts=False, runas_opts=False, fork_opts=False, vault_rekey_opts=False):
         ''' check for conflicting options '''
 
         op = self.options
@@ -333,6 +378,10 @@ class CLI(with_metaclass(ABCMeta, object)):
             # Check for vault related conflicts
             if (op.ask_vault_pass and op.vault_password_files):
                 self.parser.error("--ask-vault-pass and --vault-password-file are mutually exclusive")
+
+        if vault_rekey_opts:
+            if (op.new_vault_id and op.new_vault_password_file):
+                self.parser.error("--new-vault-password-file and --new-vault-id are mutually exclusive")
 
         if runas_opts:
             # Check for privilege escalation conflicts
@@ -350,22 +399,29 @@ class CLI(with_metaclass(ABCMeta, object)):
     @staticmethod
     def unfrack_paths(option, opt, value, parser):
         paths = getattr(parser.values, option.dest)
+        if paths is None:
+            paths = []
+
         if isinstance(value, string_types):
-            paths[:0] = [unfrackpath(x) for x in value.split(os.pathsep)]
+            paths[:0] = [unfrackpath(x) for x in value.split(os.pathsep) if x]
         elif isinstance(value, list):
-            paths[:0] = [unfrackpath(x) for x in value]
+            paths[:0] = [unfrackpath(x) for x in value if x]
         else:
             pass  # FIXME: should we raise options error?
+
         setattr(parser.values, option.dest, paths)
 
     @staticmethod
     def unfrack_path(option, opt, value, parser):
-        setattr(parser.values, option.dest, unfrackpath(value))
+        if value != '-':
+            setattr(parser.values, option.dest, unfrackpath(value))
+        else:
+            setattr(parser.values, option.dest, value)
 
     @staticmethod
     def base_parser(usage="", output_opts=False, runas_opts=False, meta_opts=False, runtask_opts=False, vault_opts=False, module_opts=False,
                     async_opts=False, connect_opts=False, subset_opts=False, check_opts=False, inventory_opts=False, epilog=None, fork_opts=False,
-                    runas_prompt_opts=False, desc=None):
+                    runas_prompt_opts=False, desc=None, basedir_opts=False, vault_rekey_opts=False):
         ''' create an options parser for most ansible scripts '''
 
         # base opts
@@ -375,8 +431,7 @@ class CLI(with_metaclass(ABCMeta, object)):
 
         if inventory_opts:
             parser.add_option('-i', '--inventory', '--inventory-file', dest='inventory', action="append",
-                              help="specify inventory host path (default=[%s]) or comma separated host list. "
-                                   "--inventory-file is deprecated" % C.DEFAULT_HOST_LIST)
+                              help="specify inventory host path or comma separated host list. --inventory-file is deprecated")
             parser.add_option('--list-hosts', dest='listhosts', action='store_true',
                               help='outputs a list of matching hosts; does not execute anything else')
             parser.add_option('-l', '--limit', default=C.DEFAULT_SUBSET, dest='subset',
@@ -384,8 +439,8 @@ class CLI(with_metaclass(ABCMeta, object)):
 
         if module_opts:
             parser.add_option('-M', '--module-path', dest='module_path', default=None,
-                              help="prepend path(s) to module library (default=%s)" % C.DEFAULT_MODULE_PATH,
-                              action="callback", callback=CLI.unfrack_path, type='str')
+                              help="prepend colon-separated path(s) to module library (default=%s)" % C.DEFAULT_MODULE_PATH,
+                              action="callback", callback=CLI.unfrack_paths, type='str')
         if runtask_opts:
             parser.add_option('-e', '--extra-vars', dest="extra_vars", action="append",
                               help="set additional variables as key=value or YAML/JSON, if filename prepend with @", default=[])
@@ -399,20 +454,19 @@ class CLI(with_metaclass(ABCMeta, object)):
                               help='ask for vault password')
             parser.add_option('--vault-password-file', default=[], dest='vault_password_files',
                               help="vault password file", action="callback", callback=CLI.unfrack_paths, type='string')
-            parser.add_option('--new-vault-password-file', default=[], dest='new_vault_password_files',
-                              help="new vault password file for rekey", action="callback", callback=CLI.unfrack_paths, type='string')
-            parser.add_option('--output', default=None, dest='output_file',
-                              help='output file name for encrypt or decrypt; use - for stdout',
-                              action="callback", callback=CLI.unfrack_path, type='string'),
             parser.add_option('--vault-id', default=[], dest='vault_ids', action='append', type='string',
                               help='the vault identity to use')
+
+        if vault_rekey_opts:
+            parser.add_option('--new-vault-password-file', default=None, dest='new_vault_password_file',
+                              help="new vault password file for rekey", action="callback", callback=CLI.unfrack_path, type='string')
             parser.add_option('--new-vault-id', default=None, dest='new_vault_id', type='string',
                               help='the new vault identity to use for rekey')
 
         if subset_opts:
-            parser.add_option('-t', '--tags', dest='tags', default=[], action='append',
+            parser.add_option('-t', '--tags', dest='tags', default=C.TAGS_RUN, action='append',
                               help="only run plays and tasks tagged with these values")
-            parser.add_option('--skip-tags', dest='skip_tags', default=[], action='append',
+            parser.add_option('--skip-tags', dest='skip_tags', default=C.TAGS_SKIP, action='append',
                               help="only run plays and tasks whose tags do not match these values")
 
         if output_opts:
@@ -498,8 +552,12 @@ class CLI(with_metaclass(ABCMeta, object)):
             parser.add_option('--force-handlers', default=C.DEFAULT_FORCE_HANDLERS, dest='force_handlers', action='store_true',
                               help="run handlers even if a task fails")
             parser.add_option('--flush-cache', dest='flush_cache', action='store_true',
-                              help="clear the fact cache")
+                              help="clear the fact cache for every host in inventory")
 
+        if basedir_opts:
+            parser.add_option('--playbook-dir', default=None, dest='basedir', action='store',
+                              help="Since this tool does not use playbooks, use this as a subsitute playbook directory."
+                                   "This sets the relative path for many features including roles/ group_vars/ etc.")
         return parser
 
     @abstractmethod
@@ -559,8 +617,8 @@ class CLI(with_metaclass(ABCMeta, object)):
                     skip_tags.add(tag.strip())
             self.options.skip_tags = list(skip_tags)
 
-        # process inventory options
-        if hasattr(self.options, 'inventory'):
+        # process inventory options except for CLIs that require their own processing
+        if hasattr(self.options, 'inventory') and not self.SKIP_INVENTORY_DEFAULTS:
 
             if self.options.inventory:
 
@@ -569,12 +627,9 @@ class CLI(with_metaclass(ABCMeta, object)):
                     self.options.inventory = [self.options.inventory]
 
                 # Ensure full paths when needed
-                self.options.inventory = [unfrackpath(opt) if ',' not in opt else opt for opt in self.options.inventory]
-
+                self.options.inventory = [unfrackpath(opt, follow=False) if ',' not in opt else opt for opt in self.options.inventory]
             else:
-                # set default if it exists
-                if os.path.exists(C.DEFAULT_HOST_LIST):
-                    self.options.inventory = [C.DEFAULT_HOST_LIST]
+                self.options.inventory = C.DEFAULT_HOST_LIST
 
     @staticmethod
     def version(prog):
@@ -609,7 +664,7 @@ class CLI(with_metaclass(ABCMeta, object)):
                 ansible_versions[counter] = 0
             try:
                 ansible_versions[counter] = int(ansible_versions[counter])
-            except:
+            except Exception:
                 pass
         if len(ansible_versions) < 3:
             for counter in range(len(ansible_versions), 3):
@@ -732,10 +787,19 @@ class CLI(with_metaclass(ABCMeta, object)):
         # all needs loader
         loader = DataLoader()
 
+        basedir = getattr(options, 'basedir', False)
+        if basedir:
+            loader.set_basedir(basedir)
+
+        vault_ids = options.vault_ids
+        default_vault_ids = C.DEFAULT_VAULT_IDENTITY_LIST
+        vault_ids = default_vault_ids + vault_ids
+
         vault_secrets = CLI.setup_vault_secrets(loader,
-                                                vault_ids=options.vault_ids,
+                                                vault_ids=vault_ids,
                                                 vault_password_files=options.vault_password_files,
-                                                ask_vault_pass=options.ask_vault_pass)
+                                                ask_vault_pass=options.ask_vault_pass,
+                                                auto_prompt=False)
         loader.set_vault_secrets(vault_secrets)
 
         # create the inventory, and filter it based on the subset specified (if any)
@@ -745,8 +809,32 @@ class CLI(with_metaclass(ABCMeta, object)):
         # the code, ensuring a consistent view of global variables
         variable_manager = VariableManager(loader=loader, inventory=inventory)
 
+        if hasattr(options, 'basedir'):
+            if options.basedir:
+                variable_manager.safe_basedir = True
+        else:
+            variable_manager.safe_basedir = True
+
         # load vars from cli options
         variable_manager.extra_vars = load_extra_vars(loader=loader, options=options)
         variable_manager.options_vars = load_options_vars(options, CLI.version_info(gitinfo=False))
 
         return loader, inventory, variable_manager
+
+    @staticmethod
+    def get_host_list(inventory, subset, pattern='all'):
+
+        no_hosts = False
+        if len(inventory.list_hosts()) == 0:
+            # Empty inventory
+            if C.LOCALHOST_WARNING:
+                display.warning("provided hosts list is empty, only localhost is available. Note that the implicit localhost does not match 'all'")
+            no_hosts = True
+
+        inventory.subset(subset)
+
+        hosts = inventory.list_hosts(pattern)
+        if len(hosts) == 0 and no_hosts is False:
+            raise AnsibleError("Specified hosts and/or --limit does not match any hosts")
+
+        return hosts
