@@ -27,7 +27,7 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = '''
 ---
 module: ali_instance
-version_added: "1.5.0"
+version_added: "2.8"
 short_description: Create, Start, Stop, Restart or Terminate an Instance in ECS. Add or Remove Instance to/from a Security Group.
 description:
     - Create, start, stop, restart, modify or terminate ecs instances.
@@ -42,7 +42,7 @@ options:
       description:
         - Aliyun availability zone ID in which to launch the instance.
           If it is not specified, it will be allocated by system automatically.
-      aliases: ['alicloud_zone']
+      aliases: ['alicloud_zone', 'zone_id']
     image_id:
       description:
         - Image ID used to launch instances. Required when C(state=present) and creating new ECS instances.
@@ -54,6 +54,7 @@ options:
     security_groups:
       description:
         - A list of security group IDs.
+      aliases: ['group_ids']
     vswitch_id:
       description:
         - The subnet ID in which to launch the instances (VPC).
@@ -150,6 +151,12 @@ options:
       description:
         - A hash/dictionaries of instance tags, to add to the new instance or for starting/stopping instance by tag. C({"key":"value"})
       aliases: ["tags"]
+    purge_tags:
+      description:
+        - Delete any tags not specified in the task that are on the instance.
+          This means you have to specify all the desired tags on each task affecting an instance.
+      default: False
+      type: bool
     key_name:
       description:
         - The name of key pair which is used to access ECS instance in SSH.
@@ -164,7 +171,7 @@ author:
     - "He Guimin (@xiaozhu36)"
 requirements:
     - "python >= 2.6"
-    - "footmark >= 1.1.16"
+    - "footmark >= 1.7.0"
 extends_documentation_fragment:
     - alicloud
 '''
@@ -490,6 +497,11 @@ instances:
             returned: always
             type: dict
             sample:
+        user_data:
+            description: User-defined data.
+            returned: always
+            type: dict
+            sample:
         vswitch_id:
             description: The ID of the vswitch in which the instance is running.
             returned: always
@@ -522,7 +534,7 @@ except ImportError:
 
 def get_instances_info(connection, ids):
     result = []
-    instances = connection.get_all_instances(instance_ids=ids)
+    instances = connection.describe_instances(instance_ids=ids)
     if len(instances) > 0:
         for inst in instances:
             result.append(inst.read())
@@ -549,7 +561,6 @@ def create_instance(module, ecs, exact_count):
     system_disk_name = module.params['system_disk_name']
     system_disk_description = module.params['system_disk_description']
     allocate_public_ip = module.params['allocate_public_ip']
-    instance_tags = module.params['instance_tags']
     period = module.params['period']
     auto_renew = module.params['auto_renew']
     instance_charge_type = module.params['instance_charge_type']
@@ -571,17 +582,17 @@ def create_instance(module, ecs, exact_count):
 
     try:
         # call to create_instance method from footmark
-        instances = ecs.create_instance(image_id=image_id, instance_type=instance_type, security_group_id=security_groups[0],
-                                        zone_id=zone_id, instance_name=instance_name, description=description,
-                                        internet_charge_type=internet_charge_type, max_bandwidth_out=max_bandwidth_out,
-                                        max_bandwidth_in=max_bandwidth_in, host_name=host_name, password=password,
-                                        io_optimized='optimized', system_disk_category=system_disk_category,
-                                        system_disk_size=system_disk_size, system_disk_name=system_disk_name,
-                                        system_disk_description=system_disk_description,
-                                        vswitch_id=vswitch_id, count=exact_count, allocate_public_ip=allocate_public_ip,
-                                        instance_charge_type=instance_charge_type, period=period, auto_renew=auto_renew,
-                                        auto_renew_period=auto_renew_period, instance_tags=instance_tags,
-                                        key_pair_name=key_name, user_data=user_data, client_token=client_token)
+        instances = ecs.create_instances(image_id=image_id, instance_type=instance_type, security_group_id=security_groups[0],
+                                         zone_id=zone_id, instance_name=instance_name, description=description,
+                                         internet_charge_type=internet_charge_type, internet_max_bandwidth_out=max_bandwidth_out,
+                                         internet_max_bandwidth_in=max_bandwidth_in, host_name=host_name, password=password,
+                                         io_optimized='optimized', system_disk_category=system_disk_category,
+                                         system_disk_size=system_disk_size, system_disk_disk_name=system_disk_name,
+                                         system_disk_description=system_disk_description, vswitch_id=vswitch_id,
+                                         count=exact_count, allocate_public_ip=allocate_public_ip,
+                                         instance_charge_type=instance_charge_type, period=period, period_unit="Month",
+                                         auto_renew=auto_renew, auto_renew_period=auto_renew_period, key_pair_name=key_name,
+                                         user_data=user_data, client_token=client_token)
 
     except Exception as e:
         module.fail_json(msg='Unable to create instance, error: {0}'.format(e))
@@ -589,11 +600,42 @@ def create_instance(module, ecs, exact_count):
     return instances
 
 
+def modify_instance(module, instance):
+    # According to state to modify instance's some special attribute
+    state = module.params["state"]
+    name = module.params['instance_name']
+    if not name:
+        name = instance.name
+
+    description = module.params['description']
+    if not description:
+        description = instance.description
+
+    host_name = module.params['host_name']
+    if not host_name:
+        host_name = instance.host_name
+
+    # password can be modified only when restart instance
+    password = ""
+    if state == "restarted":
+        password = module.params['password']
+
+    # userdata can be modified only when instance is stopped
+    user_data = instance.user_data
+    if state == "stopped":
+        user_data = module.params['user_data']
+
+    try:
+        return instance.modify(name=name, description=description, host_name=host_name, password=password, user_data=user_data)
+    except Exception as e:
+        module.fail_json(msg="Modify instance {0} attribute got an error: {1}".format(instance.id, e))
+
+
 def main():
     argument_spec = ecs_argument_spec()
     argument_spec.update(dict(
-        security_groups=dict(type='list'),
-        availability_zone=dict(type='str', aliases=['alicloud_zone']),
+        security_groups=dict(type='list', aliases=['group_ids']),
+        availability_zone=dict(type='str', aliases=['alicloud_zone', 'zone_id']),
         instance_type=dict(type='str', aliases=['type']),
         image_id=dict(type='str', aliases=['image']),
         count=dict(type='int', default=1),
@@ -611,6 +653,7 @@ def main():
         system_disk_description=dict(type='str'),
         force=dict(type='bool', default=False),
         instance_tags=dict(type='dict', aliases=['tags']),
+        purge_tags=dict(type='bool', default=False),
         state=dict(default='present', choices=['present', 'running', 'stopped', 'restarted', 'absent']),
         description=dict(type='str'),
         allocate_public_ip=dict(type='bool', aliases=['assign_public_ip'], default=False),
@@ -637,32 +680,52 @@ def main():
     force = module.params['force']
     zone_id = module.params['availability_zone']
     key_name = module.params['key_name']
+    instance_tags = module.params['instance_tags']
     changed = False
 
     instances = []
     if instance_ids:
         if not isinstance(instance_ids, list):
             module.fail_json(msg='The parameter instance_ids should be a list, aborting')
-        instances = ecs.get_all_instances(zone_id=zone_id, instance_ids=instance_ids)
+        instances = ecs.describe_instances(zone_id=zone_id, instance_ids=instance_ids)
         if not instances:
             module.fail_json(msg="There are no instances in our record based on instance_ids {0}. "
                                  "Please check it and try again.".format(instance_ids))
     elif count_tag:
-        instances = ecs.get_all_instances(zone_id=zone_id, instance_tags=eval(count_tag))
+        instances = ecs.describe_instances(zone_id=zone_id, instance_tags=eval(count_tag))
     elif instance_name:
-        instances = ecs.get_all_instances(zone_id=zone_id, instance_name=instance_name)
+        instances = ecs.describe_instances(zone_id=zone_id, instance_name=instance_name)
 
     ids = []
+    if state == 'absent':
+        if len(instances) < 1:
+            module.fail_json(msg='Please specify ECS instances that you want to operate by using '
+                                 'parameters instance_ids, instance_tags or instance_name, aborting')
+        try:
+            targets = []
+            for inst in instances:
+                if inst.status != 'stopped' and not force:
+                    module.fail_json(msg="Instance is running, and please stop it or set 'force' as True.")
+                targets.append(inst.id)
+            if ecs.delete_instances(instance_ids=targets, force=force):
+                changed = True
+                ids.extend(targets)
+
+            module.exit_json(changed=changed, ids=ids, instances=[])
+        except Exception as e:
+            module.fail_json(msg='Delete instance got an error: {0}'.format(e))
+
     if state == 'present':
         if not instance_ids:
             if len(instances) > count:
                 for i in range(0, len(instances) - count):
                     inst = instances[len(instances) - 1]
-                    if inst.status is not 'stopped' and not force:
+                    if inst.status != 'stopped' and not force:
                         module.fail_json(msg="That to delete instance {0} is failed results from it is running, "
                                              "and please stop it or set 'force' as True.".format(inst.id))
                     try:
-                        changed = inst.terminate(force=force)
+                        if inst.terminate(force=force):
+                            changed = True
                     except Exception as e:
                         module.fail_json(msg="Delete instance {0} got an error: {1}".format(inst.id, e))
                     instances.pop(len(instances) - 1)
@@ -675,11 +738,28 @@ def main():
                 except Exception as e:
                     module.fail_json(msg="Create new instances got an error: {0}".format(e))
 
+        # Allocate instance public ip
+        if module.params['allocate_public_ip']:
+            for inst in instances:
+                if inst.public_ip_address:
+                    continue
+                if inst.allocate_public_ip():
+                    changed = True
+
+        # start the stopped instances
+        stopped = []
+        for inst in instances:
+            if inst.status == "stopped":
+                stopped.append(inst.id)
+        if stopped:
+            if ecs.start_instances(instance_ids=stopped):
+                changed = True
+
         # Security Group join/leave begin
         security_groups = module.params['security_groups']
-        if not isinstance(security_groups, list):
-            module.fail_json(msg='The parameter security_groups should be a list, aborting')
-        if len(security_groups) > 0:
+        if security_groups:
+            if not isinstance(security_groups, list):
+                module.fail_json(msg='The parameter security_groups should be a list, aborting')
             for inst in instances:
                 existing = inst.security_group_ids['security_group_id']
                 remove = list(set(existing).difference(set(security_groups)))
@@ -697,80 +777,74 @@ def main():
         for inst in instances:
             if key_name is not None and key_name != inst.key_name:
                 if key_name == "":
-                    changed = inst.detach_key_pair()
+                    if inst.detach_key_pair():
+                        changed = True
                 else:
                     inst_ids.append(inst.id)
         if inst_ids:
             changed = ecs.attach_key_pair(instance_ids=inst_ids, key_pair_name=key_name)
 
         # Modify instance attribute
-        description = module.params['description']
-        host_name = module.params['host_name']
-        password = module.params['password']
         for inst in instances:
-            if not instance_name:
-                instance_name = inst.name
-            if not description:
-                description = inst.description
-            if not host_name:
-                host_name = inst.host_name
-            try:
-                if inst.modify(name=instance_name, description=description, host_name=host_name, password=password):
-                    changed = True
-            except Exception as e:
-                module.fail_json(msg="Modify instance attribute {0} got an error: {1}".format(inst.id, e))
-
+            if modify_instance(module, inst):
+                changed = True
             if inst.id not in ids:
                 ids.append(inst.id)
-
-        module.exit_json(changed=changed, ids=ids, instances=get_instances_info(ecs, ids))
-
     else:
         if len(instances) < 1:
             module.fail_json(msg='Please specify ECS instances that you want to operate by using '
                                  'parameters instance_ids, instance_tags or instance_name, aborting')
-        force = module.params['force']
         if state == 'running':
             try:
+                targets = []
                 for inst in instances:
-                    if inst.start():
+                    if modify_instance(module, inst):
                         changed = True
-                        ids.append(inst.id)
-
-                module.exit_json(changed=changed, ids=ids, instances=get_instances_info(ecs, ids))
+                    if inst.status != "running":
+                        targets.append(inst.id)
+                    ids.append(inst.id)
+                if targets and ecs.start_instances(instance_ids=targets):
+                    changed = True
+                    ids.extend(targets)
             except Exception as e:
                 module.fail_json(msg='Start instances got an error: {0}'.format(e))
         elif state == 'stopped':
             try:
+                targets = []
                 for inst in instances:
-                    if inst.stop(force=force):
+                    if inst.status != "stopped":
+                        targets.append(inst.id)
+                if targets and ecs.stop_instances(instance_ids=targets, force_stop=force):
+                    changed = True
+                    ids.extend(targets)
+                for inst in instances:
+                    if modify_instance(module, inst):
                         changed = True
-                        ids.append(inst.id)
-
-                module.exit_json(changed=changed, ids=ids, instances=get_instances_info(ecs, ids))
             except Exception as e:
                 module.fail_json(msg='Stop instances got an error: {0}'.format(e))
         elif state == 'restarted':
             try:
+                targets = []
                 for inst in instances:
-                    if inst.reboot(force=module.params['force']):
+                    if modify_instance(module, inst):
                         changed = True
-                        ids.append(inst.id)
-
-                module.exit_json(changed=changed, ids=ids, instances=get_instances_info(ecs, ids))
+                        targets.append(inst.id)
+                if ecs.reboot_instances(instance_ids=targets, force_stop=module.params['force']):
+                        changed = True
+                        ids.extend(targets)
             except Exception as e:
                 module.fail_json(msg='Reboot instances got an error: {0}'.format(e))
-        else:
-            try:
-                for inst in instances:
-                    if inst.status is not 'stopped' and not force:
-                        module.fail_json(msg="Instance is running, and please stop it or set 'force' as True.")
-                    if inst.terminate(force=module.params['force']):
-                        changed = True
 
-                module.exit_json(changed=changed, ids=[], instances=[])
-            except Exception as e:
-                module.fail_json(msg='Delete instance got an error: {0}'.format(e))
+    if instance_tags:
+        for inst in instances:
+            if module.params["purge_tags"]:
+                if inst.remove_tags(instance_tags):
+                    changed = True
+            else:
+                if inst.add_tags(instance_tags):
+                    changed = True
+
+    module.exit_json(changed=changed, ids=ids, instances=get_instances_info(ecs, ids))
 
 
 if __name__ == '__main__':

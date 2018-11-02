@@ -27,7 +27,7 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = '''
 ---
 module: ali_instance_facts
-version_added: "1.5.0"
+version_added: "2.8"
 short_description: Gather facts on instances of Alibaba Cloud ECS.
 description:
      - This module fetches data from the Open API in Alicloud.
@@ -36,25 +36,35 @@ description:
 options:
     availability_zone:
       description:
-        - Aliyun availability zone ID in which to launch the instance
+        - (Deprecated) Aliyun availability zone ID in which to launch the instance. Please use filter item 'zone_id' instead.
       aliases: ['alicloud_zone']
     instance_names:
       description:
-        - A list of ECS instance names.
+        - (Deprecated) A list of ECS instance names. Please use filter item 'instance_name' instead.
       aliases: [ "names"]
     instance_ids:
       description:
         - A list of ECS instance ids.
       aliases: ["ids"]
-    instance_tags:
+    name_prefix:
+      description:
+        - Use a instance name prefix to filter ecs instances.
+    tags:
       description:
         - A hash/dictionaries of instance tags. C({"key":"value"})
-      aliases: ["tags"]
+      aliases: ["instance_tags"]
+    filters:
+      description:
+        - A dict of filters to apply. Each dict item consists of a filter key and a filter value.
+          The filter keys can be all of request parameters. See U(https://www.alibabacloud.com/help/doc-detail/25506.htm) for parameter details.
+          Filter keys can be same as request parameter name or be lower case and use underscores (_) or dashes (-) to
+          connect different words in one parameter. 'InstanceIds' should be a list. 'Tag.n.Key' and 'Tag.n.Value' should
+          be a dict and using 'tags' instead.
 author:
     - "He Guimin (@xiaozhu36)"
 requirements:
     - "python >= 2.6"
-    - "footmark >= 1.1.16"
+    - "footmark >= 1.7.0"
 extends_documentation_fragment:
     - alicloud
 '''
@@ -79,12 +89,10 @@ EXAMPLES = '''
           - "i-35b333d9"
           - "i-ddav43kd"
       register: instances_by_ids
-    - name: Find all instances based on the specified names/name-prefixes
+    - name: Find all instances based on the specified name_prefix
       ali_instance_facts:
-        instance_names:
-          - "ecs_instance-1"
-          - "ecs_instance_2"
-      register: instances_by_ids
+        name_prefix: "ecs_instance_"
+      register: instances_by_name_prefix
 
 '''
 
@@ -336,10 +344,8 @@ ids:
     sample: [i-12345er, i-3245fs]
 '''
 
-# import time
-# import sys
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.alicloud_ecs import get_acs_connection_info, ecs_argument_spec, ecs_connect
+from ansible.module_utils.alicloud_ecs import ecs_argument_spec, ecs_connect
 
 HAS_FOOTMARK = False
 
@@ -356,7 +362,9 @@ def main():
         availability_zone=dict(aliases=['alicloud_zone']),
         instance_ids=dict(type='list', aliases=['ids']),
         instance_names=dict(type='list', aliases=['names']),
-        instance_tags=dict(type='list', aliases=['tags']),
+        name_prefix=dict(type='str'),
+        tags=dict(type='dict', aliases=['instance_tags']),
+        filters=dict(type='dict')
     )
     )
     module = AnsibleModule(argument_spec=argument_spec)
@@ -369,23 +377,33 @@ def main():
     instances = []
     instance_ids = []
     ids = module.params['instance_ids']
+    name_prefix = module.params['name_prefix']
     names = module.params['instance_names']
     zone_id = module.params['availability_zone']
     if ids and (not isinstance(ids, list) or len(ids) < 1):
         module.fail_json(msg='instance_ids should be a list of instances, aborting')
 
     if names and (not isinstance(names, list) or len(names) < 1):
-        module.fail_json(msg='instance_ids should be a list of instances, aborting')
+        module.fail_json(msg='instance_names should be a list of instances, aborting')
 
+    filters = module.params['filters']
+    if not filters:
+        filters = {}
+    if ids:
+        filters['instance_ids'] = ids
+    if module.params['tags']:
+        filters['tags'] = module.params['tags']
+    if zone_id:
+        filters['zone_id'] = zone_id
     if names:
-        for name in names:
-            for inst in ecs.get_all_instances(zone_id=zone_id, instance_ids=ids, instance_name=name):
-                instances.append(inst.read())
-                instance_ids.append(inst.id)
-    else:
-        for inst in ecs.get_all_instances(zone_id=zone_id, instance_ids=ids):
-            instances.append(inst.read())
-            instance_ids.append(inst.id)
+        filters['instance_name'] = names[0]
+
+    for inst in ecs.describe_instances(**filters):
+        if name_prefix:
+            if not str(inst.instance_name).startswith(name_prefix):
+                continue
+        instances.append(inst.read())
+        instance_ids.append(inst.id)
 
     module.exit_json(changed=False, ids=instance_ids, instances=instances)
 
