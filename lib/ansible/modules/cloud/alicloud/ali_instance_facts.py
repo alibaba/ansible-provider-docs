@@ -55,11 +55,11 @@ options:
       aliases: ["instance_tags"]
     filters:
       description:
-        - A dict of filters to apply. Each dict item consists of a filter key and a filter value.
-          The filter keys can be all of request parameters. See U(https://www.alibabacloud.com/help/doc-detail/25506.htm) for parameter details.
-          Filter keys can be same as request parameter name or be lower case and use underscores (_) or dashes (-) to
-          connect different words in one parameter. 'InstanceIds' should be a list. 'Tag.n.Key' and 'Tag.n.Value' should
-          be a dict and using 'tags' instead.
+        - A dict of filters to apply. Each dict item consists of a filter key and a filter value. The filter keys can be
+          all of request parameters. See U(https://www.alibabacloud.com/help/doc-detail/25506.htm) for parameter details.
+          Filter keys can be same as request parameter name or be lower case and use underscore ("_") or dash ("-") to
+          connect different words in one parameter. 'InstanceIds' should be a list and it will be appended to
+          I(instance_ids) automatically. 'Tag.n.Key' and 'Tag.n.Value' should be a dict and using I(tags) instead.
 author:
     - "He Guimin (@xiaozhu36)"
 requirements:
@@ -212,11 +212,6 @@ instances:
             returned: always
             type: string
             sample: m-0011223344
-        inner_ip_address:
-            description: The inner IPv4 address of the classic instance.
-            returned: always
-            type: string
-            sample: 10.0.0.2
         instance_charge_type:
             description: The instance charge type.
             returned: always
@@ -227,6 +222,11 @@ instances:
             returned: always
             type: string
             sample: my-ecs
+        instance_type_family:
+            description: The instance type family of the instance belongs.
+            returned: always
+            type: string
+            sample: ecs.sn1ne
         instance_type:
             description: The instance type of the running instance.
             returned: always
@@ -293,7 +293,7 @@ instances:
             type: string
             sample: 10.0.0.1
         public_ip_address:
-            description: The public IPv4 address assigned to the instance
+            description: The public IPv4 address assigned to the instance or eip address
             returned: always
             type: string
             sample: 43.0.0.1
@@ -389,6 +389,13 @@ def main():
     filters = module.params['filters']
     if not filters:
         filters = {}
+    if not ids:
+        ids = []
+    for key, value in filters.items():
+        if key in ["InstanceIds", "instance_ids", "instance-ids"] and isinstance(ids, list):
+            for id in value:
+                if id not in ids:
+                    ids.append(value)
     if ids:
         filters['instance_ids'] = ids
     if module.params['tags']:
