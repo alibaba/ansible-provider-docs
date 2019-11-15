@@ -2,7 +2,7 @@
 # Copyright (c) 2017 Alibaba Group Holding Limited. He Guimin <heguimin36@163.com.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 #
-# This file is part of Ansible
+#  This file is part of Ansible
 #
 # Ansible is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,112 +26,66 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 
 DOCUMENTATION = '''
 ---
-module: ali_slb_lb
+module: ali_slb_lb_facts
 version_added: "2.8"
-short_description: Create, Delete, Enable or Disable Server Load Balancer.
+short_description: Gather facts on server load balancer of Alibaba Cloud.
 description:
-  - Create, Delete, Start or Stop Server Load Balancer.
-  - Modify Load Balancer internet charge type and bandwidth
+     - This module fetches data from the Open API in Alicloud.
+       The module must be called from within the SLB itself.
+
 options:
-  state:
-    description:
-      - The state of the instance after operating.
-    default: 'present'
-    choices: [ 'present', 'absent', 'running', 'stopped']
   load_balancer_name:
     description:
-      - The name of the server load balancer, which is a string of 1 to 80 characters.
-        It can contain numerals, "_", "/", "." or "-".
-      - This is used to ensure idempotence.
-    aliases: [ 'name', 'lb_name' ]
-    required: True
-  load_balancer_id:
+      - (Deprecated) A list of server laod balancer names. New option `name_prefix` instead.
+    aliases: ["name"]
+  load_balancer_ids:
     description:
-        - (deprecated) This parameter is required when user wants to perform edit operation in Load Balancer
-    aliases: ['id']
-  load_balancer_status:
+      - A list of load balancer IDs to gather facts for.
+    aliases: ['ids']
+  name_prefix:
     description:
-        - (deprecated) The field has been deprecated from ansible-alicloud v1.1.3.
-  address_type:
+      - Use a load balancer name prefix to filter load balancers.
+  filters:
     description:
-        - (deprecated) The field has been deprecated from ansible-alicloud v1.1.3 and 'is_internet' will replace.
-  is_internet:
-    description:
-      - Load balancer network type whether is internet.
-    type: bool
-    default: False
-  vswitch_id:
-    description:
-      - The ID of the VSwitch to which the SLB instance belongs.
-    aliases: ['subnet_id']
-  internet_charge_type:
-    description:
-      - The charge type of internet. It will be ignored when C(is_internet=False)
-    default: 'PayByTraffic'
-    choices: ['PayByBandwidth', 'PayByTraffic']
-  master_zone_id:
-    description:
-      - The ID of the primary zone. By default, the SLB cluster in the primary zone is used to distribute traffic.
-  slave_zone_id:
-    description:
-        - The ID of the backup zone. The backup zone takes over the traffic distribution only when the SLB cluster in the primary zone fails.
-  bandwidth:
-    description:
-      - Bandwidth peak of the public network instance charged per fixed bandwidth. It allow 1~5000 in Mbps.
-      - It will be ignored when C(internet_charge_type=PayByTraffic)
-    default: 1
-  load_balancer_spec:
-    description:
-      - The specification of the Server Load Balancer instance. If no value is specified, a shared-performance instance is created.
-      - There are some region limitations for load_balancer_spec. See U(https://www.alibabacloud.com/help/doc-detail/27577.htm) for details
-    choices: ['slb.s1.small', 'slb.s2.small', 'slb.s2.medium', 'slb.s3.small', 'slb.s3.medium', 'slb.s3.large']
-    aliases: [ 'spec', 'lb_spec' ]
-  multi_ok:
-    description:
-      - By default the module will not create another Load Balancer if there is another Load Balancer
-        with the same I(name). Specify this as true if you want duplicate Load Balancers created.
-    default: False
-    type: bool
-notes:
-  - The change in internet charge type will take effect from the early morning of the next day.
-    It can not be changed twice in one day, otherwise, a error "Operation.NotAllowed" will appear.
+      - A dict of filters to apply. Each dict item consists of a filter key and a filter value. The filter keys can be
+        all of request parameters. See U(https://www.alibabacloud.com/help/doc-detail/27582.htm) for parameter details.
+        Filter keys can be same as request parameter name or be lower case and use underscores ("_") or dashes ("-") to
+        connect different words in one parameter. 'LoadBalancerId' will be appended to I(load_balancer_ids) automatically.
+author:
+    - "He Guimin (@xiaozhu36)"
 requirements:
     - "python >= 2.6"
     - "footmark >= 1.9.0"
 extends_documentation_fragment:
     - alicloud
-author:
-  - "He Guimin (@xiaozhu36)"
 '''
 
 EXAMPLES = '''
 # Note: These examples do not set authentication details, see the Alibaba Cloud Guide for details.
-- name: create a server load balancer
-  ali_slb_lb:
-    name: 'from-ansible'
-    is_internet: True
-    internet_charge_type: 'PayByTraffic'
-    spec: 'slb.s1.small'
-    state: present
+- name: Retrieving slbs using ids
+  ali_slb_lb_facts:
+    ids: 'lb-sn33f3'
 
-- name: stop a server load balancer
-  ali_slb_lb:
-    name: 'from-ansible'
-    state: stopped
+- name: Filter slb using name_regex
+  ali_slb_lb_facts:
+    name_prefix: 'ansible-slb'
 
-- name: start a server load balancer
-  ali_slb_lb:
-    name: 'from-ansible'
-    state: running
-
-- name: modify server load balancer internet charge type and bandwidth
-  ali_slb_lb:
-    name: 'from-ansible'
-    internet_charge_type: 'PayByBandwidth'
-    bandwidth: 5
+- name: Retrieving all slbs
+  ali_slb_lb_facts:
 '''
+
 RETURN = '''
-load_balancer:
+ids:
+    description: List ids of being fetched slb.
+    returned: when success
+    type: list
+    sample: ["lb-dj1oi1h5l74hg22gsnugf", "lb-dj1t1xwn0y9zcr90e52i2"]
+names:
+    description: List names of being fetched slb.
+    returned: when success
+    type: list
+    sample: ["ansible-foo", "ansible-bar"]
+load_balancers:
     description:
       - info about the server load balancer that was created or deleted.
     returned: on present
@@ -290,10 +244,8 @@ load_balancer:
             sample: "vsw-c3nc3r"
 '''
 
-import time
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.alicloud_ecs import ecs_argument_spec, slb_connect
-
 
 HAS_FOOTMARK = False
 
@@ -308,96 +260,57 @@ except ImportError:
 def main():
     argument_spec = ecs_argument_spec()
     argument_spec.update(dict(
-        internet_charge_type=dict(type='str', choices=['PayByBandwidth', 'PayByTraffic'], default='PayByTraffic'),
-        state=dict(type='str', choices=['present', 'absent', 'running', 'stopped'], default='present'),
-        load_balancer_name=dict(type='str', required=True, aliases=['name', 'lb_name']),
-        load_balancer_id=dict(type='str', aliases=['id']),
-        is_internet=dict(type='bool', default=False),
-        bandwidth=dict(type='int', default=1),
-        vswitch_id=dict(type='str', aliases=['subnet_id']),
-        master_zone_id=dict(),
-        slave_zone_id=dict(),
-        load_balancer_spec=dict(type='str', aliases=['spec', 'lb_spec'],
-                                choices=['slb.s1.small', 'slb.s2.small', 'slb.s2.medium', 'slb.s3.small', 'slb.s3.medium', 'slb.s3.large']),
-        multi_ok=dict(type='bool', default=False)
+        load_balancer_name=dict(type='list', aliases=['name']),
+        load_balancer_ids=dict(type='list', aliases=['ids']),
+        name_prefix=dict(type='str'),
+        filters=dict(type='dict')
     ))
 
     module = AnsibleModule(argument_spec=argument_spec)
 
     if HAS_FOOTMARK is False:
-        module.fail_json(msg='footmark required for the module ali_slb_lb.')
+        module.fail_json(msg="Package 'footmark' required for this module.")
 
-    slb = slb_connect(module)
-    state = module.params['state']
-    name = module.params['load_balancer_name']
-    is_internet = module.params['is_internet']
-    internet_charge_type = str(module.params['internet_charge_type']).lower()
-
-    changed = False
-    matching = None
-
-    if not module.params['multi_ok']:
-        try:
-            matching_slbs = slb.describe_load_balancers(load_balancer_name=name)
-            if len(matching_slbs) == 1:
-                matching = matching_slbs[0]
-            elif len(matching_slbs) > 1:
-                module.fail_json(msg='Currently there are {0} Load Balancers that have the same name {1}. '
-                                     'If you would like to create anyway '
-                                     'please pass True to the multi_ok param.'.format(len(matching_slbs), name))
-        except Exception as e:
-            module.fail_json(msg="Failed to describe Load Balancers: {0}".format(e))
-
-    if state == "absent":
-        if matching:
-            try:
-                changed = matching.delete()
-            except Exception as e:
-                module.fail_json(msg="Failed to delete Load Balancers: {0}".format(e))
-        module.exit_json(changed=changed, load_balancer={})
-
-    if state == "present":
-        if not matching:
-            params = module.params
-            params['internet_charge_type'] = internet_charge_type
-            params['client_token'] = "Ansible-Alicloud-%s-%s" % (hash(str(module.params)), str(time.time()))
-            address_type = "intranet"
-            if is_internet:
-                address_type = "internet"
-            params['address_type'] = address_type
-            try:
-                matching = slb.create_load_balancer(**params)
-                changed = True
-            except Exception as e:
-                module.fail_json(msg="Failed to create Load Balancer: {0}".format(e))
-
-    if not matching:
-        module.fail_json(msg="The specified load balancer {0} is not exist. Please check your name and try again.".format(name))
-
-    if not internet_charge_type:
-        internet_charge_type = str(matching.internet_charge_type).lower()
-
-    bandwidth = module.params['bandwidth']
-    if not bandwidth:
-        bandwidth = matching.bandwidth
-    try:
-        if matching.modify_spec(internet_charge_type=internet_charge_type, bandwidth=bandwidth):
-            changed = True
-        matching = matching.get()
-    except Exception as e:
-        module.fail_json(msg="Failed to modify Load Balancer spec: {0}".format(e))
-
-    status = "active"
-    if state == "stopped":
-        status = "inactive"
+    lb_ids = module.params['load_balancer_ids']
+    if not lb_ids:
+        lb_ids = []
+    name_prefix = module.params['name_prefix']
+    filters = module.params['filters']
+    if not filters:
+        filters = {}
+    for key, value in list(filters.items()):
+        if key in ["LoadBalancerId", "load-balancer-id", "load_balancer_id"] and value not in lb_ids:
+            lb_ids.append(value)
+    lbs = []
+    ids = []
+    names = []
 
     try:
-        if matching.set_status(status):
-            changed = True
-    except Exception as e:
-        module.fail_json(msg="Failed to modify Load Balancer status: {0}".format(e))
+        slb = slb_connect(module)
+        if len(lb_ids) > 0:
+            for index in range(0, len(lb_ids), 10):
+                ids_tmp = lb_ids[index:index + 10]
+                if not ids_tmp:
+                    break
+                filters['load_balancer_id'] = ",".join(ids_tmp)
 
-    module.exit_json(changed=changed, load_balancer=matching.get().read())
+                for lb in slb.describe_load_balancers(**filters):
+                    if name_prefix and not str(lb.load_balancer_name).startswith(name_prefix):
+                        continue
+                    lbs.append(lb.read())
+                    ids.append(lb.load_balancer_id)
+                    names.append(lb.load_balancer_name)
+        else:
+            for lb in slb.describe_load_balancers(**filters):
+                if name_prefix and not str(lb.load_balancer_name).startswith(name_prefix):
+                    continue
+                lbs.append(lb.read())
+                ids.append(lb.load_balancer_id)
+                names.append(lb.load_balancer_name)
+
+        module.exit_json(changed=False, load_balancers=lbs, ids=ids, names=names)
+    except Exception as e:
+        module.fail_json(msg="Unable to describe server load balancers, and got an error: {0}.".format(e))
 
 
 if __name__ == "__main__":

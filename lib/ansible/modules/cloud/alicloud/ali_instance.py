@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible. If not, see http://www.gnu.org/licenses/.
 
-from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
 ANSIBLE_METADATA = {'metadata_version': '1.1',
@@ -157,6 +157,7 @@ options:
           If True, it means you have to specify all the desired tags on each task affecting an instance.
       default: False
       type: bool
+      version_added: '2.9'
     key_name:
       description:
         - The name of key pair which is used to access ECS instance in SSH.
@@ -167,11 +168,23 @@ options:
         - User-defined data to customize the startup behaviors of an ECS instance and to pass data into an ECS instance.
           It only will take effect when launching the new ECS instances.
       required: false
+    ram_role_name:
+      description:
+        - The name of the instance RAM role.
+    spot_price_limit:
+      description:
+        - The maximum hourly price for the preemptible instance. This parameter supports a maximum of three decimal 
+          places and takes effect when the SpotStrategy parameter is set to SpotWithPriceLimit.
+    spot_strategy:
+      description:
+         - The bidding mode of the pay-as-you-go instance. This parameter is valid when InstanceChargeType is set to 
+         PostPaid.
+      choices: ['NoSpot', 'SpotWithPriceLimit', 'SpotAsPriceGo']
 author:
     - "He Guimin (@xiaozhu36)"
 requirements:
     - "python >= 2.6"
-    - "footmark >= 1.7.0"
+    - "footmark >= 1.12.0"
 extends_documentation_fragment:
     - alicloud
 '''
@@ -512,6 +525,18 @@ instances:
             returned: always
             type: dict
             sample: vpc-0011223344
+        spot_price_limit:
+          description:
+            - The maximum hourly price for the preemptible instance. 
+          returned: always
+          type: float
+          sample: 0.97
+        spot_strategy:
+          description:
+             - The bidding mode of the pay-as-you-go instance. 
+          returned: always
+          type: string
+          sample: NoSpot
 ids:
     description: List of ECS instance IDs
     returned: always
@@ -520,15 +545,17 @@ ids:
 '''
 
 import time
-from ansible.module_utils.basic import AnsibleModule
+import traceback
+from ansible.module_utils.basic import AnsibleModule, missing_required_lib
 from ansible.module_utils.alicloud_ecs import ecs_argument_spec, ecs_connect
 
 HAS_FOOTMARK = False
-
+FOOTMARK_IMP_ERR = None
 try:
     from footmark.exception import ECSResponseError
     HAS_FOOTMARK = True
 except ImportError:
+    FOOTMARK_IMP_ERR = traceback.format_exc()
     HAS_FOOTMARK = False
 
 
@@ -537,6 +564,9 @@ def get_instances_info(connection, ids):
     instances = connection.describe_instances(instance_ids=ids)
     if len(instances) > 0:
         for inst in instances:
+            volumes = connection.describe_disks(instance_id=inst.id)
+            setattr(inst, 'block_device_mappings', volumes)
+            setattr(inst, 'user_data', inst.describe_user_data())
             result.append(inst.read())
     return result
 
@@ -553,7 +583,7 @@ def create_instance(module, ecs, exact_count):
     description = module.params['description']
     internet_charge_type = module.params['internet_charge_type']
     max_bandwidth_out = module.params['max_bandwidth_out']
-    max_bandwidth_in = module.params['max_bandwidth_out']
+    max_bandwidth_in = module.params['max_bandwidth_in']
     host_name = module.params['host_name']
     password = module.params['password']
     system_disk_category = module.params['system_disk_category']
@@ -567,7 +597,9 @@ def create_instance(module, ecs, exact_count):
     auto_renew_period = module.params['auto_renew_period']
     user_data = module.params['user_data']
     key_name = module.params['key_name']
-
+    ram_role_name = module.params['ram_role_name']
+    spot_price_limit = module.params['spot_price_limit']
+    spot_strategy = module.params['spot_strategy']
     # check whether the required parameter passed or not
     if not image_id:
         module.fail_json(msg='image_id is required for new instance')
@@ -592,7 +624,8 @@ def create_instance(module, ecs, exact_count):
                                          count=exact_count, allocate_public_ip=allocate_public_ip,
                                          instance_charge_type=instance_charge_type, period=period, period_unit="Month",
                                          auto_renew=auto_renew, auto_renew_period=auto_renew_period, key_pair_name=key_name,
-                                         user_data=user_data, client_token=client_token)
+                                         user_data=user_data, client_token=client_token, ram_role_name=ram_role_name,
+                                         spot_price_limit=spot_price_limit, spot_strategy=spot_strategy)
 
     except Exception as e:
         module.fail_json(msg='Unable to create instance, error: {0}'.format(e))
@@ -621,9 +654,10 @@ def modify_instance(module, instance):
         password = module.params['password']
 
     # userdata can be modified only when instance is stopped
+    setattr(instance, "user_data", instance.describe_user_data())
     user_data = instance.user_data
     if state == "stopped":
-        user_data = module.params['user_data']
+        user_data = module.params['user_data'].encode()
 
     try:
         return instance.modify(name=name, description=description, host_name=host_name, password=password, user_data=user_data)
@@ -663,13 +697,16 @@ def main():
         instance_ids=dict(type='list'),
         auto_renew_period=dict(type='int', choices=[1, 2, 3, 6, 12]),
         key_name=dict(type='str', aliases=['keypair']),
-        user_data=dict(type='str')
+        user_data=dict(type='str'),
+        ram_role_name=dict(type='str'),
+        spot_price_limit=dict(type='float'),
+        spot_strategy=dict(type='str', default='NoSpot', choices=['NoSpot', 'SpotWithPriceLimit', 'SpotAsPriceGo'])
     )
     )
     module = AnsibleModule(argument_spec=argument_spec)
 
     if HAS_FOOTMARK is False:
-        module.fail_json(msg="Package 'footmark' required for the module ali_instance.")
+        module.fail_json(msg=missing_required_lib('footmark'), exception=FOOTMARK_IMP_ERR)
 
     ecs = ecs_connect(module)
     state = module.params['state']
@@ -681,6 +718,9 @@ def main():
     zone_id = module.params['availability_zone']
     key_name = module.params['key_name']
     tags = module.params['tags']
+    instance_charge_type = module.params['instance_charge_type']
+    if instance_charge_type == "PrePaid":
+        module.params['spot_strategy'] = ''
     changed = False
 
     instances = []
@@ -830,8 +870,8 @@ def main():
                         changed = True
                         targets.append(inst.id)
                 if ecs.reboot_instances(instance_ids=targets, force_stop=module.params['force']):
-                        changed = True
-                        ids.extend(targets)
+                    changed = True
+                    ids.extend(targets)
             except Exception as e:
                 module.fail_json(msg='Reboot instances got an error: {0}'.format(e))
 
@@ -842,8 +882,8 @@ def main():
             if not tags:
                 removed = inst.tags
             else:
-                for key, value in inst.tags.items():
-                    if key not in tags.keys():
+                for key, value in list(inst.tags.items()):
+                    if key not in list(tags.keys()):
                         removed[key] = value
             try:
                 if inst.remove_tags(removed):

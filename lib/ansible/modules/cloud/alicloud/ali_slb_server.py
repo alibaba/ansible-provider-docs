@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible. If not, see http://www.gnu.org/licenses/.
 
-from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
 ANSIBLE_METADATA = {'metadata_version': '1.1',
@@ -190,7 +190,7 @@ def add_set_backend_servers(module, slb, load_balancer_id, backend_servers):
 
     try:
 
-        load_balancer_info = slb.describe_load_balancer_attribute(load_balancer_id)
+        load_balancer_info = slb.describe_load_balancer_attribute(load_balancer_id=load_balancer_id)
 
         # Verifying if server load balancer Object is present
         if load_balancer_info:

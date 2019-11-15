@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible. If not, see http://www.gnu.org/licenses/.
 
-from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
 ANSIBLE_METADATA = {'metadata_version': '1.1',
@@ -26,12 +26,13 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 
 DOCUMENTATION = '''
 ---
-module: ali_instance_facts
+module: ali_instance_info
 version_added: "2.8"
-short_description: Gather facts on instances of Alibaba Cloud ECS.
+short_description: Gather information on instances of Alibaba Cloud ECS.
 description:
      - This module fetches data from the Open API in Alicloud.
        The module must be called from within the ECS instance itself.
+     - This module was called C(ali_instance_facts) before Ansible 2.9. The usage did not change.
 
 options:
     availability_zone:
@@ -49,6 +50,7 @@ options:
     name_prefix:
       description:
         - Use a instance name prefix to filter ecs instances.
+      version_added: '2.9'
     tags:
       description:
         - A hash/dictionaries of instance tags. C({"key":"value"})
@@ -60,11 +62,12 @@ options:
           Filter keys can be same as request parameter name or be lower case and use underscore ("_") or dash ("-") to
           connect different words in one parameter. 'InstanceIds' should be a list and it will be appended to
           I(instance_ids) automatically. 'Tag.n.Key' and 'Tag.n.Value' should be a dict and using I(tags) instead.
+      version_added: '2.9'
 author:
     - "He Guimin (@xiaozhu36)"
 requirements:
     - "python >= 2.6"
-    - "footmark >= 1.7.0"
+    - "footmark >= 1.12.0"
 extends_documentation_fragment:
     - alicloud
 '''
@@ -344,15 +347,19 @@ ids:
     sample: [i-12345er, i-3245fs]
 '''
 
-from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.alicloud_ecs import ecs_argument_spec, ecs_connect
+# import time
+# import sys
+import traceback
+from ansible.module_utils.basic import AnsibleModule, missing_required_lib
+from ansible.module_utils.alicloud_ecs import get_acs_connection_info, ecs_argument_spec, ecs_connect
 
 HAS_FOOTMARK = False
-
+FOOTMARK_IMP_ERR = None
 try:
     from footmark.exception import ECSResponseError
     HAS_FOOTMARK = True
 except ImportError:
+    FOOTMARK_IMP_ERR = traceback.format_exc()
     HAS_FOOTMARK = False
 
 
@@ -368,9 +375,11 @@ def main():
     )
     )
     module = AnsibleModule(argument_spec=argument_spec)
+    if module._name == 'ali_instance_facts':
+        module.deprecate("The 'ali_instance_facts' module has been renamed to 'ali_instance_info'", version='2.13')
 
     if HAS_FOOTMARK is False:
-        module.fail_json(msg='footmark required for the module ali_instance_facts')
+        module.fail_json(msg=missing_required_lib('footmark'), exception=FOOTMARK_IMP_ERR)
 
     ecs = ecs_connect(module)
 
@@ -391,7 +400,7 @@ def main():
         filters = {}
     if not ids:
         ids = []
-    for key, value in filters.items():
+    for key, value in list(filters.items()):
         if key in ["InstanceIds", "instance_ids", "instance-ids"] and isinstance(ids, list):
             for id in value:
                 if id not in ids:
@@ -409,6 +418,9 @@ def main():
         if name_prefix:
             if not str(inst.instance_name).startswith(name_prefix):
                 continue
+        volumes = ecs.describe_disks(instance_id=inst.id)
+        setattr(inst, 'block_device_mappings', volumes)
+        setattr(inst, 'user_data', inst.describe_user_data())
         instances.append(inst.read())
         instance_ids.append(inst.id)
 
