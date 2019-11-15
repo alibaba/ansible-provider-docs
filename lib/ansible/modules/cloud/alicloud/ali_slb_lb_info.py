@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible. If not, see http://www.gnu.org/licenses/.
 
-from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
 ANSIBLE_METADATA = {'metadata_version': '1.1',
@@ -26,7 +26,7 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 
 DOCUMENTATION = '''
 ---
-module: ali_slb_lb_facts
+module: ali_slb_lb_info
 version_added: "2.8"
 short_description: Gather facts on server load balancer of Alibaba Cloud.
 description:
@@ -63,15 +63,15 @@ extends_documentation_fragment:
 EXAMPLES = '''
 # Note: These examples do not set authentication details, see the Alibaba Cloud Guide for details.
 - name: Retrieving slbs using ids
-  ali_slb_lb_facts:
+  ali_slb_lb_info:
     ids: 'lb-sn33f3'
 
 - name: Filter slb using name_regex
-  ali_slb_lb_facts:
+  ali_slb_lb_info:
     name_prefix: 'ansible-slb'
 
 - name: Retrieving all slbs
-  ali_slb_lb_facts:
+  ali_slb_lb_info:
 '''
 
 RETURN = '''
@@ -278,7 +278,7 @@ def main():
     filters = module.params['filters']
     if not filters:
         filters = {}
-    for key, value in filters.items():
+    for key, value in list(filters.items()):
         if key in ["LoadBalancerId", "load-balancer-id", "load_balancer_id"] and value not in lb_ids:
             lb_ids.append(value)
     lbs = []

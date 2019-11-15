@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible. If not, see http://www.gnu.org/licenses/.
 
-from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
 ANSIBLE_METADATA = {'metadata_version': '1.1',
@@ -26,7 +26,7 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 
 DOCUMENTATION = """
 ---
-module: ali_slb_server_facts
+module: ali_slb_server_info
 version_added: "1.5.0"
 short_description: Gather facts on backend server of Alibaba Cloud SLB.
 description:
@@ -66,7 +66,7 @@ EXAMPLES = '''
       - 90
   tasks:
     - name: Find all backend server health status in specified region
-      ali_slb_server_facts:
+      ali_slb_server_info:
         alicloud_access_key: '{{ alicloud_access_key }}'
         alicloud_secret_key: '{{ alicloud_secret_key }}'
         alicloud_region: '{{ alicloud_region }}'
@@ -75,7 +75,7 @@ EXAMPLES = '''
     - debug: var=all_backend_server
 
     - name: Find all backend server health status based on specified port no.
-      ali_slb_server_facts:
+      ali_slb_server_info:
         alicloud_access_key: '{{ alicloud_access_key }}'
         alicloud_secret_key: '{{ alicloud_secret_key }}'
         alicloud_region: '{{ alicloud_region }}'

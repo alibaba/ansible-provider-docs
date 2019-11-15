@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible. If not, see http://www.gnu.org/licenses/.
 
-from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
 ANSIBLE_METADATA = {'metadata_version': '1.1',
@@ -71,6 +71,15 @@ options:
       - By default the module will not choose the recent one if there is another VPC with the same I(name) and
        I(cidr_block). Specify this as true if you want to target the recent VPC.
         There will be conflict when I(multi_ok=True) and I(recent=True).
+    default: False
+    type: bool
+  tags:
+    description:
+      - A hash/dictionaries of vpc tags. C({"key":"value"})
+  purge_tags:
+    description:
+      - Delete existing tags on the vpc that are not specified in the task.
+        If True, it means you have to specify all the desired tags on each task affecting a vpc.
     default: False
     type: bool
 notes:
@@ -224,6 +233,8 @@ def main():
         multi_ok=dict(type='bool', default=False),
         description=dict(),
         recent=dict(type='bool', default=False),
+        tags=dict(type='dict'),
+        purge_tags=dict(type='bool', default=False)
     ))
 
     module = AnsibleModule(argument_spec=argument_spec)
@@ -273,9 +284,27 @@ def main():
     try:
         if vpc.modify(vpc_name, description):
             changed = True
-        module.exit_json(changed=changed, vpc=vpc.get().read())
     except VPCResponseError as e:
         module.fail_json(msg='Unable to modify vpc {0}, error: {1}'.format(vpc.id, e))
+
+    tags = module.params['tags']
+    if module.params['purge_tags']:
+        if not tags:
+            tags = vpc.tags
+        try:
+            if vpc.remove_tags(tags):
+                changed = True
+            module.exit_json(changed=changed, vpc=vpc.get().read())
+        except Exception as e:
+            module.fail_json(msg="{0}".format(e))
+
+    if tags:
+        try:
+            if vpc.add_tags(tags):
+                changed = True
+        except Exception as e:
+            module.fail_json(msg="{0}".format(e))
+    module.exit_json(changed=changed, vpc=vpc.get().read())
 
 
 if __name__ == '__main__':

@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible. If not, see http://www.gnu.org/licenses/.
 
-from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
 ANSIBLE_METADATA = {'metadata_version': '1.1',
@@ -168,7 +168,9 @@ def get_info(route_entry):
         'route_table_id': route_entry.route_table_id,
         'status': route_entry.status,
         'tags': route_entry.tags,
-        'type': route_entry.type
+        'type': route_entry.type,
+        'route_entry_id': route_entry.route_entry_id,
+        'route_entry_name': route_entry.route_entry_name
     }
 
 

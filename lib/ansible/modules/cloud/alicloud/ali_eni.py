@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible. If not, see http://www.gnu.org/licenses/.
 
-from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
 ANSIBLE_METADATA = {'metadata_version': '1.1',
@@ -316,7 +316,7 @@ def main():
             params['network_interface_name'] = module.params.get("name")
             params['client_token'] = "Ansible-Alicloud-{0}-{1}".format(hash(str(module.params)), str(time.time()))
             eni = ecs.create_network_interface(**params)
-            changed = True
+            module.exit_json(changed=True, interface=eni.get().read())
         except Exception as e:
             module.fail_json(msg="{0}".format(e))
 
@@ -338,8 +338,8 @@ def main():
         if not tags:
             removed = eni.tags
         else:
-            for key, value in eni.tags.items():
-                if key not in tags.keys():
+            for key, value in list(eni.tags.items()):
+                if key not in list(tags.keys()):
                     removed[key] = value
         try:
             if eni.remove_tags(removed):

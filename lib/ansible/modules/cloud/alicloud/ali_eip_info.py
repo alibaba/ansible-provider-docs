@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible. If not, see http://www.gnu.org/licenses/.
 
-from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
 ANSIBLE_METADATA = {'metadata_version': '1.1',
@@ -26,7 +26,7 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 
 DOCUMENTATION = '''
 ---
-module: ali_eip_facts
+module: ali_eip_info
 version_added: "2.8"
 short_description: Gather facts about Elastic IP addresses in Alibaba Cloud
 description:
@@ -49,6 +49,9 @@ options:
         all of request parameters. See U(https://www.alibabacloud.com/help/doc-detail/36018.htm) for parameter details.
         Filter keys can be same as request parameter name or be lower case and use underscore ("_") or dashes ("-") to
         connect different words in one parameter. 'AllocationId' will be appended to I(eip_ids) automatically.
+  tags:
+    description:
+      - A hash/dictionaries of eip tags. C({"key":"value"})
 author:
     - "He Guimin (@xiaozhu36)"
 requirements:
@@ -62,10 +65,10 @@ EXAMPLES = '''
 # Note: These examples do not set authentication details, see the Alibaba Cloud Guide for details.
 
 # Gather facts about all EIPs
-- ali_eip_facts:
+- ali_eip_info:
 
 # Gather facts about a particular EIP
-- ali_eip_facts:
+- ali_eip_info:
     eip_ids:
       - eip-xxxxxxx
       - eip-yyyyyyy
@@ -73,12 +76,12 @@ EXAMPLES = '''
       status: Available
 
 # Gather facts about a particular EIP
-- ali_eip_facts:
+- ali_eip_info:
     filters:
       associated_instance_type: EcsInstance
 
 # Gather facts based on ip_address_prefix
-- ali_eip_facts:
+- ali_eip_info:
     ip_address_prefix: 72.16
 '''
 
@@ -185,6 +188,7 @@ def main():
             name_prefix=dict(),
             ip_address_prefix=dict(type='str', aliases=['ip_prefix']),
             filters=dict(type='dict'),
+            tags=dict(type='dict')
         )
     )
 
@@ -202,7 +206,7 @@ def main():
     if not filters:
         filters = {}
     new_filters = {}
-    for key, value in filters.items():
+    for key, value in list(filters.items()):
         if str(key).lower().replace("-").replace("_") == "allocationid" and value not in eip_ids:
                 eip_ids.append(value)
                 continue
@@ -210,6 +214,7 @@ def main():
 
     name_prefix = module.params["name_prefix"]
     address_prefix = module.params["ip_address_prefix"]
+    tags = module.params["tags"]
 
     try:
         for eip in vpc_connect(module).describe_eip_addresses(**new_filters):
@@ -219,6 +224,13 @@ def main():
                 continue
             if eip_ids and eip.allocation_id not in eip_ids:
                 continue
+            if tags:
+                flag = False
+                for key, value in list(tags.items()):
+                    if key in list(eip.tags.keys()) and value == eip.tags[key]:
+                        flag = True
+                if not flag:
+                    continue
             eips.append(eip.read())
             ids.append(eip.id)
 

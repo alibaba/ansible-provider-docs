@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible. If not, see http://www.gnu.org/licenses/.
 
-from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
 ANSIBLE_METADATA = {'metadata_version': '1.1',
@@ -26,7 +26,7 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 
 DOCUMENTATION = '''
 ---
-module: ali_vpc_facts
+module: ali_vpc_info
 version_added: "2.8"
 short_description: Gather facts on vpcs of Alibaba Cloud.
 description:
@@ -54,6 +54,9 @@ options:
         all of request parameters. See U(https://www.alibabacloud.com/help/doc-detail/35739.htm) for parameter details.
         Filter keys can be same as request parameter name or be lower case and use underscore ("_") or dash ("-") to
         connect different words in one parameter. 'VpcId' will be appended to I(vpc_ids) automatically.
+  tags:
+    description:
+      - A hash/dictionaries of vpc tags. C({"key":"value"})
 author:
     - "He Guimin (@xiaozhu36)"
 requirements:
@@ -67,22 +70,22 @@ EXAMPLES = '''
 # Note: These examples do not set authentication details, see the Alibaba Cloud Guide for details.
 
 # Gather facts about all VPCs
-- ali_vpc_facts:
+- ali_vpc_info:
 
 # Gather facts about a particular VPC using VPC ID
-- ali_vpc_facts:
+- ali_vpc_info:
     vpc_ids:
       - vpc-aaabbb
       - vpc-123fwec
 
 # Gather facts about any VPC with 'is_default' and name_prefix
-- ali_vpc_facts:
+- ali_vpc_info:
     name_prefix: "my-vpc"
     filters:
       is_default: False
 
 # Gather facts about any VPC with cidr_prefix
-- ali_vpc_facts:
+- ali_vpc_info:
     cidr_prefix: "172.16"
 '''
 
@@ -178,7 +181,8 @@ def main():
         vpc_name=dict(aliases=['name']),
         name_prefix=dict(),
         cidr_prefix=dict(),
-        filters=dict(type='dict')
+        filters=dict(type='dict'),
+        tags=dict(type='dict')
     )
     )
     module = AnsibleModule(argument_spec=argument_spec)
@@ -193,13 +197,14 @@ def main():
     vpc_ids = module.params['vpc_ids']
     if not vpc_ids:
         vpc_ids = []
-    for key, value in filters.items():
+    for key, value in list(filters.items()):
         if key in ["VpcId", "vpc_id", "vpc-id"] and value not in vpc_ids:
             vpc_ids.append(value)
 
     name = module.params['vpc_name']
     name_prefix = module.params['name_prefix']
     cidr_prefix = module.params['cidr_prefix']
+    tags = module.params['tags']
 
     try:
         vpcs = []
@@ -215,6 +220,13 @@ def main():
                     continue
                 if cidr_prefix and not str(vpc.cidr_block).startswith(cidr_prefix):
                     continue
+                if tags:
+                    flag = False
+                    for key, value in list(tags.items()):
+                        if key in list(vpc.tags.keys()) and value == vpc.tags[key]:
+                            flag = True
+                    if not flag:
+                        continue
                 vpcs.append(vpc.read())
                 ids.append(vpc.id)
             if not vpc_ids:

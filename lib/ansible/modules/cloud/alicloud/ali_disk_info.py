@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible. If not, see http://www.gnu.org/licenses/.
 
-from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
 ANSIBLE_METADATA = {'metadata_version': '1.1',
@@ -26,7 +26,7 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 
 DOCUMENTATION = '''
 ---
-module: ali_disk_facts
+module: ali_disk_info
 version_added: "1.5.0"
 short_description: Gather facts on disks of Alibaba Cloud ECS.
 description:
@@ -67,12 +67,12 @@ EXAMPLES = '''
 
   tasks:
     - name: Find all disks in the specified region
-      ali_disk_facts:
+      ali_disk_info:
         alicloud_zone: "{{ alicloud_zone }}"
         alicloud_region: "{{ alicloud_region }}"
       register: all_disks
     - name: Find all disks based on the specified ids
-      ali_disk_facts:
+      ali_disk_info:
         alicloud_zone: "{{ alicloud_zone }}"
         alicloud_region: "{{ alicloud_region }}"
         disk_ids:
@@ -80,7 +80,7 @@ EXAMPLES = '''
           - "d-2zeakwizkdjdu4q4lfco"
       register: disks_by_ids
     - name: Find all disks based on the specified names/name-prefixes
-      ali_disk_facts:
+      ali_disk_info:
         alicloud_zone: "{{ alicloud_zone }}"
         alicloud_region: "{{ alicloud_region }}"
         disk_ids:
