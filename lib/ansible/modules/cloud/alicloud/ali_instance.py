@@ -37,7 +37,7 @@ options:
       description:
         - The state of the instance after operating.
       default: 'present'
-      choices: [ 'present', 'running', 'stopped', 'restarted', 'absent' ]
+      choices: ['present', 'running', 'stopped', 'restarted', 'absent']
     availability_zone:
       description:
         - Aliyun availability zone ID in which to launch the instance.
@@ -45,11 +45,13 @@ options:
       aliases: ['alicloud_zone', 'zone_id']
     image_id:
       description:
-        - Image ID used to launch instances. Required when C(state=present) and creating new ECS instances.
-      aliases: [ 'image' ]
+        - Image ID used to launch instances. Required when C(state=present) and 
+          creating new ECS instances.
+      aliases: ['image']
     instance_type:
       description:
-        - Instance type used to launch instances. Required when C(state=present) and creating new ECS instances.
+        - Instance type used to launch instances. Required when C(state=present) and 
+          creating new ECS instances.
       aliases: ['type']
     security_groups:
       description:
@@ -109,15 +111,15 @@ options:
       default: 1
     count_tag:
       description:
-      - I(count) determines how many instances based on a specific tag criteria should be present.
-        This can be expressed in multiple ways and is shown in the EXAMPLES section.
-        The specified count_tag must already exist or be passed in as the I(tags) option.
-        If it is not specified, it will be replaced by I(instance_name).
+        - I(count) determines how many instances based on a specific tag criteria should be present.
+          This can be expressed in multiple ways and is shown in the EXAMPLES section.
+          The specified count_tag must already exist or be passed in as the I(tags) option.
+          If it is not specified, it will be replaced by I(instance_name).
     allocate_public_ip:
       description:
         - Whether allocate a public ip for the new instance.
       default: False
-      aliases: [ 'assign_public_ip' ]
+      aliases: ['assign_public_ip']
       type: bool
     instance_charge_type:
       description:
@@ -177,8 +179,8 @@ options:
           places and takes effect when the SpotStrategy parameter is set to SpotWithPriceLimit.
     spot_strategy:
       description:
-         - The bidding mode of the pay-as-you-go instance. This parameter is valid when InstanceChargeType is set to 
-         PostPaid.
+        - The bidding mode of the pay-as-you-go instance. This parameter is valid when InstanceChargeType is set to 
+          PostPaid.
       choices: ['NoSpot', 'SpotWithPriceLimit', 'SpotAsPriceGo']
 author:
     - "He Guimin (@xiaozhu36)"
