@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2017 Ansible Project
+# Copyright (c) 2017-present Ansible Project
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 #
 # This file is part of Ansible
@@ -28,7 +28,7 @@ DOCUMENTATION = """
 ---
 module: ali_slb_listener
 version_added: "1.5.0"
-short_description: Create, Delete, Start or Stop Server Load Balancer Listener in ECS
+short_description: Create, Delete, Start or Stop Server Load Balancer Listener in Alibaba Cloud ECS
 description:
   - Create, Delete, Start or Stop Server Load Balancer Listener in ECS
 options:

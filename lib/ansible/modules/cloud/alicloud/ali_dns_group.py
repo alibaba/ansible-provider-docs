@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2017 Alibaba Group Holding Limited. He Guimin <heguimin36@163.com.com>
+# Copyright (c) 2017-present Alibaba Group Holding Limited. He Guimin <heguimin36@163.com.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 #
 # This file is part of Ansible
@@ -28,7 +28,7 @@ DOCUMENTATION = """
 ---
 module: ali_dns_group
 version_added: "2.8"
-short_description: Configure Alibaba Cloud DNS (DNS)
+short_description: Configure Alibaba Cloud DNS (dns group)
 description:
     - Create, Delete Alicloud cloud DNS group(DNS group).
       It supports updating group name.

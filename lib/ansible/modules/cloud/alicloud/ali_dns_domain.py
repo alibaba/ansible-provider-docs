@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2017 Alibaba Group Holding Limited. He Guimin <heguimin36@163.com.com>
+# Copyright (c) 2017-present Alibaba Group Holding Limited. He Guimin <heguimin36@163.com.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 #
 # This file is part of Ansible
@@ -28,9 +28,9 @@ DOCUMENTATION = """
 ---
 module: ali_dns_domain
 version_added: "2.8"
-short_description: Configure Alibaba Cloud DNS (DNS)
+short_description: Configure Alibaba Cloud DNS
 description:
-    - Create, Delete Alicloud cloud DNS(DNS).
+    - Create, Delete Alibaba cloud DNS.
       It supports updating DNS remark and change domain group.
 options:
   domain_name:
@@ -105,13 +105,8 @@ dns:
         dns_servers:
             description: The DNS list of the domain name in the resolution system.
             returned: always
-            type: dict
-            sample: dns_servers:{
-                "dns_server": [
-                    "xx1.alidns.com",
-                    "xx2.alidns.com"
-                ]
-            }
+            type: list
+            sample: ["xx1.alidns.com", "xx2.alidns.com"]
         domain_name:
             description: The name of domain.
             returned: always

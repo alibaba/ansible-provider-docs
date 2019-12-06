@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2017 Alibaba Group Holding Limited. He Guimin <heguimin36@163.com>
+# Copyright (c) 2017-present Alibaba Group Holding Limited. He Guimin <heguimin36@163.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 #
 #  This file is part of Ansible
@@ -28,7 +28,7 @@ DOCUMENTATION = '''
 ---
 module: ali_eip
 version_added: "2.8"
-short_description: Create eip address and bind it to a specified device.
+short_description: Create eip address and bind it to a specified devicein Alibaba Cloud
 description:
     - Create and release an elastic IP address
     - Associate/disassociate an EIP with ECS instance id or SLB instance id or Elastic Network Interface (ENI) id.

@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2017 Alibaba Group Holding Limited. He Guimin <heguimin36@163.com>
+# Copyright (c) 2017-present Alibaba Group Holding Limited. He Guimin <heguimin36@163.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 #
 #  This file is part of Ansible
@@ -28,7 +28,7 @@ DOCUMENTATION = '''
 ---
 module: ali_ess_configuration
 version_added: "1.5.0"
-short_description: Create or Terminate an scaling configuration in ESS.
+short_description: Create or Terminate an scaling configuration in Alibaba Cloud ESS
 description:
     - Scaling configuration defines the configuration of ECS instances used for Auto Scaling.
       When adding ECS instances to a scaling group, Auto Scaling creates the ECS instances according to the scaling configuration.

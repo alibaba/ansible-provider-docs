@@ -26,28 +26,79 @@ Normally, you'll use the following pattern for plays that provision Alicloud res
 
 Authentication
 ``````````````
-   
-You can specify your Alicloud authentication credentials (access key and secret key) by passing them as
-environment variables or by storing them in a vars file.
+The Alicloud provider accepts several ways to enter credentials for authentication. The following methods are supported, in this order, and explained below::
 
-To pass authentication credentials as environment variables::
+    - Environment variables
+    - ECS Role
+    - Assume role
+    - Profile
 
-    export ALICLOUD_ACCESS_KEY='Alicloud123'
-    export ALICLOUD_SECRET_KEY='AlicloudSecret123'
 
-To store authentication credentials in a vars_file, encrypt them with :doc:`Ansible Vault<../user_guide/vault>` to keep them secure, then list them::
+Environment variables:
 
-    ---
-    alicloud_access_key: "--REMOVED--"
-    alicloud_secret_key: "--REMOVED--"
+    You can provide your credentials via ALICLOUD_ACCESS_KEY and ALICLOUD_SECRET_KEY environment variables, representing your Alicloud access key and secret key respectively. ALICLOUD_REGION is also used, if applicable:
 
-Note that if you store your credentials in a vars_file, you need to refer to them in each Alicloud module. For example::
+::
 
-    - ali_instance:
-        alicloud_access_key: "{{alicloud_access_key}}"
-        alicloud_secret_key: "{{alicloud_secret_key}}"
-        image_id: "..."
+    Usage::
 
+        $ export ALICLOUD_ACCESS_KEY="anaccesskey"
+        $ export ALICLOUD_SECRET_KEY="asecretkey"
+        $ export ALICLOUD_REGION="cn-beijing"
+
+
+ECS Role:
+
+    If you're running Ansible from an ECS instance with RAM Instance using RAM Role, Ansible will just access the metadata URL: http://100.100.100.200/latest/meta-data/ram/security-credentials/<ecs_role_name> to obtain the STS credential. Refer to details Access other Cloud Product APIs by the Instance RAM Role.
+    This is a preferred approach over any other when running in ECS as you can avoid hard coding credentials. Instead these are leased on-the-fly by Ansible which reduces the chance of leakage.
+
+::
+
+    Usage::
+
+        ecs_role_name : '{{ ansible-provider-alicloud }}'
+        region        : '{{ region }}
+
+    Note::
+
+        You can provide your credentials via ALICLOUD_ECS_ROLE_NAME environment variables
+
+
+Assume role:
+
+    If provided with a role ARN, Ansible will attempt to assume this role using the supplied credentials.
+
+::
+
+    Usage::
+
+        assume_role:
+            role_arn            : "acs:ram::ACCOUNT_ID:role/ROLE_NAME"
+            policy              : "POLICY"
+            session_name        : "SESSION_NAME"
+            session_expiration  :  999
+
+
+    Note::
+
+        You can provide your credentials via ALICLOUD_ASSUME_ROLE_ARN, ALICLOUD_ASSUME_ROLE_SESSION_NAME, ALICLOUD_ASSUME_ROLE_SESSION_EXPIRATION environment variables
+
+
+Profile:
+
+    If use Alibaba Cloud CLI and configure the credential information, Ansible will read credentials file.
+
+::
+
+    Usage::
+
+        profile                 : '{{ ansible_profile }}'
+        shared_credentials_file : '{{ shared_credentials_file_path }}'
+
+    Note::
+
+        profile is the Alicloud profile name as set in the shared credentials file. It can also be sourced from the ALICLOUD_PROFILE environment variable.
+        shared_credentials_file is the path to the shared credentials file. It can also be sourced from the ALICLOUD_SHARED_CREDENTIALS_FILE environment variable. If this is not set and a profile is specified, ~/.aliyun/config.json will be used.
 .. _alicloud_provisioning:
 
 Provisioning
