@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2017 Alibaba Group Holding Limited. He Guimin <heguimin36@163.com.com>
+# Copyright (c) 2017-present Alibaba Group Holding Limited. He Guimin <heguimin36@163.com.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 #
 #  This file is part of Ansible
@@ -28,7 +28,7 @@ DOCUMENTATION = '''
 ---
 module: ali_instance_type_facts
 version_added: "1.5.0"
-short_description: Gather facts of instance types provided by Alibaba Cloud ECS.
+short_description: Gather facts of instance types provided by Alibaba Cloud ECS
 description:
      - This module fetches data from the Open API in Alicloud.
 
