@@ -25,7 +25,7 @@ DOCUMENTATION = '''
 ---
 module: ali_image
 version_added: "1.5.0"
-short_description: Create or delete user-defined image
+short_description: Create or delete user-defined image in Alibaba Cloud
 description:
     - Create user-defined image from ECS instance, snapshot or disk_mapping; delete user-defined image 
 options:

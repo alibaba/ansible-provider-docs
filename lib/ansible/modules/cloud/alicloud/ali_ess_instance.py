@@ -28,7 +28,7 @@ DOCUMENTATION = '''
 ---
 module: ali_ess_instance
 version_added: "1.5.0"
-short_description: Add or Remove several ECS instances in ESS
+short_description: Add or Remove several ECS instances in Alibaba Cloud ESS
 description:
     - Add several ECS instances to a specified scaling group;
       Remove several ECS instances from a specified scaling group.

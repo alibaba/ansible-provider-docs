@@ -28,7 +28,7 @@ DOCUMENTATION = '''
 ---
 module: ali_ess_group
 version_added: "1.5.0"
-short_description: Create or Terminate an scaling group in ESS.
+short_description: Create or Terminate an scaling group in Alibaba Cloud ESS
 description:
     - A scaling group is a collection of ECS instances with similar configuration deployed in an application scenario.
       It defines the maximum and minimum number of ECS instances in the group,

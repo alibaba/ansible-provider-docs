@@ -28,7 +28,7 @@ DOCUMENTATION = """
 ---
 module: ali_slb_server
 version_added: "1.5.0"
-short_description: Add or remove a list of backend servers to/from a specified SLB
+short_description: Add or remove a list of backend servers to/from a specified SLB in Alibaba Cloud
 description:
   - Returns information about the backend servers. Will be marked changed when called only if state is changed.
 options:

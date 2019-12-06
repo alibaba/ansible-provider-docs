@@ -28,7 +28,7 @@ DOCUMENTATION = '''
 ---
 module: ali_slb_lb
 version_added: "2.8"
-short_description: Create, Delete, Enable or Disable Server Load Balancer.
+short_description: Create, Delete, Enable or Disable Server Load Balancer in Alibaba Cloud
 description:
   - Create, Delete, Start or Stop Server Load Balancer.
   - Modify Load Balancer internet charge type and bandwidth

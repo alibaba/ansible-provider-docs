@@ -28,7 +28,7 @@ DOCUMENTATION = '''
 ---
 module: ali_security_group
 version_added: "2.8"
-short_description: Manage Alibaba Cloud Security Group and its rules.
+short_description: Manage Alibaba Cloud Security Group and its rules
 description:
   - Create and Delete Security Group, Modify its description and add/remove rules.
 options:

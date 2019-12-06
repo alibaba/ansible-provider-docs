@@ -28,7 +28,7 @@ DOCUMENTATION = '''
 ---
 module: ali_eip
 version_added: "2.8"
-short_description: Create eip address and bind it to a specified device.
+short_description: Create eip address and bind it to a specified devicein Alibaba Cloud
 description:
     - Create and release an elastic IP address
     - Associate/disassociate an EIP with ECS instance id or SLB instance id or Elastic Network Interface (ENI) id.

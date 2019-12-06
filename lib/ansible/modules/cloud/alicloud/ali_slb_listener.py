@@ -28,7 +28,7 @@ DOCUMENTATION = """
 ---
 module: ali_slb_listener
 version_added: "1.5.0"
-short_description: Create, Delete, Start or Stop Server Load Balancer Listener in ECS
+short_description: Create, Delete, Start or Stop Server Load Balancer Listener in Alibaba Cloud ECS
 description:
   - Create, Delete, Start or Stop Server Load Balancer Listener in ECS
 options:

@@ -28,7 +28,7 @@ DOCUMENTATION = '''
 ---
 module: ali_ess_configuration
 version_added: "1.5.0"
-short_description: Create or Terminate an scaling configuration in ESS.
+short_description: Create or Terminate an scaling configuration in Alibaba Cloud ESS
 description:
     - Scaling configuration defines the configuration of ECS instances used for Auto Scaling.
       When adding ECS instances to a scaling group, Auto Scaling creates the ECS instances according to the scaling configuration.

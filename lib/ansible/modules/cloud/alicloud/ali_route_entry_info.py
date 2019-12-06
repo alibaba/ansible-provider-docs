@@ -28,7 +28,7 @@ DOCUMENTATION = '''
 ---
 module: ali_route_entry_info
 version_added: "1.5.0"
-short_description: Gather facts on vrouter of Alibaba Cloud.
+short_description: Gather facts on vrouter of Alibaba Cloud
 description:
      - This module fetches data from the Open API in Alicloud.
        The module must be called from within the VRouter itself.

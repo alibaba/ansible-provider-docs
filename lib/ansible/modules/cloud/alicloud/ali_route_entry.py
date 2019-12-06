@@ -25,7 +25,7 @@ DOCUMENTATION = """
 ---
 module: ali_route_entry
 version_added: "1.5.0"
-short_description: Manage route entry for Alicloud virtual private cloud,
+short_description: Manage route entry for Alibaba Cloud virtual private cloud
 description:
     - Manage route entry for Alicloud virtual private cloud.
       Create or Delete route entry in one route table.

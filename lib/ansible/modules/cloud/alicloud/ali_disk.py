@@ -25,7 +25,7 @@ DOCUMENTATION = '''
 ---
 module: ali_disk
 version_added: "1.5.0"
-short_description: Create, Attach, Detach or Delete a disk in Alicloud ECS
+short_description: Create, Attach, Detach or Delete a disk in Alibaba Cloud ECS
 description:
   - Creates and delete a ECS disk.starts, stops, restarts or terminates ecs instances.
   - Attach a disk to an ecs instance or detach a disk from it.

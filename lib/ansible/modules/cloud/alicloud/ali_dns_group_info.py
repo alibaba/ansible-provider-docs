@@ -2,7 +2,7 @@
 # Copyright (c) 2017 Alibaba Group Holding Limited. He Guimin <heguimin36@163.com.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 #
-#  This file is part of Ansible
+# This file is part of Ansible
 #
 # Ansible is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,14 +24,14 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
                     'status': ['preview'],
                     'supported_by': 'community'}
 
-DOCUMENTATION = '''
+DOCUMENTATION = """
 ---
 module: ali_domain_group_info
 version_added: "2.8"
-short_description: Gather facts on domain group of Alibaba Cloud.
+short_description: Gather info on domain group of Alibaba Cloud
 description:
-     - This module fetches data from the Open API in Alicloud.
-       The module must be called from within the group itself.
+    - This module fetches data from the Open API in Alicloud.
+      The module must be called from within the group itself.
 options:
   group_id:
     description:
@@ -39,16 +39,16 @@ options:
   name_prefix:
     description:
       - Use a Group name prefix to filter groups.
-author:
-    - "He Guimin (@xiaozhu36)"
 requirements:
     - "python >= 3.6"
     - "footmark >= 1.15.0"
 extends_documentation_fragment:
     - alicloud
-'''
+author:
+  - "He Guimin (@xiaozhu36)"
+"""
 
-EXAMPLES = '''
+EXAMPLES = """
 # Note: These examples do not set authentication details, see the Alibaba Cloud Guide for details.
 - name: Get the existing group with name_prefix
   ali_dns_group_info:
@@ -60,21 +60,11 @@ EXAMPLES = '''
     group_id: '{{ group_id }}'
   register: groups
 
-- name: Get the existing group with domain_count
-  ali_dns_group_info:
-    domain_count: '{{ domain_count }}'
-  register: groups
-
 - name: Retrieving all dns group
   ali_dns_group_info:
-'''
+"""
 
-RETURN = '''
-ids:
-    description: List all group's id after operating group.
-    returned: when success
-    type: list
-    sample: [ "group-2zegusms7jwd94lq7ix8o", "group-2ze5hrb3y5ksx5oa3a0xa" ]
+RETURN = """
 groups:
     description: Returns an array of complex objects as described below.
     returned: always
@@ -86,9 +76,7 @@ groups:
             type: int
             sample: 0
         domain_count:
-            description: Number of domain names in the group .
-            returned: always
-            type: dict
+            description: Number of domain names in the group.
             returned: always
             type: int
             sample: 0
@@ -107,7 +95,7 @@ groups:
             returned: always
             type: string
             sample: ansible_test
-'''
+"""
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.alicloud_ecs import ecs_argument_spec, dns_connect

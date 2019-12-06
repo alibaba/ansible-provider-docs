@@ -25,7 +25,7 @@ DOCUMENTATION = '''
 ---
 module: ali_oss_bucket_info
 version_added: "1.5.0"
-short_description: Gather facts on buckets of Alibaba Cloud OSS.
+short_description: Gather facts on buckets of Alibaba Cloud OSS
 description:
      - This module fetches data from the Open API in Alicloud.
        The module must be called from within the OSS bucket itself.

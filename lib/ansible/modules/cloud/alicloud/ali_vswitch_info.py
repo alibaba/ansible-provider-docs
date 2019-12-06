@@ -28,7 +28,7 @@ DOCUMENTATION = '''
 ---
 module: ali_vswitch_info
 version_added: "2.8"
-short_description: Gather facts on vswitchs of Alibaba Cloud.
+short_description: Gather facts on vswitchs of Alibaba Cloud
 description:
      - This module fetches data from the Open API in Alicloud.
        The module must be called from within the vswitch itself.

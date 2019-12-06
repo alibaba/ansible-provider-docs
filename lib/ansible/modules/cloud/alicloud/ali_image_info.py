@@ -28,7 +28,7 @@ DOCUMENTATION = '''
 ---
 module: ali_image_info
 version_added: "1.5.0"
-short_description: Gather facts on images of Alibaba Cloud ECS.
+short_description: Gather facts on images of Alibaba Cloud ECS
 description:
      - This module fetches data from the Open API in Alicloud.
        The module must be called from within the ECS image itself.

@@ -28,7 +28,7 @@ DOCUMENTATION = '''
 ---
 module: ali_instance
 version_added: "2.8"
-short_description: Create, Start, Stop, Restart or Terminate an Instance in ECS. Add or Remove Instance to/from a Security Group.
+short_description: Create, Start, Stop, Restart or Terminate an Instance in ECS. Add or Remove Instance to/from a Security Group in Alibaba Cloud
 description:
     - Create, start, stop, restart, modify or terminate ecs instances.
     - Add or remove ecs instances to/from security group.

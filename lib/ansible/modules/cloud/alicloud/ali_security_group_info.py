@@ -28,7 +28,7 @@ DOCUMENTATION = '''
 ---
 module: ali_security_group_info
 version_added: "2.8"
-short_description: Gather facts on security group of Alibaba Cloud ECS.
+short_description: Gather facts on security group of Alibaba Cloud ECS
 description:
   - This module fetches data from the Open API in Alicloud.
     The module must be called from within the ECS security group itself.

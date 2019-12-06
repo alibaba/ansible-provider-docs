@@ -25,7 +25,7 @@ DOCUMENTATION = '''
 ---
 module: ali_oss_object
 version_added: "1.5.0"
-short_description: Manage object in OSS
+short_description: Manage object in Alibaba Cloud OSS
 description:
     - This module allows the user to manage OSS objects within bucket. Includes support for uploading and downloading
       objects, retrieving object keys.

@@ -27,7 +27,7 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = '''
 ---
 module: ali_eni
-short_description: Create and optionally attach an Elastic Network Interface (ENI) to an instance
+short_description: Create and optionally attach an Elastic Network Interface (ENI) to an instance in Alibaba Cloud
 description:
     - Create and optionally attach an Elastic Network Interface (ENI) to an instance. If an ENI ID or private ip with
       vswitch id is provided, the existing ENI (if any) will be modified.

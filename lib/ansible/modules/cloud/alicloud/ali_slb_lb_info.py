@@ -28,7 +28,7 @@ DOCUMENTATION = '''
 ---
 module: ali_slb_lb_info
 version_added: "2.8"
-short_description: Gather facts on server load balancer of Alibaba Cloud.
+short_description: Gather facts on server load balancer of Alibaba Cloud
 description:
      - This module fetches data from the Open API in Alicloud.
        The module must be called from within the SLB itself.

@@ -28,7 +28,7 @@ DOCUMENTATION = '''
 ---
 module: ali_slb_vsg
 version_added: "2.8"
-short_description: Create, Delete VServerGroup and Modify its name or backend servers.
+short_description: Create, Delete VServerGroup and Modify its name or backend servers in Alibaba Cloud
 description:
   - Create and delete a VServer group
   - Add or remove backend servers or network interfaces to/from the VServer group

@@ -28,7 +28,7 @@ DOCUMENTATION = '''
 ---
 module: ali_slb_vsg_info
 version_added: "2.8"
-short_description: Gather facts on virtual server group of Alibaba Cloud SLB.
+short_description: Gather facts on virtual server group of Alibaba Cloud SLB
 description:
      - This module fetches virtual server groups data from the Open API in Alibaba Cloud.
 options:

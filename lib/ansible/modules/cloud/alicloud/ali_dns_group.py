@@ -28,7 +28,7 @@ DOCUMENTATION = """
 ---
 module: ali_dns_group
 version_added: "2.8"
-short_description: Configure Alibaba Cloud DNS (DNS)
+short_description: Configure Alibaba Cloud DNS (dns group)
 description:
     - Create, Delete Alicloud cloud DNS group(DNS group).
       It supports updating group name.
