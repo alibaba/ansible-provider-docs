@@ -96,8 +96,8 @@ options:
     required: false  
        
 requirements:
-    - "python >= 2.7"
-    - "footmark"
+    - "python >= 3.6"
+    - "footmark >= 1.15.0"
 extends_documentation_fragment:
     - alicloud
 author:
