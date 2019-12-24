@@ -44,9 +44,9 @@ options:
         C(ALICLOUD_SECURITY_TOKEN) will be used instead.
     aliases: ['security_token']
 author:
-    - "He Guimin (@xiaozhu36)"
+  - "He Guimin (@xiaozhu36)"
 requirements:
-    - "python >= 3.6"
+  - "python >= 3.6"
 extends_documentation_fragment:
     - alicloud
 notes:
