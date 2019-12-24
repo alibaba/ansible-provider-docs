@@ -74,8 +74,8 @@ options:
         Its format like 1-100 that indicates range from one to hundred bytes of object.
     aliases: [ 'range' ]
 requirements:
-    - "python >= 2.6"
-    - "footmark >= 1.1.16"
+    - "python >= 3.6"
+    - "footmark >= 1.15.0"
 extends_documentation_fragment:
     - alicloud
 author:

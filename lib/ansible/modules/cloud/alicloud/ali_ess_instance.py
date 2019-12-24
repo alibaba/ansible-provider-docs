@@ -58,8 +58,8 @@ options:
 author:
     - "He Guimin (@xiaozhu36)"
 requirements:
-    - "python >= 2.6"
-    - "footmark >= 1.3.0"
+    - "python >= 3.6"
+    - "footmark >= 1.15.0"
 notes:
   - If both I(instance_ids) and I(creation_type) are not specified, the module will remove all of ECS instnaces in the
     specified Scaling Group when C(state=absent).

@@ -86,8 +86,8 @@ notes:
   - There will be launch a virtual router along with creating a vpc successfully.
   - There is only one virtual router in one vpc and one route table in one virtual router.
 requirements:
-    - "python >= 2.6"
-    - "footmark >= 1.7.0"
+    - "python >= 3.6"
+    - "footmark >= 1.15.0"
 extends_documentation_fragment:
     - alicloud
 author:

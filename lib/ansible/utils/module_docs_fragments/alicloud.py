@@ -46,7 +46,7 @@ options:
 author:
     - "He Guimin (@xiaozhu36)"
 requirements:
-    - "python >= 2.6"
+    - "python >= 3.6"
 extends_documentation_fragment:
     - alicloud
 notes:

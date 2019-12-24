@@ -76,8 +76,8 @@ options:
       default: False
       type: bool
 requirements:
-    - "python >= 2.6"
-    - "footmark >= 1.9.0"
+    - "python >= 3.6"
+    - "footmark >= 1.15.0"
 extends_documentation_fragment:
     - alicloud
 author:

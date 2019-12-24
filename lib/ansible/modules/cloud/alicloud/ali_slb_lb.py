@@ -96,8 +96,8 @@ notes:
   - The change in internet charge type will take effect from the early morning of the next day.
     It can not be changed twice in one day, otherwise, a error "Operation.NotAllowed" will appear.
 requirements:
-    - "python >= 2.6"
-    - "footmark >= 1.9.0"
+    - "python >= 3.6"
+    - "footmark >= 1.15.0"
 extends_documentation_fragment:
     - alicloud
 author:

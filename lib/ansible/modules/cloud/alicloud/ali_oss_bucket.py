@@ -46,8 +46,8 @@ options:
     choices: [ 'private', 'public-read', 'public-read-write' ]
     aliases: [ 'acl' ]
 requirements:
-    - "python >= 2.6"
-    - "footmark >= 1.1.16"
+    - "python >= 3.6"
+    - "footmark >= 1.15.0"
 extends_documentation_fragment:
     - alicloud
 author:
