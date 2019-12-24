@@ -51,11 +51,14 @@ options:
         all of request parameters. See U(https://www.alibabacloud.com/help/doc-detail/27582.htm) for parameter details.
         Filter keys can be same as request parameter name or be lower case and use underscores ("_") or dashes ("-") to
         connect different words in one parameter. 'LoadBalancerId' will be appended to I(load_balancer_ids) automatically.
+  tags:
+    description:
+      - A hash/dictionaries of slb tags. C({"key":"value"})
 author:
     - "He Guimin (@xiaozhu36)"
 requirements:
     - "python >= 3.6"
-    - "footmark >= 1.15.0"
+    - "footmark >= 1.16.0"
 extends_documentation_fragment:
     - alicloud
 '''
