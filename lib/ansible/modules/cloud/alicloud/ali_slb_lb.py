@@ -92,6 +92,15 @@ options:
         with the same I(name). Specify this as true if you want duplicate Load Balancers created.
     default: False
     type: bool
+  tags:
+    description:
+      - A hash/dictionaries of slb tags. C({"key":"value"})
+  purge_tags:
+    description:
+      - Delete existing tags on the slb that are not specified in the task.
+        If True, it means you have to specify all the desired tags on each task affecting a slb.
+    default: False
+    type: bool
 notes:
   - The change in internet charge type will take effect from the early morning of the next day.
     It can not be changed twice in one day, otherwise, a error "Operation.NotAllowed" will appear.
