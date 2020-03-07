@@ -5,7 +5,7 @@ COPY docker/deadsnakes.list /etc/apt/sources.list.d/deadsnakes.list
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys F23C5A6CF475977595C89F51BA6932366A755776
 
 RUN apt-get update -y && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    DEBIAN_FRONTEND=noninteractive apt-get --no-install-recommends install -y \
     ca-certificates \
     curl \
     gcc \
@@ -53,14 +53,14 @@ RUN ln -s python3   /usr/bin/python
 # For now, we need to manually purge XML docs and other items from a Nuget dir to vastly reduce the image size.
 # See https://github.com/dotnet/dotnet-docker/issues/237 for details.
 RUN apt-get update -y && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    DEBIAN_FRONTEND=noninteractive apt-get --no-install-recommends install -y \
     apt-transport-https \
     && \
     apt-get clean
 ADD https://packages.microsoft.com/config/ubuntu/16.04/prod.list /etc/apt/sources.list.d/microsoft.list
 RUN curl --silent https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
 RUN apt-get update -y && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    DEBIAN_FRONTEND=noninteractive apt-get --no-install-recommends install -y \
     dotnet-sdk-2.1.4 \
     powershell \
     && \

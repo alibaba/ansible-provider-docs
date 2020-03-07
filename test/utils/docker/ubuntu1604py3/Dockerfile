@@ -1,7 +1,7 @@
 FROM ubuntu:16.04
 
 RUN apt-get update -y && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    DEBIAN_FRONTEND=noninteractive apt-get --no-install-recommends install -y \
     acl \
     apache2 \
     bzip2 \

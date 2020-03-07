@@ -2,7 +2,7 @@
 
 - name: Install python
   raw:
-    test -e /usr/bin/python || apt-get -y update && apt-get install -y python-minimal
+    test -e /usr/bin/python || apt-get -y update && apt-get --no-install-recommends install -y python-minimal
   become: yes
 
 # network-integration test are ran with gather_facts: no

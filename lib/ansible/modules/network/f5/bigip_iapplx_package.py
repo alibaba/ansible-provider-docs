@@ -39,7 +39,7 @@ options:
 notes:
   - Requires the rpm tool be installed on the host. This can be accomplished through
     different ways on each platform. On Debian based systems with C(apt);
-    C(apt-get install rpm). On Mac with C(brew); C(brew install rpm).
+    C(apt-get install -y --no-install-recommends rpm). On Mac with C(brew); C(brew install rpm).
     This command is already present on RedHat based systems.
   - Requires BIG-IP >= 12.1.0 because the required functionality is missing
     on versions earlier than that.

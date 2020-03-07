@@ -18,7 +18,7 @@
 
 # using the apt module prevents autoremove from working, so call apt-get via shell instead
 - name: install mercurial (apt)
-  shell: apt-get -y update && apt-get -y install mercurial
+  shell: apt-get -y update && apt-get --no-install-recommends install -y mercurial
   when: ansible_pkg_mgr == 'apt'
 
 - name: install mercurial (dnf)

@@ -25,7 +25,7 @@ Or alternatively starting with Debian 9 and Ubuntu 16.04:
 
 .. code-block:: bash
 
-    $ sudo apt install python-cs
+    $ sudo apt-get install -y --no-install-recommends python-cs
 
 .. note:: cs also includes a command line interface for ad-hoc interaction with the CloudStack API e.g. ``$ cs listVirtualMachines state=Running``.
 

@@ -29,8 +29,8 @@ Due to dependencies (for example ansible -> paramiko -> pynacl -> libffi):
 
 .. code:: bash
 
-    sudo apt update
-    sudo apt install build-essential libssl-dev libffi-dev python-dev
+    sudo apt-get update 
+    sudo apt-get install -y --no-install-recommends build-essential libssl-dev libffi-dev python-dev
 
 Common Environment setup
 ````````````````````````

@@ -10,12 +10,12 @@ Follow below instructions to generate documentation from `DOCUMENTATION` string 
 * `make` utility <br/><br/>
  Make utility is required to generate html docs. Install `make` utility by running below command on Ubuntu.
 ```sh
-sudo apt-get -y install make 
+sudo apt-get --no-install-recommends install -y make 
 ```
 * `python` version 2.7.X<br/><br/>
  Run below command to install `python`.
 ```sh
-sudo apt-get -y install python2.7
+sudo apt-get --no-install-recommends install -y python2.7
 ```
 Check python installation by running below command.
 ```sh
@@ -24,7 +24,7 @@ python --version
 * Install `pip`<br/><br/>
  Run below command to install `pip` and other packages.
 ```sh
-sudo apt-get -y install python-pip python-dev dos2unix
+sudo apt-get --no-install-recommends install -y python-pip python-dev dos2unix
 ```
 
 * Install sphinx and theme: 

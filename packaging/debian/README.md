@@ -6,7 +6,7 @@ To create an Ansible DEB package:
 __Note__: You must run this target as root or set `PBUILDER_BIN='sudo pbuilder'`
 
 ```
-apt-get install python-docutils cdbs debootstrap devscripts make pbuilder python-setuptools
+apt-get install -y --no-install-recommends python-docutils cdbs debootstrap devscripts make pbuilder python-setuptools
 git clone https://github.com/ansible/ansible.git
 cd ansible
 DEB_DIST='xenial trusty precise' make deb
@@ -35,5 +35,5 @@ apt-get -fy install
 Or, if you are running Debian Stretch (or later) or Ubuntu Xenial (or later):
 
 ```
-apt install /path/to/<package-file>
+apt-get install -y --no-install-recommends /path/to/<package-file>
 ```

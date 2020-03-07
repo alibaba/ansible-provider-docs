@@ -293,7 +293,7 @@ Some system dependencies that must be installed prior to using Kerberos. The scr
     yum -y install python-devel krb5-devel krb5-libs krb5-workstation
 
     # Via Apt (Ubuntu)
-    sudo apt-get install python-dev libkrb5-dev krb5-user
+    sudo apt-get install -y --no-install-recommends python-dev libkrb5-dev krb5-user
 
     # Via Portage (Gentoo)
     emerge -av app-crypt/mit-krb5

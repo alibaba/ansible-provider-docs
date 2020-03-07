@@ -362,7 +362,7 @@ def package_status(m, pkgname, version, cache, state):
                 m.fail_json(msg="No package matching '%s' is available" % pkgname)
             except AttributeError:
                 # python-apt version too old to detect virtual packages
-                # mark as upgradable and let apt-get install deal with it
+                # mark as upgradable and let apt-get install -y --no-install-recommends deal with it
                 return False, False, True, False
         else:
             return False, False, False, False

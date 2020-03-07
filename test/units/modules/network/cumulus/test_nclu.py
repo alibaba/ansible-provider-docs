@@ -36,7 +36,7 @@ class FakeModule(object):
 
     To prepare a VX:
       sudo apt-get update
-      sudo apt-get install python-setuptools git gcc python-dev libssl-dev
+      sudo apt-get install -y --no-install-recommends python-setuptools git gcc python-dev libssl-dev
       sudo easy_install pip
       sudo pip install ansible nose coverage
       # git the module and cd to the directory
