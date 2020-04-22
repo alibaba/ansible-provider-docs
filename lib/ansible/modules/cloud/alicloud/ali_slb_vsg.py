@@ -1,4 +1,6 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 # Copyright (c) 2017-present Alibaba Group Holding Limited. He Guimin <heguimin36@163.com.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 #
@@ -17,6 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible. If not, see http://www.gnu.org/licenses/.
 
+from __future__ import (absolute_import, division, print_function)
 
 __metaclass__ = type
 
@@ -27,8 +30,7 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = '''
 ---
 module: ali_slb_vsg
-version_added: "2.8"
-short_description: Create, Delete VServerGroup and Modify its name or backend servers in Alibaba Cloud
+short_description: Create, Delete VServerGroup and Modify its name or backend servers.
 description:
   - Create and delete a VServer group
   - Add or remove backend servers or network interfaces to/from the VServer group
@@ -38,25 +40,30 @@ options:
         - Create and delete a VServer group.
       default: 'present'
       choices: ['present', 'absent']
+      type: str
     load_balancer_id:
       description:
         - The Server Load Balancer instance ID.
           This is used in combination with C(name) to determine if a VServer group already exists.
       required: True
       aliases: ['lb_id']
+      type: str
     vserver_group_name:
       description:
         - Virtual server group name.
-          This is used in conjunction with the C(load_balancer_id) to ensure idempotence.
-      required: True
-      aliases: [ 'group_name', 'name' ]
+        - One of I(vserver_group_name) and I(vserver_group_id) must be specified when operate existing slb group.
+      aliases: ['group_name', 'name']
+      type: str
     backend_servers:
       description:
         - List of  that need to be added or.
         - List of hash/dictionaries backend servers or network interfaces to add in this group (see example).
           If none are supplied, no backend servers will be enabled. Each server has several keys and refer to
           https://www.alibabacloud.com/help/doc-detail/35215.htm. Each key should be format as under_score.
-          Currently the valid keys including "server_id", "port", "weight" and "type".
+          Currently the valid keys including "server_ids", "server_id", "port", "weight" and "type".
+        - If you have multiple servers to add and they have the same port, weight, type, you can use the server_ids parameter, which is a list of ids.
+      type: list
+      elements: dict
     purge_backend_servers:
       description:
         - Purge existing backend servers or ENIs on VServer group that are not found in backend_servers.
@@ -67,8 +74,10 @@ options:
       type: bool
     vserver_group_id:
       description:
-        - (Deprecated) Virtual server group id.
-      aliases: [ 'group_id' ]
+        - Virtual server group id.
+        - One of I(vserver_group_name) and I(vserver_group_id) must be specified when operate existing slb group.
+      aliases: ['group_id']
+      type: str
     multi_ok:
       description:
         - By default the module will not create another Load Balancer if there is another Load Balancer
@@ -77,7 +86,7 @@ options:
       type: bool
 requirements:
     - "python >= 3.6"
-    - "footmark >= 1.15.0"
+    - "footmark >= 1.19.0"
 extends_documentation_fragment:
     - alicloud
 author:
@@ -137,9 +146,8 @@ vserver_group:
         address:
             description: The IP address of the loal balancer
             returned: always
-            type: string
+            type: str
             sample: "47.94.26.126"
-
         backend_servers:
             description: The load balancer's backend servers
             returned: always
@@ -153,12 +161,12 @@ vserver_group:
                 server_id:
                     description: The backend server id
                     returned: always
-                    type: string
+                    type: str
                     sample: "i-vqunci342"
                 type:
                     description: The backend server type, ecs or eni
                     returned: always
-                    type: string
+                    type: str
                     sample: "ecs"
                 weight:
                     description: The backend server weight
@@ -168,27 +176,27 @@ vserver_group:
         id:
             description: The ID of the virtual server group was created. Same as vserver_group_id.
             returned: always
-            type: string
+            type: str
             sample: "rsp-2zehblhcv"
         vserver_group_id:
             description: The ID of the virtual server group was created.
             returned: always
-            type: string
+            type: str
             sample: "rsp-2zehblhcv"
         vserver_group_name:
             description: The name of the virtual server group was created.
             returned: always
-            type: string
+            type: str
             sample: "ansible-ali_slb_vsg"
         name:
             description: The name of the virtual server group was created.
             returned: always
-            type: string
+            type: str
             sample: "ansible-ali_slb_vsg"
         tags:
             description: The load balancer tags
             returned: always
-            type: complex
+            type: dict
             sample: {}
 '''
 
@@ -205,7 +213,7 @@ except ImportError:
     HAS_FOOTMARK = False
 
 
-VALID_SERVER_PARAMS = ["server_id", "port", "weight", "type"]
+VALID_SERVER_PARAMS = ["server_id", "port", "weight", "type", "server_ids"]
 
 
 def check_backend_servers(module, servers):
@@ -215,10 +223,26 @@ def check_backend_servers(module, servers):
                 module.fail_json(msg='Invalid backend server key {0}. Valid keys: {1}.'.format(key, VALID_SERVER_PARAMS))
 
 
+def parse_server_ids(servers):
+    parse_server = []
+    if servers:
+        for s in servers:
+            if "server_ids" in s:
+                ids = s.pop("server_ids")
+                for id in ids:
+                    server = {"server_id": id}
+                    server.update(s)
+                    parse_server.append(server)
+            else:
+                parse_server.append(s)
+    return parse_server
+
+
 def format_backend_servers(servers):
     backend_servers = []
     if servers:
-        for s in servers:
+        parse_server = parse_server_ids(servers)
+        for s in parse_server:
             server = {}
             for key, value in list(s.items()):
                 split = []
@@ -236,6 +260,8 @@ def filter_backend_servers(existing, inputting):
     existingList = []
     inputtingList = []
     oldList = []
+    inputting = parse_server_ids(inputting)
+
     for s in existing:
         existingList.append(s['server_id'])
 
@@ -266,7 +292,7 @@ def main():
         state=dict(type='str', default='present', choices=['present', 'absent']),
         load_balancer_id=dict(type='str', required=True, aliases=['lb_id']),
         vserver_group_name=dict(type='str', required=True, aliases=['group_name', 'name']),
-        backend_servers=dict(type='list'),
+        backend_servers=dict(type='list', elements='dict'),
         vserver_group_id=dict(type='str', aliases=['group_id']),
         purge_backend_servers=dict(type='bool', default=False),
         multi_ok=dict(type='bool', default=False)
@@ -285,7 +311,7 @@ def main():
     state = module.params['state']
     lb_id = module.params['load_balancer_id']
     vsg_name = module.params['vserver_group_name']
-
+    vserver_group_id = module.params['vserver_group_id']
     changed = False
     matching = None
 
@@ -293,7 +319,9 @@ def main():
         try:
             matching_vsgs = []
             for group in slb.describe_vserver_groups(**{'load_balancer_id': lb_id}):
-                if group.name != vsg_name:
+                if vsg_name and group.name != vsg_name:
+                    continue
+                if vserver_group_id and group.id != vserver_group_id:
                     continue
                 matching_vsgs.append(group)
             if len(matching_vsgs) == 1:

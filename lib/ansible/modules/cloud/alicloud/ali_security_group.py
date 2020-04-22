@@ -1,4 +1,6 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 # Copyright (c) 2017-present Alibaba Group Holding Limited. He Guimin <heguimin36@163.com.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 #
@@ -17,6 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible. If not, see http://www.gnu.org/licenses/.
 
+from __future__ import (absolute_import, division, print_function)
 
 __metaclass__ = type
 
@@ -27,8 +30,7 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = '''
 ---
 module: ali_security_group
-version_added: "2.8"
-short_description: Manage Alibaba Cloud Security Group and its rules
+short_description: Manage Alibaba Cloud Security Group and its rules.
 description:
   - Create and Delete Security Group, Modify its description and add/remove rules.
 options:
@@ -37,6 +39,7 @@ options:
       - Create, delete a security group
     default: 'present'
     choices: ['present', 'absent']
+    type: str
   name:
     description:
       - Name of the security group, which is a string of 2 to 128 Chinese or English characters. It must begin with an
@@ -45,13 +48,16 @@ options:
         This is used in combination with C(vpc_id) to determine if a Securty Group already exists.
     required: True
     aliases: ['group_name']
+    type: str
   description:
     description:
       - Description of the security group, which is a string of 2 to 256 characters.
       - It cannot begin with http:// or https://.
+    type: str
   vpc_id:
     description:
       - ID of the VPC to create the group in. This is used in conjunction with the C(name) to ensure idempotence.
+    type: str
   rules:
     description:
       - List of hash/dictionaries firewall inbound rules to enforce in this group (see example). If none are supplied,
@@ -60,6 +66,8 @@ options:
         At present, the valid keys including "ip_protocol", "port_range", "source_port_range", "nic_type", "policy",
         "dest_cidr_ip", "source_cidr_ip", "source_group_id", "source_group_owner_account", "source_group_owner_id",
         "priority" and "description".
+    type: list
+    elements: dict
   rules_egress:
     description:
       - List of hash/dictionaries firewall outbound rules to enforce in this group (see example). If none are supplied,
@@ -68,6 +76,8 @@ options:
         At present, the valid keys including "ip_protocol", "port_range", "source_port_range", "nic_type", "policy",
         "dest_cidr_ip", "source_cidr_ip", "dest_group_id", "dest_group_owner_account", "dest_group_owner_id",
         "priority" and "description".
+    type: list
+    elements: dict
   purge_rules:
     description:
       - Purge existing rules on security group that are not found in rules
@@ -78,14 +88,16 @@ options:
       - Purge existing rules_egress on security group that are not found in rules_egress
     default: True
     type: bool
-  group_id:
+  security_group_id:
     description:
-      - (Deprecated) Security group ID.
+      - Security group ID.
     aliases: ['id']
+    type: str
   tags:
     description:
       - A hash/dictionaries of security group tags. C({"key":"value"})
     aliases: ["group_tags"]
+    type: dict
   multi_ok:
     description:
       - By default the module will not create another Security Group if there is another Security Group
@@ -102,7 +114,7 @@ options:
     type: bool
 requirements:
     - "python >= 3.6"
-    - "footmark >= 1.15.0"
+    - "footmark >= 1.13.0"
 extends_documentation_fragment:
     - alicloud
 author:
@@ -111,12 +123,12 @@ author:
 
 EXAMPLES = '''
 # Note: These examples do not set authentication details, see the Alibaba Cloud Guide for details.
-- name: create a new security group
+- name: Create a new security group
   ali_security_group:
     name: 'AliyunSG'
     vpc_id: 'vpc-123csecd'
 
-- name: authorize security group
+- name: Authorize security group
   ali_security_group:
     name: 'AliyunSG'
     vpc_id: 'vpc-123csecd'
@@ -131,12 +143,11 @@ EXAMPLES = '''
         dest_group_id: 'sg-ce33rdsfe'
         priority: 1
 
-- name: delete security grp
+- name: Delete security grp
   ali_security_group:
     name: 'AliyunSG'
     vpc_id: 'vpc-123csecd'
     state: absent
-
 '''
 
 RETURN = '''
@@ -148,22 +159,22 @@ group:
         description:
             description: The Security Group description.
             returned: always
-            type: string
+            type: str
             sample: "my ansible group"
         group_name:
             description: Security group name
             sample: "my-ansible-group"
-            type: string
+            type: str
             returned: always
         group_id:
             description: Security group id
             sample: sg-abcd1234
-            type: string
+            type: str
             returned: always
         id:
             description: Alias of "group_id".
             sample: sg-abcd1234
-            type: string
+            type: str
             returned: always
         inner_access_policy:
             description: Whether can access each other in one security group.
@@ -172,15 +183,17 @@ group:
             returned: always
         tags:
             description: Tags associated with the security group
-            sample:
-            Name: My Security Group
-            From: Ansible
             type: dict
+            sample:
+              - Name: My Security Group
+                From: Ansible
+                type: dict
+                returned: always
             returned: always
         vpc_id:
             description: ID of VPC to which the security group belongs
             sample: vpc-abcd1234
-            type: string
+            type: str
             returned: always
         permissions:
             description: Inbound rules associated with the security group.
@@ -298,7 +311,7 @@ def purge_rules(module, group, existing_rule, rules, direction):
     return False
 
 
-def group_exists(conn, module, vpc_id, name, multi, recent):
+def group_exists(conn, module, vpc_id, name, security_group_id, multi, recent):
     """Returns None or a security group object depending on the existence of a security group.
     When supplied with a vpc_id and Name, it will check them to determine if it is a match
     otherwise it will assume the Security Group does not exist and thus return None.
@@ -309,10 +322,13 @@ def group_exists(conn, module, vpc_id, name, multi, recent):
     filters = {}
     if vpc_id:
         filters['vpc_id'] = vpc_id
+    if security_group_id:
+        filters['security_group_id'] = security_group_id
     try:
         for g in conn.describe_security_groups(**filters):
-            if g.security_group_name == name:
-                matching_groups.append(g)
+            if name and g.security_group_name != name:
+                continue
+            matching_groups.append(g.get())
     except Exception as e:
         module.fail_json(msg="Failed to describe Security Groups: {0}".format(e))
 
@@ -335,14 +351,14 @@ def main():
         name=dict(type='str', required=True, aliases=['group_name']),
         description=dict(type='str'),
         vpc_id=dict(type='str'),
+        security_group_id=dict(type='str', aliases=['id', 'group_id']),
         tags=dict(type='dict', aliases=['group_tags']),
-        rules=dict(type='list'),
-        rules_egress=dict(type='list'),
+        rules=dict(type='list', elements='dict'),
+        rules_egress=dict(type='list', elements='dict'),
         purge_rules=dict(type='bool', default=True),
         purge_rules_egress=dict(type='bool', default=True),
-        group_id=dict(type='str', aliases=['id']),
         multi_ok=dict(type='bool', default=False),
-        recent=dict(type='bool', default=False),
+        recent=dict(type='bool', default=False)
     ))
 
     module = AnsibleModule(argument_spec=argument_spec)
@@ -353,6 +369,7 @@ def main():
     ecs = ecs_connect(module)
 
     state = module.params['state']
+    security_group_id = module.params['security_group_id']
     group_name = module.params['name']
     if str(group_name).startswith('http://') or str(group_name).startswith('https://'):
         module.fail_json(msg='Name can not start with http:// or https://')
@@ -367,7 +384,7 @@ def main():
 
     changed = False
 
-    group = group_exists(ecs, module, module.params['vpc_id'], group_name, multi, recent)
+    group = group_exists(ecs, module, module.params['vpc_id'], group_name, security_group_id, multi, recent)
 
     if state == 'absent':
         if not group:

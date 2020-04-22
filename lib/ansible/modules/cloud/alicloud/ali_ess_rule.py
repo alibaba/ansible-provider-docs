@@ -28,7 +28,7 @@ DOCUMENTATION = '''
 ---
 module: ali_ess_rule
 version_added: "1.5.0"
-short_description: Create or Terminate an scaling rule in Alibaba Cloud ESS
+short_description: Create or Terminate an scaling rule in ESS.
 description:
     - A scaling rule defines specific scaling actions, for example, adding or removing n ECS instances.
       If the execution of a scaling rule results in a number of ECS instances in the scaling group that is less than
@@ -80,8 +80,8 @@ options:
 author:
     - "He Guimin (@xiaozhu36)"
 requirements:
-    - "python >= 3.6"
-    - "footmark >= 1.15.0"
+    - "python >= 2.6"
+    - "footmark >= 1.3.0"
 extends_documentation_fragment:
     - alicloud
 '''

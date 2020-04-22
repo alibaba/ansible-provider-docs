@@ -1,4 +1,6 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 # Copyright (c) 2017-present Alibaba Group Holding Limited. He Guimin <heguimin36@163.com.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 #
@@ -17,6 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible. If not, see http://www.gnu.org/licenses/.
 
+from __future__ import (absolute_import, division, print_function)
 
 __metaclass__ = type
 
@@ -27,8 +30,7 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = """
 ---
 module: ali_dns_domain_info
-version_added: "2.8"
-short_description: Gather info on dns of Alibaba Cloud
+short_description: Gather info on dns of Alibaba Cloud.
 description:
      - This module fetches data from the Open API in Alicloud.
        The module must be called from within the dns itself.
@@ -36,12 +38,13 @@ options:
   domain_name:
     description:
       -  The name to give your DNS.
-    required: True
     aliases: ['name']
-  filter:
+    type: str
+  filters:
     description:
       -  A dict of filters to apply. Each dict item consists of a filter key and a filter value. The filter keys can be
          all of request parameters. 
+    type: dict
 requirements:
     - "python >= 3.6"
     - "footmark >= 1.15.0"
@@ -63,7 +66,7 @@ EXAMPLES = """
 
 RETURN = '''
 dns:
-    description: info about the DNS that was created or deleted
+    description: info about the DNS that was created or deleted.
     returned: always
     type: complex
     contains:
@@ -75,22 +78,25 @@ dns:
         dns_servers:
             description: The DNS list of the domain name in the resolution system.
             returned: always
-            type: list
-            sample: ["xx1.alidns.com", "xx2.alidns.com"]
+            sample: 
+                dns_servers:
+                    dns_server: 
+                     - xx1.alidns.com
+                     - xx2.alidns.com
         domain_name:
             description: The name of domain.
             returned: always
-            type: string
+            type: str
             sample: ansiblexxx.abc
         name:
             description: alias of 'domain_name'.
             returned: always
-            type: string
+            type: str
             sample: ansiblexxx.abc
         id:
             description: alias of 'domain_id'.
             returned: always
-            type: string
+            type: str
             sample: dns-c2e00da5
         puny_code:
             description: Chinese domain name punycode code, English domain name returned empty
@@ -104,7 +110,7 @@ dns:
         remark:
             description: A comment for dns
             returned: always
-            type: string
+            type: str
             sample: ansible_test_dns_domain
         starmark:
             description: Whether to query the domain name star.
@@ -114,17 +120,17 @@ dns:
         domain_id:
             description: DNS resource id
             returned: always
-            type: string
+            type: str
             sample: dns-c2e00da5
         version_code:
             description: Cloud resolution version Code
             returned: always
-            type: string
+            type: str
             sample: mianfei
         version_name:
             description: Cloud resolution product name
             returned: always
-            type: string
+            type: str
             sample: Alibaba Cloud DNS
 '''
 

@@ -28,7 +28,7 @@ DOCUMENTATION = '''
 ---
 module: ali_ess_instance
 version_added: "1.5.0"
-short_description: Add or Remove several ECS instances in Alibaba Cloud ESS
+short_description: Add or Remove several ECS instances in ESS
 description:
     - Add several ECS instances to a specified scaling group;
       Remove several ECS instances from a specified scaling group.
@@ -58,8 +58,8 @@ options:
 author:
     - "He Guimin (@xiaozhu36)"
 requirements:
-    - "python >= 3.6"
-    - "footmark >= 1.15.0"
+    - "python >= 2.6"
+    - "footmark >= 1.3.0"
 notes:
   - If both I(instance_ids) and I(creation_type) are not specified, the module will remove all of ECS instnaces in the
     specified Scaling Group when C(state=absent).

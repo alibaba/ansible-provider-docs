@@ -1,4 +1,6 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 # Copyright (c) 2017-present Alibaba Group Holding Limited. He Guimin <heguimin36@163.com.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 #
@@ -17,6 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible. If not, see http://www.gnu.org/licenses/.
 
+from __future__ import (absolute_import, division, print_function)
 
 __metaclass__ = type
 
@@ -27,8 +30,7 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = '''
 ---
 module: ali_image_info
-version_added: "1.5.0"
-short_description: Gather facts on images of Alibaba Cloud ECS
+short_description: Gather facts on images of Alibaba Cloud ECS.
 description:
      - This module fetches data from the Open API in Alicloud.
        The module must be called from within the ECS image itself.
@@ -37,11 +39,15 @@ options:
     image_ids:
       description:
         - A list of ECS image ids.
-      aliases: [ "ids" ]
+      aliases: ["ids"]
+      type: list
+      elements: str
     image_names:
       description:
         - A list of ECS image names.
-      aliases: [ "names" ]
+      aliases: ["names"]
+      type: list
+      elements: str
 author:
     - "He Guimin (@xiaozhu36)"
 requirements:
@@ -53,45 +59,16 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 # Fetch disk details according to setting different filters
-- name: Fetch image details example
-  hosts: localhost
-  vars:
-    alicloud_access_key: <your-alicloud-access-key>
-    alicloud_secret_key: <your-alicloud-secret-key>
-    alicloud_region: cn-beijing
-    image_ids:
-      - m-2zeddnvf7uhw3xwcr6dl
-      - m-2zeirrrgvh8co3z364f0
-    image_names:
-      - test_image_1
-      - test_image_2
-  tasks:
-    - name: Find all images in the specified region
-      ali_image_info:
-        alicloud_access_key: '{{ alicloud_access_key }}'
-        alicloud_secret_key: '{{ alicloud_secret_key }}'
-        alicloud_region: '{{ alicloud_region }}'
-      register: images_by_region
-    - debug: var=images_by_region
+- name: Find all images in the specified region
+  ali_image_info:
 
-    - name: Find all images in the specified region by image ids
-      ali_image_info:
-        alicloud_access_key: '{{ alicloud_access_key }}'
-        alicloud_secret_key: '{{ alicloud_secret_key }}'
-        alicloud_region: '{{ alicloud_region }}'
-        image_ids: '{{ image_ids }}'
-      register: images_by_ids
-    - debug: var=images_by_ids
+- name: Find all images in the specified region by image ids
+  ali_image_info:
+    image_ids: '{{ image_ids }}'
 
-    - name: Find all images in the specified region by image names
-      ali_image_info:
-        alicloud_access_key: '{{ alicloud_access_key }}'
-        alicloud_secret_key: '{{ alicloud_secret_key }}'
-        alicloud_region: '{{ alicloud_region }}'
-        image_names: '{{ image_names }}'
-      register: images_by_names
-    - debug: var=images_by_names
-
+- name: Find all images in the specified region by image names
+  ali_image_info:
+    image_names: '{{ image_names }}'
 '''
 
 RETURN = '''
@@ -99,7 +76,7 @@ image_ids:
     description: List all image's id after operating ecs image.
     returned: when success
     type: list
-    sample: [ "m-2zeddnvf7uhw3xwcr6dl", "m-2zeirrrgvh8co3z364f0" ]
+    sample: ["m-2zeddnvf7uhw3xwcr6dl", "m-2zeirrrgvh8co3z364f0"]
 images:
     description: Details about the ecs images.
     returned: when success
@@ -188,7 +165,7 @@ total:
 '''
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.alicloud_ecs import get_acs_connection_info, ecs_argument_spec, ecs_connect
+from ansible.module_utils.alicloud_ecs import ecs_argument_spec, ecs_connect
 
 HAS_FOOTMARK = False
 
@@ -234,8 +211,8 @@ def get_info(image):
 def main():
     argument_spec = ecs_argument_spec()
     argument_spec.update(dict(
-        image_ids=dict(type='list', aliases=['ids']),
-        image_names=dict(type='list', aliases=['names']),
+        image_ids=dict(type='list', elements='str', aliases=['ids']),
+        image_names=dict(type='list', elements='str', aliases=['names']),
     )
     )
     module = AnsibleModule(argument_spec=argument_spec)

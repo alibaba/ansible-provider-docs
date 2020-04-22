@@ -1,4 +1,6 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 # Copyright (c) 2017-present Alibaba Group Holding Limited. He Guimin <heguimin36@163.com.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 #
@@ -17,6 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible. If not, see http://www.gnu.org/licenses/.
 
+from __future__ import (absolute_import, division, print_function)
 
 __metaclass__ = type
 
@@ -27,7 +30,6 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = """
 ---
 module: ali_ram_user
-version_added: "2.9"
 short_description: Create, Delete, Update Ram User in Alibaba Cloud.
 description:
     - Create, Delete, Update Ram User in Alibaba Cloud.
@@ -39,39 +41,40 @@ options:
       - If I(state=absent), user will be removed.
     choices: ['present', 'absent']
     default: 'present'
+    type: str
   user_name:
     description:
       - The username. It must be 1 to 64 characters in length.
-      - This is used to determine if the user already exists.
+      - One of I(user_name) and I(user_id) must be specified when operate existing user.
     aliases: ['name']
-    required: True
+    type: str
+  user_id:
+    description:
+      - The ID of user.
+      - One of I(user_name) and I(user_id) must be specified when operate existing user.
+    aliases: ['id']
+    type: str
   display_name:
     description:
       - The display name. It must be 1 to 128 characters in length.
+    type: str
   mobile_phone:
     description:
       - The mobile phone number of the RAM user. International area code-mobile phone number.
+    type: str
+    aliases: ['phone']
   email:
     description:
       - The email address of the RAM user.
+    type: str
   comments:
     description:
       - The comment. It must be 1 to 128 characters in length.
+    type: str
   new_user_name:
     description:
       - The new username of the new RAM user. It must be 1 to 64 characters in length.
-  new_mobile_phone:
-    description:
-      - The new mobile phone number of the RAM user. International area code-mobile phone number.
-  new_display_name:
-    description:
-      - The new display name. It must be 1 to 128 characters in length.
-  new_email:
-    description:
-      - The new email address of the RAM user.
-  new_comments:
-    description:
-      - The new comment. It must be 1 to 128 characters in length.
+    type: str
 requirements:
     - "python >= 3.6"
     - "footmark >= 1.17.0"
@@ -112,48 +115,48 @@ user:
         user_name:
             description: The username.
             returned: always
-            type: string
+            type: str
             sample: Alice
         name:
             description: alias of 'user_name'.
             returned: always
-            type: string
+            type: str
             sample: Alice
         user_id:
             description: The ID of the RAM user.
             returned: always
-            type: string
+            type: str
             sample: 122748924538****
         id:
             description: alias of 'user_id'.
             returned: always
-            type: string
+            type: str
             sample: 122748924538****
         mobile_phone:
             description: The mobile phone number of the RAM user.
             returned: always
-            type: string
+            type: str
             sample: 86-1860000****
         phone:
             description: alias of 'mobile_phone'.
             returned: always
-            type: string
+            type: str
             sample: vpc-c2e00da5
         email:
             description: The email address of the RAM user.
             returned: always
-            type: string
+            type: str
             sample: alice@example.com
         display_name:
             description: The display name.
             returned: always
-            type: string
+            type: str
             sample: Alice
         create_date:
             description: The date and time when the RAM user was created.
             returned: always
-            type: string
-            sample: 2015-01-23T12:33:18Z
+            type: str
+            sample: '2015-01-23T12:33:18Z'
         comments:
             description: The comment.
             returned: always
@@ -161,7 +164,6 @@ user:
             sample: ansible test
 '''
 
-import time
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.alicloud_ecs import ecs_argument_spec, ram_connect
 
@@ -174,12 +176,16 @@ except ImportError:
     HAS_FOOTMARK = False
 
 
-def user_exists(module, ram_conn, user_name):
+def user_exists(module, ram_conn, user_name, user_id):
     try:
+        user = None
         for u in ram_conn.list_users():
-            if u.name == user_name:
-                return u
-        return None
+            if user_name and u.name != user_name:
+                continue
+            if user_id and u.user_id != user_id:
+                continue
+            user = u
+        return user
     except Exception as e:
         module.fail_json(msg="Failed to describe Users: {0}".format(e))
 
@@ -188,16 +194,13 @@ def main():
     argument_spec = ecs_argument_spec()
     argument_spec.update(dict(
         state=dict(default='present', choices=['present', 'absent']),
-        user_name=dict(type='str', required=True, aliases=['name']),
+        user_name=dict(type='str', aliases=['name']),
+        user_id=dict(type='str', aliases=['id']),
         display_name=dict(type='str'),
         mobile_phone=dict(type='str', aliases=['phone']),
         email=dict(type='str'),
         comments=dict(type='str'),
-        new_user_name=dict(type='str'),
-        # new_mobile_phone=dict(type='str'),
-        # new_display_name=dict(type='str'),
-        # new_email=dict(type='str'),
-        # new_comments=dict(type='str')
+        new_user_name=dict(type='str')
     ))
 
     module = AnsibleModule(argument_spec=argument_spec)
@@ -210,10 +213,11 @@ def main():
     # Get values of variable
     state = module.params['state']
     user_name = module.params['user_name']
+    user_id = module.params['user_id']
     changed = False
 
     # Check if user exists
-    user = user_exists(module, ram_conn, user_name)
+    user = user_exists(module, ram_conn, user_name, user_id)
 
     if state == 'absent':
         if not user:

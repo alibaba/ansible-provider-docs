@@ -1,4 +1,6 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 # Copyright (c) 2017-present Alibaba Group Holding Limited. He Guimin <heguimin36@163.com.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 #
@@ -17,6 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible. If not, see http://www.gnu.org/licenses/.
 
+from __future__ import (absolute_import, division, print_function)
 
 __metaclass__ = type
 
@@ -27,7 +30,6 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = '''
 ---
 module: ali_ram_access_key_info
-version_added: "2.9"
 short_description: List the AccessKeys of a RAM user in Alibaba Cloud.
 description:
      - List the AccessKeys of a RAM user.
@@ -36,6 +38,8 @@ options:
     description:
       - The username of the RAM user. If this parameter is not set when the user logs on to the console, 
         the AccessKeys of this user are displayed.
+    type: str
+    aliases: ['name']
 author:
     - "He Guimin (@xiaozhu36)"
 requirements:
@@ -60,22 +64,22 @@ RETURN = '''
 users:
     description: Returns an array of complex objects as described below.
     returned: always
-    type: list
+    type: complex
     contains:
         access_key_id:
             description: The AccessKeyId.
             returned: always
-            type: string
+            type: str
             sample: 0wNEpMMlzy7s****
         create_date:
             description: The date and time when the AccessKey was created.
             returned: always
-            type: string
-            sample: 2015-01-23T12:33:18Z
+            type: str
+            sample: '2015-01-23T12:33:18Z'
         status:
             description: The status of the AccessKey.
             returned: always
-            type: string
+            type: str
             sample: Active
 '''
 
@@ -94,8 +98,8 @@ except ImportError:
 def main():
     argument_spec = ecs_argument_spec()
     argument_spec.update(dict(
-        user_name=dict(type='str'), aliases=['name'])
-    )
+        user_name=dict(type='str', aliases=['name'])
+    ))
     module = AnsibleModule(argument_spec=argument_spec)
 
     if HAS_FOOTMARK is False:

@@ -1,4 +1,6 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 # Copyright (c) 2017-present Alibaba Group Holding Limited. He Guimin <heguimin36@163.com.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 #
@@ -17,6 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible. If not, see http://www.gnu.org/licenses/.
 
+from __future__ import (absolute_import, division, print_function)
 
 __metaclass__ = type
 
@@ -27,8 +30,7 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = '''
 ---
 module: ali_slb_vsg_info
-version_added: "2.8"
-short_description: Gather facts on virtual server group of Alibaba Cloud SLB
+short_description: Gather facts on virtual server group of Alibaba Cloud SLB.
 description:
      - This module fetches virtual server groups data from the Open API in Alibaba Cloud.
 options:
@@ -37,19 +39,23 @@ options:
       - ID of server load balancer.
     required: true
     aliases: ["lb_id"]
+    type: str
   vserver_group_ids:
     description:
       - A list of SLB vserver group ids.
     required: false
     aliases: ["group_ids", "ids"]
+    type: list
+    elements: str
   name_prefix:
     description:
       - Use a vritual server group name prefix to filter vserver groups.
+    type: str
 author:
     - "He Guimin (@xiaozhu36)"
 requirements:
     - "python >= 3.6"
-    - "footmark >= 1.15.0"
+    - "footmark >= 1.19.0"
 extends_documentation_fragment:
     - alicloud
 '''
@@ -87,9 +93,8 @@ vserver_groups:
         address:
             description: The IP address of the loal balancer
             returned: always
-            type: string
+            type: str
             sample: "47.94.26.126"
-
         backend_servers:
             description: The load balancer's backend servers
             returned: always
@@ -103,12 +108,12 @@ vserver_groups:
                 server_id:
                     description: The backend server id
                     returned: always
-                    type: string
+                    type: str
                     sample: "i-vqunci342"
                 type:
                     description: The backend server type, ecs or eni
                     returned: always
-                    type: string
+                    type: str
                     sample: "ecs"
                 weight:
                     description: The backend server weight
@@ -118,27 +123,27 @@ vserver_groups:
         id:
             description: The ID of the virtual server group was created. Same as vserver_group_id.
             returned: always
-            type: string
+            type: str
             sample: "rsp-2zehblhcv"
         vserver_group_id:
             description: The ID of the virtual server group was created.
             returned: always
-            type: string
+            type: str
             sample: "rsp-2zehblhcv"
         vserver_group_name:
             description: The name of the virtual server group was created.
             returned: always
-            type: string
+            type: str
             sample: "ansible-ali_slb_vsg"
         name:
             description: The name of the virtual server group was created.
             returned: always
-            type: string
+            type: str
             sample: "ansible-ali_slb_vsg"
         tags:
             description: The load balancer tags
             returned: always
-            type: complex
+            type: dict
             sample: {}
 '''
 
@@ -158,7 +163,7 @@ def main():
     argument_spec = ecs_argument_spec()
     argument_spec.update(dict(
         load_balancer_id=dict(type='str', aliases=['lb_id'], required=True),
-        vserver_group_ids=dict(type='list', aliases=['group_ids', 'ids']),
+        vserver_group_ids=dict(type='list', elements='str', aliases=['group_ids', 'ids']),
         name_prefix=dict(type='str')
     ))
     module = AnsibleModule(argument_spec=argument_spec)

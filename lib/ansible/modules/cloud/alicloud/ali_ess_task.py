@@ -28,7 +28,7 @@ DOCUMENTATION = '''
 ---
 module: ali_ess_task
 version_added: "1.5.0"
-short_description: Create or Terminate an scheduled task in Alibaba Cloud ESS
+short_description: Create or Terminate an scheduled task in ESS.
 description:
     - A scheduled task used to execute scaling activity in a scaling group automatically.
     - At most 20 scheduled tasks can be specified in a account.
@@ -109,8 +109,8 @@ options:
 author:
     - "He Guimin (@xiaozhu36)"
 requirements:
-    - "python >= 3.6"
-    - "footmark >= 1.15.0"
+    - "python >= 2.6"
+    - "footmark >= 1.3.0"
 extends_documentation_fragment:
     - alicloud
 '''

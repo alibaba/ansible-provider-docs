@@ -1,4 +1,6 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 # Copyright (c) 2017-present Alibaba Group Holding Limited. He Guimin <heguimin36@163.com.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 #
@@ -27,38 +29,42 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = '''
 ---
 module: ali_slb_lb_info
-version_added: "2.8"
-short_description: Gather facts on server load balancer of Alibaba Cloud
+version_added: "2.9"
+short_description: Gather facts on server load balancer of Alibaba Cloud.
 description:
      - This module fetches data from the Open API in Alicloud.
        The module must be called from within the SLB itself.
-
 options:
   load_balancer_name:
     description:
       - (Deprecated) A list of server laod balancer names. New option `name_prefix` instead.
     aliases: ["name"]
+    type: list
   load_balancer_ids:
     description:
       - A list of load balancer IDs to gather facts for.
     aliases: ['ids']
+    type: list
   name_prefix:
     description:
       - Use a load balancer name prefix to filter load balancers.
+    type: str
   filters:
     description:
       - A dict of filters to apply. Each dict item consists of a filter key and a filter value. The filter keys can be
         all of request parameters. See U(https://www.alibabacloud.com/help/doc-detail/27582.htm) for parameter details.
         Filter keys can be same as request parameter name or be lower case and use underscores ("_") or dashes ("-") to
         connect different words in one parameter. 'LoadBalancerId' will be appended to I(load_balancer_ids) automatically.
+    type: dict
   tags:
     description:
-      - A hash/dictionaries of slb tags. C({"key":"value"})
+      - A hash/dictionaries of eip tags. C({"key":"value"})
+    type: dict
 author:
     - "He Guimin (@xiaozhu36)"
 requirements:
     - "python >= 3.6"
-    - "footmark >= 1.15.0"
+    - "footmark >= 1.16.0"
 extends_documentation_fragment:
     - alicloud
 '''
@@ -97,17 +103,17 @@ load_balancers:
         address:
             description: The IP address of the loal balancer
             returned: always
-            type: string
+            type: str
             sample: "47.94.26.126"
         address_ipversion:
             description: The IP address version. IPV4 or IPV6.
             returned: always
-            type: string
+            type: str
             sample: "ipv4"
         address_type:
             description: The load balancer internet type
             returned: always
-            type: string
+            type: str
             sample: "internet"
         backend_servers:
             description: The load balancer's backend servers
@@ -117,7 +123,7 @@ load_balancers:
                 server_id:
                     description: The backend server id
                     returned: always
-                    type: string
+                    type: str
                     sample: "i-vqunci342"
                 weight:
                     description: The backend server weight
@@ -127,7 +133,7 @@ load_balancers:
                 description:
                     description: The backend server description
                     returned: always
-                    type: string
+                    type: str
                     sample: ""
                 type:
                     description: The backend server type, ecs or eni
@@ -142,22 +148,22 @@ load_balancers:
         create_time:
             description: The time of the load balancer was created
             returned: always
-            type: string
+            type: str
             sample: "2019-01-02T02:37:41Z"
         end_time:
             description: The time of the load balancer will be released
             returned: always
-            type: string
+            type: str
             sample: "2999-09-08T16:00:00Z"
         id:
             description: The ID of the load balancer was created. Same as load_balancer_id.
             returned: always
-            type: string
+            type: str
             sample: "lb-2zea9ohgtf"
         internet_charge_type:
             description: The load balancer internet charge type
             returned: always
-            type: string
+            type: str
             sample: "PayByTraffic"
         listeners:
             description: The listeners of the load balancer.
@@ -173,12 +179,12 @@ load_balancers:
                 listener_protocol:
                     description: The frontend protocol used by the SLB instance.
                     returned: always
-                    type: string
+                    type: str
                     sample: tcp
                 listener_forward:
                     description: Whether to enable listener forwarding.
                     returned: always
-                    type: string
+                    type: str
                     sample: ""
                 forward_port:
                     description: The destination listening port. It must be an existing HTTPS listening port.
@@ -188,62 +194,62 @@ load_balancers:
         load_balancer_id:
             description: The ID of the load balancer was created.
             returned: always
-            type: string
+            type: str
             sample: "lb-2zea9ohgtf"
         load_balancer_name:
             description: The name of the load balancer was created.
             returned: always
-            type: string
+            type: str
             sample: "ansible-ali_slb_lb"
         load_balancer_status:
             description: The load balancer current status.
             returned: always
-            type: string
+            type: str
             sample: "active"
         master_zone_id:
             description: The ID of the primary zone.
             returned: always
-            type: string
+            type: str
             sample: "cn-beijing-a"
         name:
             description: The name of the load balancer was created.
             returned: always
-            type: string
+            type: str
             sample: "ansible-ali_slb_lb"
         network_type:
             description: The network type of the load balancer was created.
             returned: always
-            type: string
+            type: str
             sample: "classic"
         pay_type:
             description: The load balancer instance charge type.
             returned: always
-            type: string
+            type: str
             sample: "PostPaid"
         resource_group_id:
             description: The resource group of the load balancer belongs.
             returned: always
-            type: string
+            type: str
             sample: "rg-acfmwvvtg5owavy"
         slave_zone_id:
             description: The ID of the backup zone
             returned: always
-            type: string
+            type: str
             sample: "cn-beijing-d"
         tags:
             description: The load balancer tags
             returned: always
-            type: complex
+            type: dict
             sample: {}
         vpc_id:
             description: The vpc of the load balancer belongs.
             returned: always
-            type: string
+            type: str
             sample: "vpc-fn3nc3"
         vswitch_id:
             description: The vswitch of the load balancer belongs.
             returned: always
-            type: string
+            type: str
             sample: "vsw-c3nc3r"
 '''
 
@@ -266,7 +272,8 @@ def main():
         load_balancer_name=dict(type='list', aliases=['name']),
         load_balancer_ids=dict(type='list', aliases=['ids']),
         name_prefix=dict(type='str'),
-        filters=dict(type='dict')
+        filters=dict(type='dict'),
+        tags=dict(type='dict')
     ))
 
     module = AnsibleModule(argument_spec=argument_spec)
@@ -279,8 +286,20 @@ def main():
         lb_ids = []
     name_prefix = module.params['name_prefix']
     filters = module.params['filters']
+
     if not filters:
         filters = {}
+
+    res = []
+    tags = module.params['tags']
+    if tags:
+        for key, value in tags.items():
+            tmp = {}
+            tmp['tagKey'] = key
+            tmp['tagValue'] = value
+            res.append(tmp)
+        filters['tags'] = res
+
     for key, value in list(filters.items()):
         if key in ["LoadBalancerId", "load-balancer-id", "load_balancer_id"] and value not in lb_ids:
             lb_ids.append(value)
