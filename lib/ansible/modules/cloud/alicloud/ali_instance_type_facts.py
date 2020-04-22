@@ -28,7 +28,7 @@ DOCUMENTATION = '''
 ---
 module: ali_instance_type_facts
 version_added: "1.5.0"
-short_description: Gather facts of instance types provided by Alibaba Cloud ECS
+short_description: Gather facts of instance types provided by Alibaba Cloud ECS.
 description:
      - This module fetches data from the Open API in Alicloud.
 
@@ -56,8 +56,8 @@ options:
 author:
     - "He Guimin (@xiaozhu36)"
 requirements:
-    - "python >= 3.6"
-    - "footmark >= 1.15.0"
+    - "python >= 2.6"
+    - "footmark >= 1.1.16"
 extends_documentation_fragment:
     - alicloud
 '''

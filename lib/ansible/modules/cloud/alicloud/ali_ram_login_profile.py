@@ -1,4 +1,6 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 # Copyright (c) 2017-present Alibaba Group Holding Limited. He Guimin <heguimin36@163.com.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 #
@@ -17,6 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible. If not, see http://www.gnu.org/licenses/.
 
+from __future__ import (absolute_import, division, print_function)
 
 __metaclass__ = type
 
@@ -27,7 +30,6 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = """
 ---
 module: ali_ram_login_profile
-version_added: "2.9"
 short_description: Create, Delete, Update Ram login profile in Alibaba Cloud.
 description:
     - Create, Delete, Update Ram login profile in Alibaba Cloud.
@@ -38,25 +40,32 @@ options:
       - If I(state=present) and login profile exists, it will be updated.
       - If I(state=absent), ram login profile will be removed.
     default: 'present'
+    choices: ['present', 'absent']
+    type: str
   user_name:
     description:
       - The username.
     aliases: ['name']
     required: True
+    type: str
   password:
     description:
-      - The password. 
+      - The password.
+    type: str 
   new_password:
     description:
-      - The new password. Required when update password. 
+      - The new password. Required when update password.
+    type: str
   password_reset_required:
     description:
-      - Specifies whether you need to change your password upon logon
+      - Specifies whether you need to change your password upon logon.
     default: False
+    type: bool
   mfa_bind_required:
     description:
       - Specifies whether you need to attach an MFA device upon the next logon.
     default: False
+    type: bool
 requirements:
     - "python >= 3.6"
     - "footmark >= 1.17.0"
@@ -94,8 +103,8 @@ user:
         create_date:
             description: The creation time.
             returned: always
-            type: string
-            sample: 2015-01-23T12:33:18Z
+            type: str
+            sample: '2015-01-23T12:33:18Z'
         mfabind_required:
             description: Indicates that you must attach an MFA device.
             returned: always
@@ -109,7 +118,7 @@ user:
         user_name:
             description: The username.
             returned: always
-            type: string
+            type: str
             sample: Alice
 '''
 from ansible.module_utils.basic import AnsibleModule
@@ -183,3 +192,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+

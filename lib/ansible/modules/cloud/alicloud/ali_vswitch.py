@@ -1,4 +1,6 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 # Copyright (c) 2017-present Alibaba Group Holding Limited. He Guimin <heguimin36@163.com.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 #
@@ -17,6 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible. If not, see http://www.gnu.org/licenses/.
 
+from __future__ import (absolute_import, division, print_function)
 
 __metaclass__ = type
 
@@ -27,7 +30,6 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = """
 ---
 module: ali_vswitch
-version_added: "2.8"
 short_description: Manage subnet in Alibaba Cloud virtual private cloud(VPC)
 description:
     - Manage subnet in Alibaba Cloud virtual private cloud(VPC).
@@ -38,37 +40,45 @@ options:
       -  Create or delete vswitch.
     choices: ['present', 'absent']
     default: 'present'
+    type: str
   zone_id:
     description:
       - Aliyun availability zone ID which to launch the vswitch or list vswitches.
         It is required when creating a new vswitch.
-    aliases: [ 'availability_zone', 'alicloud_zone' ]
+    aliases: ['availability_zone', 'alicloud_zone']
+    type: str
   vpc_id:
     description:
       - The ID of a VPC to which that Vswitch belongs.
         This is used in combination with C(cidr_block) to determine if a VSwitch already exists.
     required: True
+    type: str
   cidr_block:
     description:
       - The CIDR block representing the Vswitch e.g. 10.0.0.0/8. The value must be sub cidr_block of Vpc.
         This is used in conjunction with the C(vpc_id) to ensure idempotence.
     required: True
+    type: str
   name:
     description:
       - The name of vswitch, which is a string of 2 to 128 Chinese or English characters. It must begin with an
         uppercase/lowercase letter or a Chinese character and can contain numerals, "_" or "-".
         It cannot begin with http:// or https://.
-    aliases: [ 'vswitch_name', 'subnet_name' ]
+    aliases: ['vswitch_name', 'subnet_name']
+    type: str
   description:
     description:
       - The description of vswitch, which is a string of 2 to 256 characters. It cannot begin with http:// or https://.
+    type: str
   vswitch_id:
     description:
-      - (Deprecated) VSwitch ID.
+      - VSwitch ID.
     aliases: ['subnet_id', 'id']
+    type: str
   tags:
     description:
       - A hash/dictionaries of vswitch tags. C({"key":"value"})
+    type: dict
   purge_tags:
     description:
       - Delete existing tags on the vswitch that are not specified in the task.
@@ -77,29 +87,28 @@ options:
     type: bool
 requirements:
     - "python >= 3.6"
-    - "footmark >= 1.15.0"
+    - "footmark >= 1.13.0"
 extends_documentation_fragment:
     - alicloud
 author:
   - "He Guimin (@xiaozhu36)"
-
 """
 
 EXAMPLES = """
 # Note: These examples do not set authentication details, see the Alibaba Cloud Guide for details.
-- name: create a new vswitch
+- name: Create a new vswitch
   ali_vswitch:
     cidr_block: '{{ cidr_blok }}'
     name: 'my-vsw'
     vpc_id: 'vpc-abc12345'
 
-- name: modify the existing vswitch
+- name: Modify the existing vswitch
   ali_vswitch:
     cidr_block: '{{ cidr_blok }}'
     vpc_id: 'vpc-abc12345'
     name: 'my-vsw-from-ansible'
 
-- name: delete the existing vswitch
+- name: Delete the existing vswitch
   ali_vswitch:
     cidr_block: '{{ cidr_blok }}'
     vpc_id: 'vpc-abc12345'
@@ -115,22 +124,22 @@ vswitch:
         id:
             description: alias of vswitch_id
             returned: always
-            type: string
+            type: str
             sample: vsw-b883b2c4
         cidr_block:
             description: The IPv4 CIDR of the VSwitch
             returned: always
-            type: string
+            type: str
             sample: "10.0.0.0/16"
         zone_id:
             description: Availability zone of the VSwitch
             returned: always
-            type: string
+            type: str
             sample: cn-beijing-a
         state:
             description: state of the Subnet
             returned: always
-            type: string
+            type: str
             sample: available
         is_default:
             description: indicates whether this is the default VSwitch
@@ -145,33 +154,33 @@ vswitch:
         vpc_id:
             description: the id of the VPC where this VSwitch exists
             returned: always
-            type: string
+            type: str
             sample: vpc-67236184
         available_ip_address_count:
             description: number of available IPv4 addresses
             returned: always
-            type: string
+            type: str
             sample: 250
         vswitch_id:
             description: VSwitch resource id
             returned: always
-            type: string
+            type: str
             sample: vsw-b883b2c4
         subnet_id:
             description: alias of vswitch_id
             returned: always
-            type: string
+            type: str
             sample: vsw-b883b2c4
         vswitch_name:
             description: VSwitch resource name
             returned: always
-            type: string
+            type: str
             sample: my-vsw
         creation_time:
             description: The time the VSwitch was created.
             returned: always
-            type: string
-            sample: 2018-06-24T15:14:45Z
+            type: str
+            sample: '2018-06-24T15:14:45Z'
 '''
 
 import time
@@ -187,27 +196,30 @@ except ImportError:
     HAS_FOOTMARK = False
 
 
-def vswitch_exists(conn, module, vpc_id, cidr):
+def vswitch_exists(conn, module, vswitch_id, vpc_id, cidr):
     try:
-        for vsw in conn.describe_vswitches(vpc_id=vpc_id):
-            if vsw.cidr_block == cidr:
-                return vsw
+        for vsw in conn.describe_vswitches():
+            if cidr and vsw.cidr_block != cidr:
+                continue
+            if vpc_id and vpc_id != vsw.vpc_id:
+                continue
+            if vswitch_id and vswitch_id != vsw.vswitch_id:
+                continue
+            return vsw
     except Exception as e:
         module.fail_json(msg="Couldn't get matching subnet: {0}".format(e))
-
-    return None
 
 
 def main():
     argument_spec = ecs_argument_spec()
     argument_spec.update(dict(
         state=dict(default='present', choices=['present', 'absent']),
-        cidr_block=dict(required=True),
-        description=dict(),
-        zone_id=dict(aliases=['availability_zone', 'alicloud_zone']),
-        vpc_id=dict(required=True),
-        name=dict(aliases=['vswitch_name', 'subnet_name']),
-        vswitch_id=dict(aliases=['subnet_id', 'id']),
+        cidr_block=dict(type='str', required=True),
+        description=dict(type='str'),
+        zone_id=dict(type='str', aliases=['availability_zone', 'alicloud_zone']),
+        vpc_id=dict(type='str', required=True),
+        name=dict(type='str', aliases=['vswitch_name', 'subnet_name']),
+        vswitch_id=dict(type='str', aliases=['subnet_id', 'id']),
         tags=dict(type='dict'),
         purge_tags=dict(type='bool', default=False)
     ))
@@ -221,9 +233,10 @@ def main():
 
     # Get values of variable
     state = module.params['state']
+    vswitch_id = module.params['vswitch_id']
 
     changed = False
-    vswitch = vswitch_exists(vpc, module, module.params['vpc_id'], module.params['cidr_block'])
+    vswitch = vswitch_exists(vpc, module, vswitch_id,  module.params['vpc_id'], module.params['cidr_block'])
 
     if state == 'absent':
         if not vswitch:

@@ -1,4 +1,6 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 # Copyright (c) 2017-present Alibaba Group Holding Limited. He Guimin <heguimin36@163.com.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 #
@@ -17,6 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible. If not, see http://www.gnu.org/licenses/.
 
+from __future__ import (absolute_import, division, print_function)
 
 __metaclass__ = type
 
@@ -27,7 +30,6 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = """
 ---
 module: ali_vpc
-version_added: "2.8"
 short_description: Configure Alibaba Cloud virtual private cloud(VPC)
 description:
     - Create, Delete Alicloud virtual private cloud(VPC).
@@ -37,6 +39,7 @@ options:
     description:
       -  Whether or not to create, delete VPC.
     choices: ['present', 'absent']
+    type: str
     default: 'present'
   name:
     description:
@@ -44,22 +47,29 @@ options:
         uppercase/lowercase letter or a Chinese character and can contain numerals, "_" or "-".
         It cannot begin with http:// or https://.
         This is used in combination with C(cidr_block) to determine if a VPC already exists.
-    aliases: [ 'vpc_name' ]
+    aliases: ['vpc_name']
     required: True
+    type: str
+  vpc_id:
+    description:
+      - The id of VPC, required when operate existing vpc.
+    type: str
+    aliases: ['id']
   description:
     description:
       - The description of VPC, which is a string of 2 to 256 characters. It cannot begin with http:// or https://.
+    type: str
   cidr_block:
     description:
       - The primary CIDR of the VPC. This is used in conjunction with the C(name) to ensure idempotence.
-    aliases: [ 'cidr' ]
+    aliases: ['cidr']
     required: True
+    type: str
   user_cidrs:
     description:
       - List of user custom cidr in the VPC. It no more than three.
-  vpc_id:
-    description:
-      - (Deprecated) The ID of a VPC.
+    type: list
+    elements: str
   multi_ok:
     description:
       - By default the module will not create another VPC if there is another VPC with the same name and CIDR block.
@@ -76,6 +86,7 @@ options:
   tags:
     description:
       - A hash/dictionaries of vpc tags. C({"key":"value"})
+    type: dict
   purge_tags:
     description:
       - Delete existing tags on the vpc that are not specified in the task.
@@ -83,32 +94,32 @@ options:
     default: False
     type: bool
 notes:
-  - There will be launch a virtual router along with creating a vpc successfully.
-  - There is only one virtual router in one vpc and one route table in one virtual router.
+    - There will be launch a virtual router along with creating a vpc successfully.
+    - There is only one virtual router in one vpc and one route table in one virtual router.
 requirements:
     - "python >= 3.6"
-    - "footmark >= 1.15.0"
+    - "footmark >= 1.14.1"
 extends_documentation_fragment:
     - alicloud
 author:
-  - "He Guimin (@xiaozhu36)"
+    - "He Guimin (@xiaozhu36)"
 """
 
 EXAMPLES = """
 # Note: These examples do not set authentication details, see the Alibaba Cloud Guide for details.
-- name: create a new vpc
+- name: Create a new vpc
   ali_vpc:
     cidr_block: '192.168.0.0/16'
     name: 'Demo_VPC'
     description: 'Demo VPC'
 
-- name: choose the latest VPC as target when there are several vpcs with same name and cidr block
+- name: Choose the latest VPC as target when there are several vpcs with same name and cidr block
   ali_vpc:
     cidr_block: '192.168.0.0/16'
     name: 'Demo_VPC'
     recent: True
 
-- name: delete a vpc
+- name: Delete a vpc
   ali_vpc:
     state: absent
     cidr_block: '192.168.0.0/16'
@@ -124,22 +135,22 @@ vpc:
         cidr_block:
             description: The CIDR of the VPC
             returned: always
-            type: string
+            type: str
             sample: 10.0.0.0/8
         creation_time:
             description: The time the VPC was created.
             returned: always
-            type: string
-            sample: 2018-06-24T15:14:45Z
+            type: str
+            sample: '2018-06-24T15:14:45Z'
         description:
             description: The VPC description.
             returned: always
-            type: string
+            type: str
             sample: "my ansible vpc"
         id:
             description: alias of 'vpc_id'.
             returned: always
-            type: string
+            type: str
             sample: vpc-c2e00da5
         is_default:
             description: indicates whether this is the default VPC
@@ -149,12 +160,12 @@ vpc:
         state:
             description: state of the VPC
             returned: always
-            type: string
+            type: str
             sample: available
         tags:
             description: tags attached to the VPC, includes name
             returned: always
-            type: complex
+            type: dict
             sample:
         user_cidrs:
             description: The custom CIDR of the VPC
@@ -164,17 +175,17 @@ vpc:
         vpc_id:
             description: VPC resource id
             returned: always
-            type: string
+            type: str
             sample: vpc-c2e00da5
         vpc_name:
             description: Name of the VPC
             returned: always
-            type: string
+            type: str
             sample: my-vpc
         vrouter_id:
             description: The ID of virtual router which in the VPC
             returned: always
-            type: string
+            type: str
             sample: available
         vswitch_ids:
             description: List IDs of virtual switch which in the VPC
@@ -196,7 +207,7 @@ except ImportError:
     HAS_FOOTMARK = False
 
 
-def vpc_exists(module, vpc, name, cidr_block, multi, recent):
+def vpc_exists(module, vpc, vpc_id, name, cidr_block, multi, recent):
     """Returns None or a vpc object depending on the existence of a VPC. When supplied
     with a CIDR and Name, it will check them to determine if it is a match
     otherwise it will assume the VPC does not exist and thus return None.
@@ -206,8 +217,14 @@ def vpc_exists(module, vpc, name, cidr_block, multi, recent):
     matching_vpcs = []
     try:
         for v in vpc.describe_vpcs():
-            if v.cidr_block == cidr_block and v.vpc_name == name:
-                matching_vpcs.append(v)
+            if cidr_block and v.cidr_block != cidr_block:
+                continue
+            if name and v.vpc_name != name:
+                continue
+            if vpc_id and v.vpc_id != vpc_id:
+                continue
+            matching_vpcs.append(v)
+
     except Exception as e:
         module.fail_json(msg="Failed to describe VPCs: {0}".format(e))
 
@@ -227,11 +244,12 @@ def main():
     argument_spec = ecs_argument_spec()
     argument_spec.update(dict(
         state=dict(default='present', choices=['present', 'absent']),
-        cidr_block=dict(required=True, aliases=['cidr']),
-        user_cidrs=dict(type='list'),
-        name=dict(required=True, aliases=['vpc_name']),
+        cidr_block=dict(type='str', required=True, aliases=['cidr']),
+        user_cidrs=dict(type='list', elements='str'),
+        name=dict(type='str', required=True, aliases=['vpc_name']),
+        vpc_id=dict(type='str', aliases=['id']),
         multi_ok=dict(type='bool', default=False),
-        description=dict(),
+        description=dict(type='str'),
         recent=dict(type='bool', default=False),
         tags=dict(type='dict'),
         purge_tags=dict(type='bool', default=False)
@@ -248,6 +266,7 @@ def main():
     state = module.params['state']
     vpc_name = module.params['name']
     description = module.params['description']
+    vpc_id = module.params['vpc_id']
 
     if str(description).startswith('http://') or str(description).startswith('https://'):
         module.fail_json(msg='description can not start with http:// or https://')
@@ -257,7 +276,7 @@ def main():
     changed = False
 
     # Check if VPC exists
-    vpc = vpc_exists(module, vpc_conn, vpc_name, module.params['cidr_block'], module.params['multi_ok'], module.params['recent'])
+    vpc = vpc_exists(module, vpc_conn, vpc_id, vpc_name, module.params['cidr_block'], module.params['multi_ok'], module.params['recent'])
 
     if state == 'absent':
         if not vpc:

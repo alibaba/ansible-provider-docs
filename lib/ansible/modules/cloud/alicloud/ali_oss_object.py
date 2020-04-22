@@ -25,7 +25,7 @@ DOCUMENTATION = '''
 ---
 module: ali_oss_object
 version_added: "1.5.0"
-short_description: Manage object in Alibaba Cloud OSS
+short_description: Manage object in OSS
 description:
     - This module allows the user to manage OSS objects within bucket. Includes support for uploading and downloading
       objects, retrieving object keys.
@@ -74,8 +74,8 @@ options:
         Its format like 1-100 that indicates range from one to hundred bytes of object.
     aliases: [ 'range' ]
 requirements:
-    - "python >= 3.6"
-    - "footmark >= 1.15.0"
+    - "python >= 2.6"
+    - "footmark >= 1.1.16"
 extends_documentation_fragment:
     - alicloud
 author:

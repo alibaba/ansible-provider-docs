@@ -1,4 +1,6 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 # Copyright (c) 2017-present Alibaba Group Holding Limited. He Guimin <heguimin36@163.com.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 #
@@ -17,6 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible. If not, see http://www.gnu.org/licenses/.
 
+from __future__ import (absolute_import, division, print_function)
 
 __metaclass__ = type
 
@@ -27,7 +30,6 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = """
 ---
 module: ali_ram_role
-version_added: "2.9"
 short_description: Create, Delete, Update Ram Role in Alibaba Cloud.
 description:
     - Create, Delete, Update Role in Alibaba Cloud.
@@ -40,20 +42,30 @@ options:
       - If I(state=absent), role will be removed.
     choices: ['present', 'absent']
     default: 'present'
+    type: str
   role_name:
     description:
       - The name of the RAM role. The specified name can be up to 64 characters in length. Format(^[a-zA-Z0-9\. @\-]+$)
-      - This is used to determine if the Ram role already exists.
+      - One of I(role_name) and I(role_id) must be specified when operate existing role.
     aliases: ['name']
-    required: True
+    type: str
+  role_id:
+    description:
+      - The id of the RAM role.
+      - One of I(role_name) and I(role_id) must be specified when operate existing role.
+    aliases: ['id']
+    type: str
   assume_role_policy_document:
     description:
       - The policy text that specifies one or more entities entrusted to assume the RAM role. 
         The trusted entity can be an Alibaba Cloud account, Alibaba Cloud service, or identity provider (IdP).
       - Required when C(state=present)
+    type: str
+    aliases: ['policy']
   description:
     description:
       - The description of the RAM role. The description can be up to 1,024 characters in length.
+    type: str
 requirements:
     - "python >= 3.6"
     - "footmark >= 1.17.0"
@@ -91,36 +103,35 @@ user:
         arn:
             description: The Alibaba Cloud Resource Name (ARN) of the RAM role.
             returned: always
-            type: string
+            type: str
             sample: acs:ram::123456789012****:role/ECSAdmin
         assume_role_policy_document:
             description: The policy text that specifies one or more entities entrusted to assume the RAM role.
             returned: always
-            type: string
-            sample: { "Statement": [ { "Action": "sts:AssumeRole", "Effect": "Allow", "Principal": { "RAM": "acs:ram::123456789012****:root" } } ], "Version": "1" }
+            type: str
+            sample: '{ "Statement": [ { "Action": "sts:AssumeRole", "Effect": "Allow", "Principal": { "RAM": "acs:ram::123456789012****:root" } } ], "Version": "1" }'
         create_date:
             description: The date and time when the RAM role was created.
             returned: always
-            type: string
-            sample: 2015-01-23T12:33:18Z
+            type: str
+            sample: '2015-01-23T12:33:18Z'
         description:
             description: The description of the RAM role.
             returned: always
-            type: string
+            type: str
             sample: ECS administrator
         role_id:
             description: The ID of the RAM role.
             returned: always
-            type: string
+            type: str
             sample: 901234567890****
         role_name:
             description: The name of the RAM role.
             returned: always
-            type: string
+            type: str
             sample: ECSAdmin
 '''
 
-import json
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.alicloud_ecs import ecs_argument_spec, ram_connect
 
@@ -133,12 +144,16 @@ except ImportError:
     HAS_FOOTMARK = False
 
 
-def role_exists(module, ram_conn, role_name):
+def role_exists(module, ram_conn, role_name, role_id):
     try:
+        role = None
         for r in ram_conn.list_roles():
-            if r.read()['name'] == role_name:
-                return r
-        return None
+            if role_name and r.read()['name'] != role_name:
+                continue
+            if role_id and r.read()['role_id'] != role_id:
+                continue
+            role = r
+        return role
     except Exception as e:
         module.fail_json(msg="Failed to describe Roles: {0}".format(e))
 
@@ -147,7 +162,8 @@ def main():
     argument_spec = ecs_argument_spec()
     argument_spec.update(dict(
         state=dict(default='present', choices=['present', 'absent']),
-        role_name=dict(type='str', required=True, aliases=['name']),
+        role_name=dict(type='str', aliases=['name']),
+        role_id=dict(type='str', aliases=['id']),
         assume_role_policy_document=dict(type='str', aliases=['policy']),
         description=dict(type='str')
     ))
@@ -163,10 +179,11 @@ def main():
     state = module.params['state']
     role_name = module.params['role_name']
     assume_role_policy_document = module.params['assume_role_policy_document']
+    role_id = module.params['role_id']
     changed = False
 
     # Check if role exists
-    role = role_exists(module, ram_conn, role_name)
+    role = role_exists(module, ram_conn, role_name, role_id)
 
     if state == 'absent':
         if not role:

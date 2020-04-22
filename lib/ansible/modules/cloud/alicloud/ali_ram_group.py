@@ -1,4 +1,6 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 # Copyright (c) 2017-present Alibaba Group Holding Limited. He Guimin <heguimin36@163.com.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 #
@@ -17,6 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible. If not, see http://www.gnu.org/licenses/.
 
+from __future__ import (absolute_import, division, print_function)
 
 __metaclass__ = type
 
@@ -27,7 +30,6 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = """
 ---
 module: ali_ram_group
-version_added: "2.9"
 short_description: Create, Delete, Update Ram Groups in Alibaba Cloud.
 description:
     - Create, Delete, Update group comments, name in Alibaba Cloud.
@@ -43,28 +45,33 @@ options:
       - If I(state=absent), group and user_name exists, it will remove user from group.
     choices: ['present', 'absent']
     default: 'present'
+    type: str
   user_name:
     description:
       - The username. Required when add user to group or remove user from group.
+    type: str
   group_name:
     description:
       - The RAM user group name. It must be 1 to 64 characters in length.
       - This is used to determine if the group already exists.
     aliases: ['name']
     required: True
+    type: str
   new_group_name:
     description:
       - The new group name. Required when update group name.
+    type: str
   comments:
     description:
       - The comment. It must be 1 to 128 characters in length. Required when update group comments.
+    type: str
 requirements:
     - "python >= 3.6"
     - "footmark >= 1.17.0"
 extends_documentation_fragment:
     - alicloud
 author:
-  - "He Guimin (@xiaozhu36)"
+    - "He Guimin (@xiaozhu36)"
 """
 
 EXAMPLES = """
@@ -110,28 +117,28 @@ group:
         comments:
             description: The comment.
             returned: always
-            type: string
+            type: str
             sample: Development team
         create_date:
             description: The date and time when the RAM user group was created.
             returned: always
-            type: string
-            sample: 2015-01-23T12:33:18Z
+            type: str
+            sample: '2015-01-23T12:33:18Z'
         group_name:
             description: The RAM user group name.
             returned: alway
-            type: string
+            type: str
             sample: Dev-Team
         name:
             description: alias of 'group_name'.
             returned: always
-            type: string
+            type: str
             sample: Dev-Team
         update_date:
             description: The date and time when a RAM user group was modified.
             returned: always
-            type: string
-            sample: 2015-01-23T12:33:18Z
+            type: str
+            sample: '2015-01-23T12:33:18Z'
 '''
 
 import time

@@ -1,4 +1,6 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 # Copyright (c) 2017-present Alibaba Group Holding Limited. He Guimin <heguimin36@163.com.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 #
@@ -17,6 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible. If not, see http://www.gnu.org/licenses/.
 
+from __future__ import (absolute_import, division, print_function)
 
 __metaclass__ = type
 
@@ -27,7 +30,6 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = '''
 ---
 module: ali_rds_instance
-version_added: "1.5.0"
 short_description: Create, Restart or Delete an RDS Instance in Alibaba Cloud.
 description:
     - Create, Restart, Delete and Modify connection_string, spec for RDS Instance.
@@ -41,15 +43,18 @@ options:
       - If I(state=restart), instance will be restarted.
     choices: ['present', 'restart', 'absent']
     default: 'present'
+    type: str
   zone_id:
     description:
       - Aliyun availability zone ID in which to launch the instance.
         If it is not specified, it will be allocated by system automatically.
     aliases: ['alicloud_zone']
+    type: str
   engine:
     description:
       - The engine type of the database. Required when C(state=present).
     choices: ['MySQL', 'SQLServer', 'PostgreSQL', 'PPAS', 'MariaDB']
+    type: str
   engine_version:
     description:
       - The version of the database. Required when C(state=present).
@@ -59,72 +64,99 @@ options:
       - PPAS (9.3 | 10.0).
       - MariaDB (10.3).
       - see more (https://www.alibabacloud.com/help/doc-detail/26228.htm).
+    type: str
   db_instance_class:
     description:
       - The instance type (specifications). For more information, see(https://www.alibabacloud.com/help/doc-detail/26312.htm).
         Required when C(state=present).
     aliases: ['instance_class']
+    type: str
   db_instance_storage:
     description:
       - The storage capacity of the instance. Unit(GB). This value must be a multiple of 5. For more information see(https://www.alibabacloud.com/help/doc-detail/26312.htm).
         Required when C(state=present).
     aliases: ['instance_storage']
+    type: int
   db_instance_net_type:
     description:
       - Instance of the network connection type (Internet on behalf of the public network, Intranet on behalf of the private network）
         Required when C(state=present).
     aliases: ['instance_net_type']
     choices: ["Internet", "Intranet"]
+    type: str
   db_instance_name:
     description:
-      - The instance name. the unique identifier of the instance. It starts with a letter and contains 2 to 255 characters, including letters, digits, underscores (_), and hyphens (-).
+      - The instance name. It starts with a letter and contains 2 to 255 characters, including letters, digits, underscores (_), and hyphens (-).
         It cannot start with http:// or https://.
-      - This is used to determine if the rds instance already exists.
+      - One of I(db_instance_id) and I(db_instance_name) must be specified when operate existing instance.
     aliases: ['description', 'name']
-    required: True
+    type: str
+  db_instance_id:
+    description:
+      - The instance id.
+      - One of I(db_instance_id) and I(db_instance_name) must be specified when operate existing instance.
+    aliases: ['id']
+    type: str
   security_ip_list:
     description:
       - The IP address whitelist of the instance. Separate multiple IP addresses with commas (,). It can include up to 1,000 IP addresses. The IP addresses support two formats.
         IP address format. For example, 10.23.12.24. Classless Inter-Domain Routing (CIDR) format. For example, 10.23.12.24/24 (where /24 indicates the number of bits for the prefix of the IP address, in the range of 1 to 32).
         Required when C(state=present).
     aliases: ['security_ips']
+    type: str
   pay_type:
     description:
       - The billing method of the instance. Required when C(state=present).
     choices: ["PostPaid", "PrePaid"]
+    type: str
   period:
     description:
       - The duration of the instance. Required when C(pay_type=PrePaid).
-    choices: [1~9,12,24,36]
+    choices: [1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 24, 36]
     default: 1
+    type: int
   connection_mode:
     description:
       - The access mode of the instance.
     choices: ["Standard", "Safe"]
+    type: str
   vswitch_id:
     description:
       - The ID of the VSwitch.
         Required when C(engine=MariaDB)
+    type: str
   private_ip_address:
     description:
       - The intranet IP address of the instance. It must be within the IP address range provided by the switch. 
         By default, the system automatically assigns an IP address based on the VPCId and VSwitchId.
+    type: str
   auto_renew:
     description:
       - Indicates whether the instance is automatically renewed
     type: bool
+    default: False
+    aliases: ['auto_renew']
   port:
     description:
       - The target port.
+    type: str
+  auto_pay:
+    description:
+      - Auto renew or not.
+    type: bool
+    default: False
   current_connection_string:
     description:
       - The current connection address of an instance. It can be an internal network address, a public network address, or a classic network address in the hybrid access mode.
+    type: str
   connection_string_prefix:
     description:
       - The prefix of the target connection address. Only the prefix of CurrentConnectionString can be modified.
+    type: str
   tags:
     description:
       - A hash/dictionaries of rds tags. C({"key":"value"})
+    type: dict
   purge_tags:
     description:
       - Delete existing tags on the rds that are not specified in the task.
@@ -132,7 +164,8 @@ options:
     default: False
     type: bool
 author:
-    - "Li Xue"
+    - "He Guimin (@xiaozhu36)"
+    - "Li Xue (@lixue323)"
 requirements:
     - "python >= 3.6"
     - "footmark >= 1.16.0"
@@ -200,103 +233,103 @@ instances:
         db_instance_class:
             description: The type of the instance.
             returned: always
-            type: string
+            type: str
             sample: rds.mysql.t1.small
         db_instance_description:
             description: The description of the instance.
             returned: always
-            type: string
+            type: str
             sample: ansible_test_rds
         db_instance_id:
             description: The ID of the instance.
             returned: always
-            type: string
+            type: str
             sample: rm-uf6wjk5xxxxxxxxxx
         db_instance_net_type:
-            description: The network type of the instance
+            description: The network type of the instance.
             returned: always
-            type: string
+            type: str
             sample: Internet
         db_instance_status:
-            description: The status of the instance
+            description: The status of the instance.
             returned: always
-            type: string
+            type: str
             sample: Running
         db_instance_type:
-            description: The type of the instance role
+            description: The type of the instance role.
             returned: always
-            type: string
+            type: str
             sample: Primary
         engine:
             description: The type of the database.
             returned: always
-            type: string
+            type: str
             sample: MySQL
         engine_version:
             description: The version of the database.
             returned: always
-            type: string
+            type: str
             sample: 5.6
         id:
             description: alias of 'db_instance_id'.
             returned: always
-            type: string
+            type: str
             sample: rm-uf6wjk5xxxxxxxxxx
         type:
             description: alias of 'db_instance_type'.
             returned: always
-            type: string
+            type: str
             sample: Primary
         instance_network_type:
-            description: The network type of the instance
+            description: The network type of the instance.
             returned: always
-            type: string
+            type: str
             sample: VPC
         name:
-            description: alias of 'db_instance_description'
+            description: alias of 'db_instance_description'.
             returned: always
-            type: string
+            type: str
             sample: ansible_test_rds
         pay_type:
-            description: The billing method of the instance
+            description: The billing method of the instance.
             returned: always
-            type: string
+            type: str
             sample: Postpaid
         resource_group_id:
-            description: The ID of the resource group
+            description: The ID of the resource group.
             returned: always
-            type: string
+            type: str
             sample: rg-acfmyxxxxxxx
         status:
             description: alias of 'db_instance_status'
             returned: always
-            type: string
+            type: str
             sample: Running
         vpc_cloud_instance_id:
             description: The ID of the VPC instance
             returned: always
-            type: string
+            type: str
             sample: rm-uf6wjk5xxxxxxx
         vpc_id:
             description: The ID of the VPC.
             returned: always
-            type: string
-            sample: vpc-uf6f7l4fg90xxxxxxx   
+            type: str
+            sample: vpc-uf6f7l4fg90xxxxxxx
         vswitch_id:
             description: The ID of the VSwitch.
             returned: always
-            type: string
-            sample: vsw-uf6adz52c2pxxxxxxx   
+            type: str
+            sample: vsw-uf6adz52c2pxxxxxxx
         lock_mode:
-            description: The lock mode of the instance
+            description: The lock mode of the instance.
             returned: always
-            type: string
-            sample: Unlock   
+            type: str
+            sample: Unlock
         connection_mode:
-            description: The access mode of the instance
+            description: The access mode of the instance.
             returned: always
-            type: string
-            sample: Standard 
+            type: str
+            sample: Standard
         account_max_quantity:
             description: The maximum number of accounts that can be created in an instance.
             returned: always
@@ -305,42 +338,42 @@ instances:
         account_type:
             description: The type of the account.
             returned: always
-            type: string
+            type: str
             sample: Mix
         auto_upgrade_minor_version:
-            description: The method of upgrading an instance to a minor version
+            description: The method of upgrading an instance to a minor version.
             returned: always
-            type: string
+            type: str
             sample: Auto
         availability_value:
-            description: The availability of the instance
+            description: The availability of the instance.
             returned: always
-            type: string
-            sample: 100
+            type: str
+            sample: 100.0%
         category:
-            description: The edition (series) of the instance
+            description: The edition (series) of the instance.
             returned: always
-            type: string
+            type: str
             sample: Basic
         connection_string:
             description: The private IP address of the instance.
             returned: always
-            type: string
+            type: str
             sample: rm-uf6wjk5xxxxxxxxxx.mysql.rds.aliyuncs.com
         creation_time:
             description: The time when the instance is created
             returned: always
-            type: string
-            sample: 2011-05-30T12:11:04Z
+            type: str
+            sample: '2011-05-30T12:11:04Z'
         current_kernel_version:
             description: The current kernel version.
             returned: always
-            type: string
+            type: str
             sample: rds_20181010
         db_instance_class_type:
             description: The instance type (specifications).
             returned: always
-            type: string
+            type: str
             sample: rds.mys2.small
         db_instance_cpu:
             description: The count of the instance cpu.
@@ -355,7 +388,7 @@ instances:
         db_instance_storage:
             description: The type of the instance.
             returned: always
-            type: string
+            type: str
             sample: rds.mysql.t1.small
         db_instance_storage_type:
             description: The storage capacity of the instance.
@@ -370,18 +403,18 @@ instances:
         dispense_mode:
             description: The allocation mode.
             returned: always
-            type: string
+            type: str
             sample: ClassicDispenseMode
         expire_time:
-            description: The expiration time. 
+            description: The expiration time.
             returned: always
-            type: string
-            sample: 2019-03-27T16:00:00Z
+            type: str
+            sample: '2019-03-27T16:00:00Z'
         maintain_time:
             description: The maintenance period of the instance.
             returned: always
-            type: string
-            sample: 00:00Z-02:00Z
+            type: str
+            sample: '00:00Z-02:00Z'
         max_connections:
             description: The maximum number of concurrent connections.
             returned: always
@@ -395,12 +428,12 @@ instances:
         origin_configuration:
             description: The type of the instance.
             returned: always
-            type: string
+            type: str
             sample: rds.mysql.t1.small
         port:
-            description: The private port of the instance..
+            description: The private port of the instance.
             returned: always
-            type: string
+            type: str
             sample: 3306
         read_only_dbinstance_ids:
             description: The IDs of read-only instances attached to the master instance.
@@ -432,13 +465,16 @@ except ImportError:
     HAS_FOOTMARK = False
 
 
-def get_instance(name, modules, rds):
+def get_instance(db_instance_id, name, modules, rds):
     try:
         instances = rds.describe_db_instances()
         res = None
         for ins in instances:
-            if ins.name == name:
-                res = ins
+            if name and ins.name != name:
+                continue
+            if db_instance_id and ins.id != db_instance_id:
+                continue
+            res = ins
         return res
     except Exception as e:
         modules.fail_json(msg="Failed to describe rds: {0}".format(e))
@@ -449,13 +485,14 @@ def main():
     argument_spec.update(dict(
         state=dict(default="present", choices=["present", "absent", "restart"]),
         zone_id=dict(type='str', aliases=['alicloud_zone']),
-        engine=dict(type='str', choices=["MySQL", "SQLServer", "PostgreSQL", "PPAS"]),
+        engine=dict(type='str', choices=['MySQL', 'SQLServer', 'PostgreSQL', 'PPAS', 'MariaDB']),
         engine_version=dict(type='str'),
         db_instance_net_type=dict(type='str', choices=["Internet", "Intranet"], aliases=['instance_net_type']),
-        db_instance_name=dict(type='str', aliases=['description', 'name'], required=True),
+        db_instance_name=dict(type='str', aliases=['description', 'name']),
+        db_instance_id=dict(type='str', aliases=['id']),
         security_ip_list=dict(type='str', aliases=['security_ips']),
         pay_type=dict(type='str', choices=["PostPaid", "PrePaid"]),
-        period=dict(type='int', choice=[1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 24, 36], default=1),
+        period=dict(type='int', choices=[1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 24, 36], default=1),
         connection_mode=dict(type='str', choices=["Standard", "Safe"]),
         vswitch_id=dict(type='str'),
         private_ip_address=dict(type='str'),
@@ -486,6 +523,7 @@ def main():
     modules.params['db_instance_description'] = db_instance_description
     db_instance_class = modules.params['db_instance_class']
     db_instance_storage = modules.params['db_instance_storage']
+    db_instance_id = modules.params['db_instance_id']
     pay_type = modules.params['pay_type']
     used_time = modules.params['period']
     modules.params['period'] = 'Month'
@@ -515,7 +553,7 @@ def main():
             modules.fail_json(msg=str("Unable to get vswitch, error:{0}".format(e)))
 
     try:
-        current_instance = get_instance(db_instance_description, modules, rds)
+        current_instance = get_instance(db_instance_id, db_instance_description, modules, rds)
     except Exception as e:
         modules.fail_json(msg=str("Unable to describe instance, error:{0}".format(e)))
 
@@ -593,4 +631,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

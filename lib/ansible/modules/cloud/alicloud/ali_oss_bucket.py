@@ -25,7 +25,7 @@ DOCUMENTATION = '''
 ---
 module: ali_oss_bucket
 version_added: "2.4"
-short_description: Create/Delete/Retrieve Bucket in Alibaba Cloud
+short_description: Create/Delete/Retrieve Bucket.
 description:
     - This module allows the user to manage OSS buckets. Includes support for creating, deleting and retrieving buckets.
 options:
@@ -46,8 +46,8 @@ options:
     choices: [ 'private', 'public-read', 'public-read-write' ]
     aliases: [ 'acl' ]
 requirements:
-    - "python >= 3.6"
-    - "footmark >= 1.15.0"
+    - "python >= 2.6"
+    - "footmark >= 1.1.16"
 extends_documentation_fragment:
     - alicloud
 author:

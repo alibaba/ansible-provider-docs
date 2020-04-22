@@ -1,4 +1,6 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 # Copyright (c) 2017-present Alibaba Group Holding Limited. He Guimin <heguimin36@163.com.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 #
@@ -17,6 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible. If not, see http://www.gnu.org/licenses/.
 
+from __future__ import (absolute_import, division, print_function)
 
 __metaclass__ = type
 
@@ -27,7 +30,6 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = '''
 ---
 module: ali_ram_policy_info
-version_added: "2.9"
 short_description: Gather info on ram policy in Alibaba Cloud.
 description:
      - Gather info on ram policy in Alibaba Cloud. support name_prefix to filter policies.
@@ -35,6 +37,7 @@ options:
   name_prefix:
     description:
       - Use a policy name prefix to filter policies.
+    type: str
 author:
     - "He Guimin (@xiaozhu36)"
 requirements:
@@ -58,7 +61,7 @@ RETURN = '''
 policies:
     description: Returns an array of complex objects as described below.
     returned: always
-    type: list
+    type: complex
     contains:
         attachment_count:
             description: The number of times that the policy is referenced.
@@ -68,38 +71,38 @@ policies:
         create_date:
             description: The date and time when the policy was created.
             returned: always
-            type: string
-            sample: 2015-01-23T12:33:18Z
+            type: str
+            sample: '2015-01-23T12:33:18Z'
         default_version:
             description: The default version.
             returned: always
-            type: string
+            type: str
             sample: v1
         description:
             description: The policy description.
             returned: always
-            type: string
+            type: str
             sample: OSS administrator
         policy_name:
             description: The policy name.
             returned: always
-            type: string
+            type: str
             sample: OSS-Administrator
         name:
             description: alias of 'policy_name'.
             returned: always
-            type: string
+            type: str
             sample: OSS-Administrator
         policy_type:
             description: The policy type.
             returned: always
-            type: string
+            type: str
             sample: Custom
         update_date:
             description: The date and time when the policy was modified.
             returned: always
-            type: string
-            sample: 2015-01-23T12:33:18Z
+            type: str
+            sample: '2015-01-23T12:33:18Z'
 '''
 
 from ansible.module_utils.basic import AnsibleModule

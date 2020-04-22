@@ -1,4 +1,6 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 # Copyright (c) 2017-present Alibaba Group Holding Limited. He Guimin <heguimin36@163.com.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 #
@@ -17,6 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible. If not, see http://www.gnu.org/licenses/.
 
+from __future__ import (absolute_import, division, print_function)
 
 __metaclass__ = type
 
@@ -27,8 +30,7 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = """
 ---
 module: ali_slb_server
-version_added: "1.5.0"
-short_description: Add or remove a list of backend servers to/from a specified SLB in Alibaba Cloud
+short_description: Add or remove a list of backend servers to/from a specified SLB
 description:
   - Returns information about the backend servers. Will be marked changed when called only if state is changed.
 options:
@@ -37,30 +39,43 @@ options:
       - Add or remove backend server to/from a specified slb
     default: 'present'
     choices: ['present', 'absent']
+    type: str
   load_balancer_id:
     description:
       - The unique ID of a Server Load Balancer instance
     required: true
-    aliases: [ 'lb_id']
+    aliases: ['lb_id']
+    type: str
   backend_servers:
     description:
       - List of hash/dictionary of backend servers to add or set in when C(state=present)
       - List IDs of backend servers which in the load balancer when C(state=absent)
     required: true
-    aliases: [ 'servers']
+    aliases: ['servers']
+    type: list
+    elements: dict
     suboptions:
       server_id:
         description:
           - The ID of ecs instance which is added into load balancer.
-        required: true
+          - One of I(server_id) and I(server_ids) required.
+      server_ids:
+        description:
+          - If you have multiple servers to add and they have the same weight, type, you can use the server_ids parameter, which is a list of ids.
+          - One of I(server_id) and I(server_ids) required.
       weight:
         description:
           - The weight of backend server in the load balancer.
         choices: [0~100]
         default: 100
+      type:
+        description:
+          - The type of backend server in the load balancer.
+        choices: ['ecs', 'eni']
+        default: 'ecs'
 requirements:
     - "python >= 3.6"
-    - "footmark >= 1.15.0"
+    - "footmark >= 1.19.0"
 extends_documentation_fragment:
     - alicloud
 author:
@@ -121,7 +136,7 @@ RETURN = '''
 load_balancer_id:
     description: ID of the load balancer.
     returned: when success
-    type: string
+    type: str
     sample: "lb-2zeyfm5a14c9ffxvxmvco"
 "backend_servers":
     description: Details about the backened-servers that were added.
@@ -139,10 +154,8 @@ load_balancer_id:
     ]
 '''
 
-import time
-import sys
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.alicloud_ecs import get_acs_connection_info, ecs_argument_spec, slb_connect
+from ansible.module_utils.alicloud_ecs import ecs_argument_spec, slb_connect
 
 try:
     from footmark.exception import SLBResponseError
@@ -150,6 +163,21 @@ try:
     HAS_FOOTMARK = True
 except ImportError:
     HAS_FOOTMARK = False
+
+
+def parse_server_ids(servers):
+    parse_server = []
+    if servers:
+        for s in servers:
+            if "server_ids" in s:
+                ids = s.pop("server_ids")
+                for id in ids:
+                    server = {"server_id": id}
+                    server.update(s)
+                    parse_server.append(server)
+            else:
+                parse_server.append(s)
+    return parse_server
 
 
 def get_backen_server_weight(server):
@@ -290,53 +318,28 @@ def validate_backend_server_info(module, backend_servers, default_weight):
     :param backend_servers: backend severs information to validate (list of dictionaries or string)
     :param default_weight: assigns default weight, if provided, for a backend server to set/add
     """
-
-    server_id_param = 'server_id'
-    weight_param = 'weight'
-    VALID_PARAMS = (server_id_param, weight_param)
+    VALID_PARAMS = ['server_id', 'server_ids', 'weight', 'type']
 
     for backend_server in backend_servers:
 
-        if isinstance(backend_server, dict) is False:
+        if not isinstance(backend_server, dict):
             module.fail_json(msg='Invalid backend_servers parameter type [%s] for state=present.' % type(backend_server))
 
         for k in backend_server:
             if k not in VALID_PARAMS:
-                module.fail_json(msg='Invalid backend_server parameter \'{}\''.format(k))
+                module.fail_json(msg='Invalid backend_server parameter {}'.format(k))
 
-        server_id = get_sub_value(backend_server, [server_id_param])
-        if server_id is None:
-            module.fail_json(msg="'server_id': required field is set")
+        if "server_id" not in backend_server and "server_ids" not in backend_server:
+            module.fail_json(msg="'server_id' or 'server_ids': required field is set")
 
-        weight = get_sub_value(backend_server, [weight_param])
-
-        if weight is None:
-            backend_server[weight_param] = default_weight
-        else:
-            # verifying weight parameter for non numeral string and limit validation
+        # verifying weight parameter for non numeral string and limit validation
+        if "weight" in backend_server:
             try:
-                w = int(weight)
+                w = int(backend_server['weight'])
                 if w < 0 or w > 100:
                     module.fail_json(msg="'weight': field value is invalid. Expect to [0-100].")
             except Exception as e:
                 module.fail_json(msg="'weight': field value is invalid. Expect to positive integer [0-100].")
-
-
-def get_sub_value(dictionary, aliases):
-    """
-
-    :param dictionary: a dictionary to check in for aliases
-    :param aliases: list of keys to check in dictionary for value retrieval
-    :return: returns value if alias found else none
-    """
-
-    if (dictionary and aliases) is not None:
-        for alias in aliases:
-            if alias in dictionary:
-                return dictionary[alias]
-        return None
-    else:
-        return None
 
 
 def get_verify_listener_ports(module, listener_ports=None):
@@ -365,9 +368,9 @@ def get_verify_listener_ports(module, listener_ports=None):
 def main():
     argument_spec = ecs_argument_spec()
     argument_spec.update(dict(
-        state=dict(choices=['present', 'absent'], default='present'),
-        backend_servers=dict(required=True, type='list', aliases=['servers']),
-        load_balancer_id=dict(required=True, aliases=['lb_id']),
+        state=dict(choices=['present', 'absent'], default='present', type='str'),
+        backend_servers=dict(required=True, type='list', elements='dict', aliases=['servers']),
+        load_balancer_id=dict(required=True, aliases=['lb_id'], type='str'),
     ))
 
     # handling region parameter which is not required by this module
@@ -384,7 +387,7 @@ def main():
     slb = slb_connect(module)
 
     state = module.params['state']
-    backend_servers = module.params['backend_servers']
+    backend_servers = parse_server_ids(module.params['backend_servers'])
     load_balancer_id = module.params['load_balancer_id']
 
     if state == 'present':
@@ -392,7 +395,6 @@ def main():
         if len(backend_servers) > 0:
 
             validate_backend_server_info(module, backend_servers, 100)
-
             changed, current_backend_servers = add_set_backend_servers(module, slb, load_balancer_id, backend_servers)
 
             result_servers = []
@@ -404,7 +406,7 @@ def main():
 
     if len(backend_servers) > 0:
 
-        if isinstance(backend_servers, list) is False:
+        if not isinstance(backend_servers, list):
             module.fail_json(msg='Invalid backend_server parameter type [%s] for state=absent.' % type(backend_servers))
 
         changed, backend_servers = remove_backend_servers(module, slb, load_balancer_id, backend_servers)

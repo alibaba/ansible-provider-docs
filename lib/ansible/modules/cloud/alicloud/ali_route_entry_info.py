@@ -1,4 +1,6 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 # Copyright (c) 2017-present Alibaba Group Holding Limited. He Guimin <heguimin36@163.com.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 #
@@ -17,6 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible. If not, see http://www.gnu.org/licenses/.
 
+from __future__ import (absolute_import, division, print_function)
 
 __metaclass__ = type
 
@@ -27,20 +30,20 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = '''
 ---
 module: ali_route_entry_info
-version_added: "1.5.0"
-short_description: Gather facts on vrouter of Alibaba Cloud
+short_description: Gather facts on vrouter of Alibaba Cloud.
 description:
      - This module fetches data from the Open API in Alicloud.
        The module must be called from within the VRouter itself.
-
 options:    
     vrouter_id:
       description:
         - Id of vrouter of vpc
       aliases: ["id"]
+      type: str
     route_table_id:
      description:
         - The ID of the route table.
+     type: str
 author:
     - "He Guimin (@xiaozhu36)"
 requirements:
@@ -52,35 +55,14 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 # Fetch vrouter details according to setting different filters
-- name: Fetch vroute entry details example
-  hosts: localhost
-  connection: local
-  vars:
-    alicloud_access_key: <your-alicloud-access-key>
-    alicloud_secret_key: <your-alicloud-secret-key>
-    alicloud_region: cn-beijing
-    vrouter_id: xxxxxxxxxxxxx
-    route_table_id: xxxxxxxxxxxxx
+- name: Find all vroute_entries in the specified vroute
+  ali_route_entry_info:
+    vrouter_id: '{{ vrouter_id }}'
     
-  tasks:
-    - name: Find all vroute_entries in the specified vroute
-      ali_route_entry_info:
-        alicloud_access_key: '{{ alicloud_access_key }}'
-        alicloud_secret_key: '{{ alicloud_secret_key }}'
-        alicloud_region: '{{ alicloud_region }}'
-        vrouter_id: '{{ vrouter_id }}'
-      register: result
-    - debug: var=result
-    
-    - name: Find all vroute_entries in the specified vroute by route table id
-      ali_route_entry_info:
-        alicloud_access_key: '{{ alicloud_access_key }}'
-        alicloud_secret_key: '{{ alicloud_secret_key }}'
-        alicloud_region: '{{ alicloud_region }}'
-        vrouter_id: '{{ vrouter_id }}'
-        route_table_id: '{{ route_table_id }}'
-      register: result_by_tbl_id
-    - debug: var=result_by_tbl_id    
+- name: Find all vroute_entries in the specified vroute by route table id
+  ali_route_entry_info:
+    vrouter_id: '{{ vrouter_id }}'
+    route_table_id: '{{ route_table_id }}'  
 
 '''
 

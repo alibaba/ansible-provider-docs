@@ -1,4 +1,6 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 # Copyright (c) 2017-present Alibaba Group Holding Limited. He Guimin <heguimin36@163.com.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 #
@@ -17,6 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible. If not, see http://www.gnu.org/licenses/.
 
+from __future__ import (absolute_import, division, print_function)
 
 __metaclass__ = type
 
@@ -27,10 +30,9 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = """
 ---
 module: ali_dns_domain
-version_added: "2.8"
-short_description: Configure Alibaba Cloud DNS
+short_description: Configure Alibaba Cloud DNS (DNS)
 description:
-    - Create, Delete Alibaba cloud DNS.
+    - Create, Delete Alicloud cloud DNS(DNS).
       It supports updating DNS remark and change domain group.
 options:
   domain_name:
@@ -38,26 +40,33 @@ options:
       -  The name to give your DNS.
     required: True
     aliases: ['name']
+    type: str
   group_name:
     description:
       - Specify name of group, when change domain group.
+    type: str
   lang:
     description:
       - The language which you choose
+    type: str
   resource_group_id:
     description:
-      - When add domain, You can specify the resource group id
+      - When add domain, You can specify the resource group id.
+    type: str
   remark:
     description:
-      - Specify this parameter as a comment for dns
+      - Specify this parameter as a comment for dns.
+    type: str
   state:
     description:
       -  Whether or not to create, delete DNS.
     choices: ['present', 'absent']
     default: 'present'
+    type: str
   user_client_ip:
     description:
-      - User client IP
+      - User client IP.
+    type: str
 requirements:
     - "python >= 3.6"
     - "footmark >= 1.15.0"
@@ -93,7 +102,7 @@ EXAMPLES = """
 
 RETURN = '''
 dns:
-    description: info about the DNS that was created or deleted
+    description: info about the DNS that was created or deleted.
     returned: always
     type: complex
     contains:
@@ -105,36 +114,41 @@ dns:
         dns_servers:
             description: The DNS list of the domain name in the resolution system.
             returned: always
-            type: list
-            sample: ["xx1.alidns.com", "xx2.alidns.com"]
+            type: dict
+            sample: 
+                dns_servers:
+                    dns_server: 
+                     - xx1.alidns.com
+                     - xx2.alidns.com
+
         domain_name:
             description: The name of domain.
             returned: always
-            type: string
+            type: str
             sample: ansiblexxx.abc
         name:
             description: alias of 'domain_name'.
             returned: always
-            type: string
+            type: str
             sample: ansiblexxx.abc
         id:
             description: alias of 'domain_id'.
             returned: always
-            type: string
+            type: str
             sample: dns-c2e00da5
         puny_code:
-            description: Chinese domain name punycode code, English domain name returned empty
+            description: Chinese domain name punycode code, English domain name returned empty.
             type: bool
             sample: ansiblexxx.abc
         record_count:
-            description: The number of parsing records contained in the domain name
+            description: The number of parsing records contained in the domain name.
             returned: always
             type: int
             sample: 0
         remark:
-            description: A comment for dns
+            description: A comment for dns.
             returned: always
-            type: string
+            type: str
             sample: ansible_test_dns_domain
         starmark:
             description: Whether to query the domain name star.
@@ -142,19 +156,19 @@ dns:
             type: bool
             sample: false
         domain_id:
-            description: DNS resource id
+            description: DNS resource id.
             returned: always
-            type: string
+            type: str
             sample: dns-c2e00da5
         version_code:
-            description: Cloud resolution version Code
+            description: Cloud resolution version Code.
             returned: always
-            type: string
+            type: str
             sample: mianfei
         version_name:
-            description: Cloud resolution product name
+            description: Cloud resolution product name.
             returned: always
-            type: string
+            type: str
             sample: Alibaba Cloud DNS
 '''
 

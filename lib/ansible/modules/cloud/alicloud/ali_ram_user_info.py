@@ -1,4 +1,6 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 # Copyright (c) 2017-present Alibaba Group Holding Limited. He Guimin <heguimin36@163.com.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 #
@@ -17,6 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible. If not, see http://www.gnu.org/licenses/.
 
+from __future__ import (absolute_import, division, print_function)
 
 __metaclass__ = type
 
@@ -27,7 +30,6 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = '''
 ---
 module: ali_ram_user_info
-version_added: "2.9"
 short_description: Gather info on ram users in Alibaba Cloud.
 description:
      - Gather info on ram users in Alibaba Cloud. support name_prefix to filter users.
@@ -35,6 +37,12 @@ options:
   name_prefix:
     description:
       - Use a User name prefix to filter Users.
+    type: str
+  user_ids:
+    description:
+      - Use a user_ids list to filter Users.
+    type: list
+    elements: str
 author:
     - "He Guimin (@xiaozhu36)"
 requirements:
@@ -60,62 +68,62 @@ RETURN = '''
 users:
     description: Returns an array of complex objects as described below.
     returned: always
-    type: list
+    type: complex
     contains:
         user_name:
             description: The username.
             returned: always
-            type: string
+            type: str
             sample: Alice
         name:
             description: alias of 'user_name'.
             returned: always
-            type: string
+            type: str
             sample: Alice
         user_id:
             description: The ID of the RAM user.
             returned: always
-            type: string
+            type: str
             sample: 122748924538****
         id:
             description: alias of 'user_id'.
             returned: always
-            type: string
+            type: str
             sample: 122748924538****
         update_date:
             description: The date and time when the user information was modified.
             returned: always
-            type: string
-            sample: 2015-01-23T12:33:18Z
+            type: str
+            sample: '2015-01-23T12:33:18Z'
         mobile_phone:
             description: The mobile phone number of the RAM user.
             returned: always
-            type: string
+            type: str
             sample: 86-1860000****
         phone:
             description: alias of 'mobile_phone'.
             returned: always
-            type: string
+            type: str
             sample: vpc-c2e00da5
         email:
             description: The email address of the RAM user.
             returned: always
-            type: string
+            type: str
             sample: alice@example.com
         display_name:
             description: The display name.
             returned: always
-            type: string
+            type: str
             sample: Alice
         create_date:
             description: The date and time when the RAM user was created.
             returned: always
-            type: string
-            sample: 2015-01-23T12:33:18Z
+            type: str
+            sample: '2015-01-23T12:33:18Z'
         comments:
             description: The comment.
             returned: always
-            type: string
+            type: str
             sample: ansible test
 '''
 
@@ -134,7 +142,8 @@ except ImportError:
 def main():
     argument_spec = ecs_argument_spec()
     argument_spec.update(dict(
-        name_prefix=dict(type='str'))
+        name_prefix=dict(type='str')),
+        user_ids=dict(type='list', elements='str')
     )
     module = AnsibleModule(argument_spec=argument_spec)
 
@@ -142,11 +151,13 @@ def main():
         module.fail_json(msg="Package 'footmark' required for this module.")
 
     name_prefix = module.params['name_prefix']
-
+    user_ids = module.params['user_ids']
     try:
         users = []
         for user in ram_connect(module).list_users():
             if name_prefix and not user.name.startswith(name_prefix):
+                continue
+            if user_ids and user.user_id not in user_ids:
                 continue
             users.append(user.read())
         module.exit_json(changed=False, users=users)

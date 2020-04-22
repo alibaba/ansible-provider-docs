@@ -1,4 +1,6 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 # Copyright (c) 2017-present Alibaba Group Holding Limited. He Guimin <heguimin36@163.com.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 #
@@ -17,6 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible. If not, see http://www.gnu.org/licenses/.
 
+from __future__ import (absolute_import, division, print_function)
 
 __metaclass__ = type
 
@@ -27,7 +30,6 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = '''
 ---
 module: ali_ram_group_info
-version_added: "2.9"
 short_description: Gather info on ram groups in Alibaba Cloud.
 description:
      - Gather info on ram groups in Alibaba Cloud. support name_prefix to filter groups.
@@ -35,6 +37,7 @@ options:
   name_prefix:
     description:
       - Use a group name prefix to filter groups.
+    type: str
 author:
     - "He Guimin (@xiaozhu36)"
 requirements:
@@ -59,33 +62,33 @@ RETURN = '''
 users:
     description: Returns an array of complex objects as described below.
     returned: always
-    type: list
+    type: complex
     contains:
         comments:
             description: The comment.
             returned: always
-            type: string
+            type: str
             sample: Development team
         create_date:
             description: The date and time when the RAM user group was created.
             returned: always
-            type: string
-            sample: 2015-01-23T12:33:18Z
+            type: str
+            sample: '2015-01-23T12:33:18Z'
         group_name:
             description: The RAM user group name.
             returned: alway
-            type: string
+            type: str
             sample: Dev-Team
         name:
             description: alias of 'group_name'.
             returned: always
-            type: string
+            type: str
             sample: Dev-Team
         update_date:
             description: The date and time when a RAM user group was modified.
             returned: always
-            type: string
-            sample: 2015-01-23T12:33:18Z
+            type: str
+            sample: '2015-01-23T12:33:18Z'
 '''
 
 from ansible.module_utils.basic import AnsibleModule
@@ -125,3 +128,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
