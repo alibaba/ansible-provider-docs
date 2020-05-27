@@ -12,7 +12,7 @@
   register: tempdir
 
 - name: SEPARATE-GIT-DIR | clone with a separate git dir
-  command: git clone {{ repo_format1 }} {{ checkout_dir }} --separate-git-dir={{ tempdir.stdout }}
+  command: git clone --depth 1 {{ repo_format1 }} {{ checkout_dir }} --separate-git-dir={{ tempdir.stdout }}
 
 - name: SEPARATE-GIT-DIR | update repo the usual way
   git:

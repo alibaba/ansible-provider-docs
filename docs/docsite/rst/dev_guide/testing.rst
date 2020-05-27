@@ -122,7 +122,7 @@ Here's how:
 Create a fresh area to work::
 
 
-   git clone https://github.com/ansible/ansible.git ansible-pr-testing
+   git clone --depth 1 https://github.com/ansible/ansible.git ansible-pr-testing
    cd ansible-pr-testing
 
 Next, find the pull request you'd like to test and make note of the line at the top which describes the source

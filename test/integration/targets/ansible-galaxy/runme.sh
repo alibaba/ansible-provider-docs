@@ -81,7 +81,7 @@ f_ansible_galaxy_status \
 galaxy_testdir=$(mktemp -d)
 pushd "${galaxy_testdir}"
 
-    git clone "${galaxy_local_test_role_git_repo}" "${galaxy_local_test_role}"
+    git clone --depth 1 "${galaxy_local_test_role_git_repo}" "${galaxy_local_test_role}"
     ansible-galaxy init roles-path-bug
     pushd roles-path-bug
         cat <<EOF > ansible.cfg

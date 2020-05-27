@@ -54,7 +54,7 @@ installed version and then clone the git repo.
 .. code-block:: shell
 
     pip uninstall ansible -y
-    git clone https://github.com/ansible/ansible.git
+    git clone --depth 1 https://github.com/ansible/ansible.git
     source ansible/hacking/env-setup
 
     # to enable Ansible on login, run the following

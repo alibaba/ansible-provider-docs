@@ -129,7 +129,7 @@ You can also build an RPM yourself. From the root of a checkout or tarball, use 
 
 .. code-block:: bash
 
-    $ git clone https://github.com/ansible/ansible.git
+    $ git clone --depth 1 https://github.com/ansible/ansible.git
     $ cd ./ansible
     $ make rpm
     $ sudo rpm -Uvh ./rpm-build/ansible-*.noarch.rpm
@@ -312,7 +312,7 @@ To install from source, clone the Ansible git repository:
 
 .. code-block:: bash
 
-    $ git clone https://github.com/ansible/ansible.git --recursive
+    $ git clone --depth 1 https://github.com/ansible/ansible.git --recursive
     $ cd ./ansible
 
 Once git has cloned the Ansible repository, setup the Ansible environment:
