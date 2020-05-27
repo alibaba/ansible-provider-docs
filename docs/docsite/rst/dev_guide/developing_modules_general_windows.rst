@@ -128,7 +128,7 @@ To provision the environment as is, run the following:
 
 .. code-block:: shell
 
-    git clone https://github.com/jborean93/ansible-windows.git
+    git clone --depth 1 https://github.com/jborean93/ansible-windows.git
     cd vagrant
     vagrant up
 

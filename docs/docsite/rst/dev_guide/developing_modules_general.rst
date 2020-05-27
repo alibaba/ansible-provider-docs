@@ -35,7 +35,7 @@ Due to dependencies (for example ansible -> paramiko -> pynacl -> libffi):
 Common Environment setup
 ````````````````````````
 1. Clone the Ansible repository:
-   ``$ git clone https://github.com/ansible/ansible.git``
+   ``$ git clone --depth 1 https://github.com/ansible/ansible.git``
 2. Change directory into the repository root dir: ``$ cd ansible``
 3. Create a virtual environment: ``$ python3 -m venv venv`` (or for
    Python 2 ``$ virtualenv venv``. Note, this requires you to install

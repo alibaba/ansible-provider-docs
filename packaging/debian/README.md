@@ -7,7 +7,7 @@ __Note__: You must run this target as root or set `PBUILDER_BIN='sudo pbuilder'`
 
 ```
 apt-get install python-docutils cdbs debootstrap devscripts make pbuilder python-setuptools
-git clone https://github.com/ansible/ansible.git
+git clone --depth 1 https://github.com/ansible/ansible.git
 cd ansible
 DEB_DIST='xenial trusty precise' make deb
 ```
@@ -15,7 +15,7 @@ DEB_DIST='xenial trusty precise' make deb
 Building in Docker:
 
 ```
-git clone https://github.com/ansible/ansible.git
+git clone --depth 1 https://github.com/ansible/ansible.git
 cd ansible
 docker build -t ansible-deb-builder -f packaging/debian/Dockerfile .
 docker run --privileged -e DEB_DIST='trusty' -v $(pwd):/ansible ansible-deb-builder
