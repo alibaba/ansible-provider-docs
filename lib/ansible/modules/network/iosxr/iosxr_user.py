@@ -671,12 +671,12 @@ def main():
         if not HAS_B64:
             module.fail_json(
                 msg='library base64 is required but does not appear to be '
-                    'installed. It can be installed using `pip install base64`'
+                    'installed. It can be installed using `pip install --no-cache-dir base64`'
             )
         if not HAS_PARAMIKO:
             module.fail_json(
                 msg='library paramiko is required but does not appear to be '
-                    'installed. It can be installed using `pip install paramiko`'
+                    'installed. It can be installed using `pip install --no-cache-dir paramiko`'
             )
 
     result = {'changed': False, 'warnings': []}

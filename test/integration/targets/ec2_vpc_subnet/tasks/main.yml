@@ -400,7 +400,7 @@
     # ============================================================
     # FIXME - Replace by creating IPv6 enabled VPC once ec2_vpc_net module supports it.
     - name: install aws cli - FIXME temporary this should go for a lighterweight solution
-      command: pip install awscli
+      command: pip install --no-cache-dir awscli
 
     - name: Assign an Amazon provided IPv6 CIDR block to the VPC
       command: aws ec2 associate-vpc-cidr-block --amazon-provided-ipv6-cidr-block --vpc-id '{{ vpc_result.vpc.id }}'

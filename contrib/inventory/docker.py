@@ -35,7 +35,7 @@ Requirements
 Using the docker modules requires having docker-py <https://docker-py.readthedocs.io/en/stable/>
 installed on the host running Ansible. To install docker-py:
 
-   pip install docker-py
+   pip install --no-cache-dir docker-py
 
 
 Run for Specific Host
@@ -885,7 +885,7 @@ class DockerInventory(object):
 def main():
 
     if not HAS_DOCKER_PY:
-        fail("Failed to import docker-py. Try `pip install docker-py` - %s" % (HAS_DOCKER_ERROR))
+        fail("Failed to import docker-py. Try `pip install --no-cache-dir docker-py` - %s" % (HAS_DOCKER_ERROR))
 
     DockerInventory().run()
 

@@ -48,7 +48,7 @@ options:
     type: bool
 notes:
   - Requires the objectpath Python package on the host. This is as easy as
-    C(pip install objectpath).
+    C(pip install --no-cache-dir objectpath).
 extends_documentation_fragment: f5
 author:
   - Tim Rupp (@caphrim007)

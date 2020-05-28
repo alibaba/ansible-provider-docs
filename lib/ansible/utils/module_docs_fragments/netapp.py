@@ -55,7 +55,7 @@ options:
 requirements:
   - A physical or virtual clustered Data ONTAP system. The modules were developed with Clustered Data ONTAP 9.3
   - Ansible 2.6
-  - netapp-lib (2017.10.30). Install using 'pip install netapp-lib'
+  - netapp-lib (2017.10.30). Install using 'pip install --no-cache-dir netapp-lib'
   - To enable http on the cluster you must run the following commands 'set -privilege advanced;' 'system services web modify -http-enabled true;'
 
 notes:
@@ -84,7 +84,7 @@ options:
 requirements:
   - A physical or virtual clustered Data ONTAP system. The modules were developed with Clustered Data ONTAP 8.3
   - Ansible 2.2
-  - netapp-lib (2015.9.25). Install using 'pip install netapp-lib'
+  - netapp-lib (2015.9.25). Install using 'pip install --no-cache-dir netapp-lib'
 
 notes:
   - The modules prefixed with na\\_cdot are built to support the ONTAP storage platform.

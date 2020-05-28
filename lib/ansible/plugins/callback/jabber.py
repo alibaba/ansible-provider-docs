@@ -62,7 +62,7 @@ class CallbackModule(CallbackBase):
 
         if not HAS_XMPP:
             self._display.warning("The required python xmpp library (xmpppy) is not installed. "
-                                  "pip install git+https://github.com/ArchipelProject/xmpppy")
+                                  "pip install --no-cache-dir git+https://github.com/ArchipelProject/xmpppy")
             self.disabled = True
 
         self.serv = os.getenv('JABBER_SERV')

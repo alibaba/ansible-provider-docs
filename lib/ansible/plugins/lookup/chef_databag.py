@@ -15,7 +15,7 @@ DOCUMENTATION = """
          The lookup order mirrors the one from Chef, all folders in the base path are walked back looking for the following configuration
          file in order : .chef/knife.rb, ~/.chef/knife.rb, /etc/chef/client.rb"
     requirements:
-        - "pychef (python library https://pychef.readthedocs.io `pip install pychef`"
+        - "pychef (python library https://pychef.readthedocs.io `pip install --no-cache-dir pychef`"
     options:
         name:
           description:
@@ -85,7 +85,7 @@ class LookupModule(LookupBase):
     def run(self, terms, variables=None, **kwargs):
         # Ensure pychef has been loaded
         if not HAS_CHEF:
-            raise AnsibleError('PyChef needed for lookup plugin, try `pip install pychef`')
+            raise AnsibleError('PyChef needed for lookup plugin, try `pip install --no-cache-dir pychef`')
 
         for term in terms:
             self.parse_kv_args(parse_kv(term))

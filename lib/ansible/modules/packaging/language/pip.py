@@ -98,7 +98,7 @@ options:
     description:
       - The system umask to apply before installing the pip package. This is
         useful, for example, when installing on systems that have a very
-        restrictive umask by default (e.g., 0077) and you want to pip install
+        restrictive umask by default (e.g., 0077) and you want to pip install --no-cache-dir
         packages which are to be used by all users. Note that this requires you
         to specify desired umask mode in octal, with a leading 0 (e.g., 0077).
     version_added: "2.1"
@@ -195,7 +195,7 @@ cmd:
   description: pip command used by the module
   returned: success
   type: string
-  sample: pip2 install ansible six
+  sample: pip2 install --no-cache-dir ansible six
 name:
   description: list of python modules targetted by pip
   returned: success

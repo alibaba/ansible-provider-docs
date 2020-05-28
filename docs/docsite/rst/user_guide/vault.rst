@@ -333,7 +333,7 @@ By default, Ansible uses PyCrypto to encrypt and decrypt vault files. If you hav
 
 .. code-block:: bash
 
-    pip install cryptography
+    pip install --no-cache-dir cryptography
 
 
 .. _vault_format:

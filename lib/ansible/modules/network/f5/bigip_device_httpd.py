@@ -90,7 +90,7 @@ options:
     version_added: 2.6
 notes:
   - Requires the requests Python package on the host. This is as easy as
-    C(pip install requests).
+    C(pip install --no-cache-dir requests).
 requirements:
   - requests
 extends_documentation_fragment: f5

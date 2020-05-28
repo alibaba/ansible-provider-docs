@@ -22,7 +22,7 @@ class HerokuHelper():
 
     def check_lib(self):
         if not HAS_HEROKU:
-            self.module.fail_json(msg='heroku3 library required for this module (pip install heroku3)')
+            self.module.fail_json(msg='heroku3 library required for this module (pip install --no-cache-dir heroku3)')
 
     @staticmethod
     def heroku_argument_spec():

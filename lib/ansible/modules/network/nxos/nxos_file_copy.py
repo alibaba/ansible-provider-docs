@@ -200,13 +200,13 @@ def main():
     if not HAS_PARAMIKO:
         module.fail_json(
             msg='library paramiko is required but does not appear to be '
-                'installed. It can be installed using `pip install paramiko`'
+                'installed. It can be installed using `pip install --no-cache-dir paramiko`'
         )
 
     if not HAS_SCP:
         module.fail_json(
             msg='library scp is required but does not appear to be '
-                'installed. It can be installed using `pip install scp`'
+                'installed. It can be installed using `pip install --no-cache-dir scp`'
         )
 
     warnings = list()

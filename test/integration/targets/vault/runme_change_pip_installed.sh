@@ -8,7 +8,7 @@ pip uninstall -y pycrypto
 ./runme.sh
 
 # now just pycrypto
-pip install --user pycrypto
+pip install --no-cache-dir --user pycrypto
 
 ./runme.sh
 
@@ -16,12 +16,12 @@ pip install --user pycrypto
 # now just cryptography
 
 pip uninstall -y pycrypto
-pip install --user cryptography
+pip install --no-cache-dir --user cryptography
 
 ./runme.sh
 
 # now both
 
-pip install --user pycrypto
+pip install --no-cache-dir --user pycrypto
 
 ./runme.sh

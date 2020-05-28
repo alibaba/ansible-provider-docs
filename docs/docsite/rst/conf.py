@@ -16,7 +16,7 @@
 import sys
 import os
 
-# pip install sphinx_rtd_theme
+# pip install --no-cache-dir sphinx_rtd_theme
 # import sphinx_rtd_theme
 # html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 

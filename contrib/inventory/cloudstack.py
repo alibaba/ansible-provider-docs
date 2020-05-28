@@ -84,7 +84,7 @@ except:
 try:
     from cs import CloudStack, CloudStackException, read_config
 except ImportError:
-    print("Error: CloudStack library must be installed: pip install cs.",
+    print("Error: CloudStack library must be installed: pip install --no-cache-dir cs.",
           file=sys.stderr)
     sys.exit(1)
 

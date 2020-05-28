@@ -15,7 +15,7 @@ The GCE modules all require the apache-libcloud module which you can install fro
 
 .. code-block:: bash
 
-    $ pip install apache-libcloud
+    $ pip install --no-cache-dir apache-libcloud
 
 .. note:: If you're using Ansible on macOS, libcloud also needs to access a CA cert chain. You'll need to download one (you can get one for `here <http://curl.haxx.se/docs/caextract.html>`_.)
 

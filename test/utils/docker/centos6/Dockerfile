@@ -46,7 +46,7 @@ RUN yum clean all && \
     && \
     yum clean all
 
-RUN rpm -e --nodeps python-crypto && pip install --upgrade pycrypto cryptography
+RUN rpm -e --nodeps python-crypto && pip install --no-cache-dir --upgrade pycrypto cryptography
 
 RUN /bin/sed -i -e 's/^\(Defaults\s*requiretty\)/#--- \1/'  /etc/sudoers
 RUN mkdir /etc/ansible/
@@ -58,6 +58,6 @@ RUN ssh-keygen -q -t rsa1 -N '' -f /etc/ssh/ssh_host_key && \
     ssh-keygen -q -t rsa -N '' -f /root/.ssh/id_rsa && \
     cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys && \
     for key in /etc/ssh/ssh_host_*_key.pub; do echo "localhost $(cat ${key})" >> /root/.ssh/known_hosts; done
-RUN pip install coverage junit-xml
+RUN pip install --no-cache-dir coverage junit-xml
 ENV container=docker
 CMD ["/sbin/init"]

@@ -73,7 +73,7 @@ Enabling NETCONF
 
 Before you can use NETCONF to connect to a switch, you must:
 
-- install the ``ncclient`` python package on your control node(s) with ``pip install ncclient``
+- install the ``ncclient`` python package on your control node(s) with ``pip install --no-cache-dir ncclient``
 - enable NETCONF on the Junos OS device(s)
 
 To enable NETCONF on a new switch via Ansible, use the ``junos_netconf`` module via the CLI connection. Set up your platform-level variables just like in the CLI example above, then run a playbook task like this:

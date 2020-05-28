@@ -19,5 +19,5 @@ EOF
 ansible-playbook test-pause.yml -i ../../inventory "$@"
 
 # Interactively test pause
-pip install pexpect
+pip install --no-cache-dir pexpect
 python test-pause.py -i ../../inventory "$@"

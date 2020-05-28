@@ -170,7 +170,7 @@ class AnsibleDockerClient(Client):
                       "cause a corrupt installation. Please uninstall both packages, and re-install only the docker-py or docker python module")
 
         if not HAS_DOCKER_PY:
-            self.fail("Failed to import docker-py - %s. Try `pip install docker-py`" % HAS_DOCKER_ERROR)
+            self.fail("Failed to import docker-py - %s. Try `pip install --no-cache-dir docker-py`" % HAS_DOCKER_ERROR)
 
         if LooseVersion(docker_version) < LooseVersion(MIN_DOCKER_VERSION):
             self.fail("Error: docker-py version is %s. Minimum version required is %s." % (docker_version,

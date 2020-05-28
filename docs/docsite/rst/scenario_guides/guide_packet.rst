@@ -19,7 +19,7 @@ The Packet modules and inventory script connect to the Packet API using the pack
 
 .. code-block:: bash
 
-    $ pip install packet-python
+    $ pip install --no-cache-dir packet-python
 
 In order to check the state of devices created by Ansible on Packet, it's a good idea to install one of the `Packet CLI clients <https://www.packet.net/developers/integrations/api-cli/>`_. Otherwise you can check them via the `Packet portal <https://app.packet.net/portal>`_.
 

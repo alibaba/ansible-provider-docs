@@ -22,7 +22,7 @@ package repositories, so you will likely need to install it via pip:
 
 .. code-block:: bash
 
-    $ pip install pyrax
+    $ pip install --no-cache-dir pyrax
 
 The following steps will often execute from the control machine against the Rackspace Cloud API, so it makes sense 
 to add localhost to the inventory file.  (Ansible may not require this manual step in the future):

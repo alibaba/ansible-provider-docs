@@ -137,5 +137,5 @@ def transform_reply():
 def remove_namespaces(data):
     if not HAS_NCCLIENT:
         raise ImportError("ncclient is required but does not appear to be installed.  "
-                          "It can be installed using `pip install ncclient`")
+                          "It can be installed using `pip install --no-cache-dir ncclient`")
     return NCElement(data, transform_reply()).data_xml

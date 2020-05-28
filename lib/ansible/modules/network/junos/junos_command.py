@@ -398,7 +398,7 @@ def main():
             if item['xattrs']['format'] == 'xml':
                 if not HAS_JXMLEASE:
                     module.fail_json(msg='jxmlease is required but does not appear to be installed. '
-                                         'It can be installed using `pip install jxmlease`')
+                                         'It can be installed using `pip install --no-cache-dir jxmlease`')
 
                 try:
                     json_resp = jxmlease.parse(resp)

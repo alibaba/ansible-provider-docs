@@ -44,7 +44,7 @@ class K8sInventoryHelper(K8sAnsibleMixin):
 
         if not HAS_K8S_MODULE_HELPER:
             raise K8sInventoryException(
-                "This module requires the OpenShift Python client. Try `pip install openshift`"
+                "This module requires the OpenShift Python client. Try `pip install --no-cache-dir openshift`"
             )
 
         source_data = None

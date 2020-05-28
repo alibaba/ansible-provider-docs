@@ -459,7 +459,7 @@ def main():
     if not HAS_ZABBIX_API:
         module.fail_json(msg="Missing required zabbix-api module " +
                              "(check docs or install with: " +
-                             "pip install zabbix-api)")
+                             "pip install --no-cache-dir zabbix-api)")
 
     server_url = module.params['server_url']
     login_user = module.params['login_user']

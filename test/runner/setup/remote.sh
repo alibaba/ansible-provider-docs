@@ -43,7 +43,7 @@ elif [ "${platform}" = "rhel" ]; then
 fi
 
 if [ "${platform}" = "freebsd" ] || [ "${platform}" = "osx" ]; then
-    pip install virtualenv
+    pip install --no-cache-dir virtualenv
 
     # Tests assume loopback addresses other than 127.0.0.1 will work.
     # Add aliases for loopback addresses used by tests.

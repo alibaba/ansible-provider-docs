@@ -16,7 +16,7 @@ and vCenter infrastcture. You can install pyVmomi using pip:
 
 .. code-block:: bash
 
-    $ pip install pyvmomi
+    $ pip install --no-cache-dir pyvmomi
 
 
 vmware_guest module

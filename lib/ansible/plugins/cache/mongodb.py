@@ -54,7 +54,7 @@ from ansible.plugins.cache import BaseCacheModule
 try:
     import pymongo
 except ImportError:
-    raise AnsibleError("The 'pymongo' python module is required for the mongodb fact cache, 'pip install pymongo>=3.0'")
+    raise AnsibleError("The 'pymongo' python module is required for the mongodb fact cache, 'pip install --no-cache-dir pymongo>=3.0'")
 
 
 class CacheModule(BaseCacheModule):

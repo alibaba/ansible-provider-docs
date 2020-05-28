@@ -12,14 +12,14 @@ installed on the host running Ansible.
 
 .. code-block:: bash
 
-    $ pip install ansible[azure]
+    $ pip install --no-cache-dir ansible[azure]
 
 If you are running Ansible from source, you can install the dependencies from the
 root directory of the Ansible repo.
 
 .. code-block:: bash
 
-    $ pip install .[azure]
+    $ pip install --no-cache-dir .[azure]
 
 You can also directly run Ansible in `Azure Cloud Shell <https://shell.azure.com>`_, where Ansible is pre-installed.
 

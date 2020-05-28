@@ -270,7 +270,7 @@ def main():
     )
 
     if not HAS_GITLAB_PACKAGE:
-        module.fail_json(msg="Missing required gitlab module (check docs or install with: pip install pyapi-gitlab")
+        module.fail_json(msg="Missing required gitlab module (check docs or install with: pip install --no-cache-dir pyapi-gitlab")
 
     server_url = module.params['server_url']
     verify_ssl = module.params['validate_certs']

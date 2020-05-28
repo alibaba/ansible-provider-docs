@@ -74,7 +74,7 @@ notes:
     - Module creates maintenance window from now() to now() + minutes,
       so if Zabbix server's time and host's time are not synchronized,
       you will get strange results.
-    - Install required module with 'pip install zabbix-api' command.
+    - Install required module with 'pip install --no-cache-dir zabbix-api' command.
 '''
 
 EXAMPLES = '''
@@ -282,7 +282,7 @@ def main():
     )
 
     if not HAS_ZABBIX_API:
-        module.fail_json(msg="Missing required zabbix-api module (check docs or install with: pip install zabbix-api)")
+        module.fail_json(msg="Missing required zabbix-api module (check docs or install with: pip install --no-cache-dir zabbix-api)")
 
     host_names = module.params['host_names']
     host_groups = module.params['host_groups']

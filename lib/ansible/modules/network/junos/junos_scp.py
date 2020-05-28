@@ -154,7 +154,7 @@ def main():
     if not HAS_PYEZ:
         module.fail_json(
             msg='junos-eznc is required but does not appear to be installed. '
-                'It can be installed using `pip install junos-eznc`'
+                'It can be installed using `pip install --no-cache-dir junos-eznc`'
         )
 
     result = dict(changed=True)

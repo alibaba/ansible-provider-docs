@@ -17,7 +17,7 @@ Ansible uses the `pywinrm <https://github.com/diyan/pywinrm>`_ package to
 communicate with Windows servers over WinRM. It is not installed by default
 with the Ansible package, but can be installed by running the following::
 
-   pip install "pywinrm>=0.3.0"
+   pip install --no-cache-dir "pywinrm>=0.3.0"
 
 .. Note:: on distributions with multiple python versions, use pip2 or pip2.x,
     where x matches the python minor version Ansible is running under.
@@ -316,7 +316,7 @@ be install using ``pip``:
 
 .. code-block:: shell
 
-    pip install pywinrm[kerberos]
+    pip install --no-cache-dir pywinrm[kerberos]
 
 
 Configuring Host Kerberos
@@ -465,7 +465,7 @@ The ``requests-credssp`` wrapper can be installed using ``pip``:
 
 .. code-block:: bash
 
-    pip install pywinrm[credssp]
+    pip install --no-cache-dir pywinrm[credssp]
 
 CredSSP and TLS 1.2
 +++++++++++++++++++
@@ -686,7 +686,7 @@ would an IPv4 address or hostname::
 
 .. Note:: The ipaddress library is only included by default in Python 3.x. To
     use IPv6 addresses in Python 2.6 and 2.7, make sure to run
-    ``pip install ipaddress`` which installs a backported package.
+    ``pip install --no-cache-dir ipaddress`` which installs a backported package.
 
 HTTPS Certificate Validation
 ````````````````````````````

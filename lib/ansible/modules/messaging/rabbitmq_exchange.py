@@ -145,7 +145,7 @@ def main():
     )
 
     if not HAS_REQUESTS:
-        module.fail_json(msg="requests library is required for this module. To install, use `pip install requests`")
+        module.fail_json(msg="requests library is required for this module. To install, use `pip install --no-cache-dir requests`")
 
     # Check if exchange already exists
     r = requests.get(url, auth=(module.params['login_user'], module.params['login_password']))

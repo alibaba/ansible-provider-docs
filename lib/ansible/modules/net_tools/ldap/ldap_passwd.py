@@ -133,7 +133,7 @@ def main():
 
     if not HAS_LDAP:
         module.fail_json(
-            msg="Missing required 'ldap' module (pip install python-ldap).")
+            msg="Missing required 'ldap' module (pip install --no-cache-dir python-ldap).")
 
     ldap = LdapPasswd(module)
 

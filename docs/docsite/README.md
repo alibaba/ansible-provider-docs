@@ -15,7 +15,7 @@ If you do not want to learn the reStructuredText format, you can also [file issu
 
 Note that module documentation can actually be [generated from a DOCUMENTATION docstring][module-docs] in the modules directory, so corrections to modules written as such need to be made in the module source, rather than in docsite source.
 
-To install sphinx and the required theme, install pip and then "pip install sphinx sphinx_rtd_theme"
+To install sphinx and the required theme, install pip and then "pip install --no-cache-dir sphinx sphinx_rtd_theme"
 
 [file issues]: https://github.com/ansible/ansible/issues
 [module-docs]: https://docs.ansible.com/developing_modules.html#documenting-your-module

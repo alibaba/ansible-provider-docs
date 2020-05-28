@@ -9,7 +9,7 @@ Introduction
 Ansible contains several modules for controlling and managing Alibaba Cloud Compute Services (Alicloud).  This guide
 explains how to use the Alicloud Ansible modules together.
 
-All Alicloud modules require ``footmark`` - install it on your control machine with ``pip install footmark``.
+All Alicloud modules require ``footmark`` - install it on your control machine with ``pip install --no-cache-dir footmark``.
 
 Cloud modules, including Alicloud modules, execute on your local machine (the control machine) with ``connection: local``, rather than on remote machines defined in your hosts.
 

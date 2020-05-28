@@ -16,7 +16,7 @@ version of pip.  This will make the default :command:`/usr/bin/ansible` run with
 
 .. code-block:: shell
 
-    $ pip3 install ansible
+    $ pip3 install --no-cache-dir ansible
     $ ansible --version | grep "python version"
       python version = 3.6.2 (default, Sep 22 2017, 08:28:09) [GCC 7.2.1 20170915 (Red Hat 7.2.1-2)]
 

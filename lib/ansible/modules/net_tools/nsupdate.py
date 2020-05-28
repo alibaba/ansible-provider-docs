@@ -342,7 +342,7 @@ def main():
     )
 
     if not HAVE_DNSPYTHON:
-        module.fail_json(msg='python library dnspython required: pip install dnspython')
+        module.fail_json(msg='python library dnspython required: pip install --no-cache-dir dnspython')
 
     if len(module.params["record"]) == 0:
         module.fail_json(msg='record cannot be empty.')

@@ -410,7 +410,7 @@ class Template:
     def __init__(self):
         if not HAS_JINJA2:
             raise ImportError("jinja2 is required but does not appear to be installed.  "
-                              "It can be installed using `pip install jinja2`")
+                              "It can be installed using `pip install --no-cache-dir jinja2`")
 
         self.env = Environment(undefined=StrictUndefined)
         self.env.filters.update({'ternary': ternary})

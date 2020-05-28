@@ -189,7 +189,7 @@ def get_xml_request(module, request, xmlns, content):
         if not HAS_JXMLEASE:
             module.fail_json(msg='jxmlease is required to convert RPC content to XML '
                                  'but does not appear to be installed. '
-                                 'It can be installed using `pip install jxmlease`')
+                                 'It can be installed using `pip install --no-cache-dir jxmlease`')
 
         payload = jxmlease.XMLDictNode(content).emit_xml(pretty=False, full_document=False)
         if xmlns is None:
@@ -233,7 +233,7 @@ def main():
     if display == 'json' and not HAS_JXMLEASE:
         module.fail_json(msg='jxmlease is required to display response in json format'
                              'but does not appear to be installed. '
-                             'It can be installed using `pip install jxmlease`')
+                             'It can be installed using `pip install --no-cache-dir jxmlease`')
 
     xml_req = get_xml_request(module, rpc, xmlns, content)
     response = dispatch(module, xml_req)

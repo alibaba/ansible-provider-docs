@@ -70,7 +70,7 @@ options:
 
 notes:
    - Requires the redis-py Python package on the remote host. You can
-     install it with pip (pip install redis) or with a package manager.
+     install it with pip (pip install --no-cache-dir redis) or with a package manager.
      https://github.com/andymccurdy/redis-py
    - If the redis master instance we are making slave of is password protected
      this needs to be in the redis.conf in the masterauth variable

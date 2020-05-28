@@ -53,7 +53,7 @@ class AnsibleCloudStack:
 
     def __init__(self, module):
         if not HAS_LIB_CS:
-            module.fail_json(msg="python library cs required: pip install cs")
+            module.fail_json(msg="python library cs required: pip install --no-cache-dir cs")
 
         self.result = {
             'changed': False,

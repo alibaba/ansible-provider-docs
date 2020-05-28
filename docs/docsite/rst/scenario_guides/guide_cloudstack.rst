@@ -19,7 +19,7 @@ You'll need this Python module installed on the execution host, usually your wor
 
 .. code-block:: bash
 
-    $ pip install cs
+    $ pip install --no-cache-dir cs
 
 Or alternatively starting with Debian 9 and Ubuntu 16.04:
 
