@@ -86,7 +86,7 @@ class CallbackModule(CallbackBase):
         if not HAS_LOGSTASH:
             self.disabled = True
             self._display.warning("The required python-logstash is not installed. "
-                                  "pip install python-logstash")
+                                  "pip install --no-cache-dir python-logstash")
         else:
             self.logger = logging.getLogger('python-logstash-logger')
             self.logger.setLevel(logging.DEBUG)

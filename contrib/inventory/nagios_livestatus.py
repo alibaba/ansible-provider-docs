@@ -46,7 +46,7 @@ import json
 try:
     from mk_livestatus import Socket
 except ImportError:
-    sys.exit("Error: mk_livestatus is needed. Try something like: pip install python-mk-livestatus")
+    sys.exit("Error: mk_livestatus is needed. Try something like: pip install --no-cache-dir python-mk-livestatus")
 
 
 class NagiosLivestatusInventory(object):

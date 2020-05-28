@@ -260,15 +260,15 @@ your version of Python, you can get pip by::
 
 Then install Ansible with [1]_::
 
-   $ sudo pip install ansible
+   $ sudo pip install --no-cache-dir ansible
 
 Or if you are looking for the latest development version::
 
-   $ pip install git+https://github.com/ansible/ansible.git@devel
+   $ pip install --no-cache-dir git+https://github.com/ansible/ansible.git@devel
 
 If you are installing on macOS Mavericks, you may encounter some noise from your compiler.  A workaround is to do the following::
 
-   $ sudo CFLAGS=-Qunused-arguments CPPFLAGS=-Qunused-arguments pip install ansible
+   $ sudo CFLAGS=-Qunused-arguments CPPFLAGS=-Qunused-arguments pip install --no-cache-dir ansible
 
 Readers that use virtualenv can also install Ansible under virtualenv, though we'd recommend to not worry about it and just install Ansible globally. Do not use easy_install to install Ansible directly.
 
@@ -331,7 +331,7 @@ If you want to suppress spurious warnings/errors, use::
 
     $ source ./hacking/env-setup -q
 
-If you don't have pip installed in your version of Python, install pip::
+If you don't have pip install --no-cache-dired in your version of Python, install pip::
 
     $ sudo easy_install pip
 
@@ -339,7 +339,7 @@ Ansible also uses the following Python modules that need to be installed [1]_:
 
 .. code-block:: bash
 
-    $ sudo pip install -r ./requirements.txt
+    $ sudo pip install --no-cache-dir -r ./requirements.txt
 
 To update ansible checkouts, use pull-with-rebase so any local changes are replayed.
 
@@ -402,4 +402,4 @@ bugs and feature ideas.
    `irc.freenode.net <http://irc.freenode.net>`_
        #ansible IRC chat channel
 
-.. [1] If you have issues with the "pycrypto" package install on Mac OSX, then you may need to try ``CC=clang sudo -E pip install pycrypto``.
+.. [1] If you have issues with the "pycrypto" package install on Mac OSX, then you may need to try ``CC=clang sudo -E pip install --no-cache-dir pycrypto``.

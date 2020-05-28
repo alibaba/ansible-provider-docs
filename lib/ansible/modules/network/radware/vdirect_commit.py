@@ -40,7 +40,7 @@ description:
       Explicit apply, sync and save actions specifying is not relevant.
 notes:
     - Requires the Radware vdirect-client Python package on the host. This is as easy as
-      C(pip install vdirect-client)
+      C(pip install --no-cache-dir vdirect-client)
 version_added: "2.5"
 options:
   vdirect_ip:

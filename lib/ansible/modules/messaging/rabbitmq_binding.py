@@ -296,7 +296,7 @@ def main():
     )
 
     if not HAS_REQUESTS:
-        module.fail_json(msg="requests library is required for this module. To install, use `pip install requests`")
+        module.fail_json(msg="requests library is required for this module. To install, use `pip install --no-cache-dir requests`")
 
     RabbitMqBinding(module).run()
 

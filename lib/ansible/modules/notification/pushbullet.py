@@ -51,7 +51,7 @@ options:
 
 notes:
    - Requires pushbullet.py Python package on the remote host.
-     You can install it via pip with ($ pip install pushbullet.py).
+     You can install it via pip with ($ pip install --no-cache-dir pushbullet.py).
      See U(https://github.com/randomchars/pushbullet.py)
 '''
 
@@ -125,7 +125,7 @@ def main():
     url = module.params['url']
 
     if not pushbullet_found:
-        module.fail_json(msg="Python 'pushbullet.py' module is required. Install via: $ pip install pushbullet.py")
+        module.fail_json(msg="Python 'pushbullet.py' module is required. Install via: $ pip install --no-cache-dir pushbullet.py")
 
     # Init pushbullet
     try:

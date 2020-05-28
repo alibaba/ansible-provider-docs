@@ -40,7 +40,7 @@ try:
     from sqlalchemy import text
     from sqlalchemy.engine import create_engine
 except ImportError:
-    sys.exit("Error: SQLAlchemy is needed. Try something like: pip install sqlalchemy")
+    sys.exit("Error: SQLAlchemy is needed. Try something like: pip install --no-cache-dir sqlalchemy")
 
 
 class NagiosNDOInventory(object):

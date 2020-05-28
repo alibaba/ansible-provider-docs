@@ -521,7 +521,7 @@ def main():
                            supports_check_mode=True)
 
     if not HAS_IPADDRESS:
-        module.fail_json(msg="ipaddress is required for this module. Run 'pip install ipaddress' for install.")
+        module.fail_json(msg="ipaddress is required for this module. Run 'pip install --no-cache-dir ipaddress' for install.")
 
     warnings = list()
 

@@ -28,7 +28,7 @@ notes:
      dependency to work. In this case, you'll need an active SendGrid
      account."
    - "In order to use api_key, cc, bcc, attachments, from_name, html_body, headers
-     you must pip install sendgrid"
+     you must pip install --no-cache-dir sendgrid"
    - "since 2.2 username and password are not required if you supply an api_key"
 requirements:
   - sendgrid python library

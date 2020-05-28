@@ -30,7 +30,7 @@ sudo apt-get -y install python-pip python-dev dos2unix
 * Install sphinx and theme: 
 
 ```sh
-pip install sphinx==1.4.8 sphinx_rtd_theme
+pip install --no-cache-dir sphinx==1.4.8 sphinx_rtd_theme
 ```
 
 ## Build the documentation

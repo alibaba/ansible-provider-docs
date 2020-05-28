@@ -764,7 +764,7 @@ class PyVmomi(object):
         Constructor
         """
         if not HAS_PYVMOMI:
-            module.fail_json(msg='PyVmomi Python module required. Install using "pip install PyVmomi"')
+            module.fail_json(msg='PyVmomi Python module required. Install using "pip install --no-cache-dir PyVmomi"')
 
         self.module = module
         self.params = module.params

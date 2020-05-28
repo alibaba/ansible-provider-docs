@@ -24,7 +24,7 @@ Requirements
 ~~~~~~~~~~~~
 The below requirements are needed on the local master node that executes this lookup.
 
-- pychef (python library https://pychef.readthedocs.io `pip install pychef`
+- pychef (python library https://pychef.readthedocs.io `pip install --no-cache-dir pychef`
 
 
 Parameters

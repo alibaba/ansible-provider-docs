@@ -38,7 +38,7 @@ class FakeModule(object):
       sudo apt-get update
       sudo apt-get install python-setuptools git gcc python-dev libssl-dev
       sudo easy_install pip
-      sudo pip install ansible nose coverage
+      sudo pip install --no-cache-dir ansible nose coverage
       # git the module and cd to the directory
       nosetests --with-coverage --cover-package=nclu --cover-erase --cover-branches
 

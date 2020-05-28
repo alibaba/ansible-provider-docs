@@ -47,13 +47,13 @@ installed on the host running Ansible. You will need to have >= 1.7.0 installed.
 
 .. code-block:: bash
 
-    $ pip install 'docker-py>=1.7.0'
+    $ pip install --no-cache-dir 'docker-py>=1.7.0'
 
 The docker_service module also requires `docker-compose <https://github.com/docker/compose>`_
 
 .. code-block:: bash
 
-   $ pip install 'docker-compose>=1.7.0'
+   $ pip install --no-cache-dir 'docker-compose>=1.7.0'
 
 
 Connecting to the Docker API

@@ -45,7 +45,7 @@ except ImportError:
 try:
     from zabbix_api import ZabbixAPI
 except:
-    print("Error: Zabbix API library must be installed: pip install zabbix-api.",
+    print("Error: Zabbix API library must be installed: pip install --no-cache-dir zabbix-api.",
           file=sys.stderr)
     sys.exit(1)
 

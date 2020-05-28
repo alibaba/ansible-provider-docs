@@ -380,7 +380,7 @@ def main():
 
     if HAS_FOOTMARK is False:
         module.fail_json(msg="'footmark' is required for the module ali_slb_server. "
-                             "Please install 'footmark' by using 'sudo pip install footmark'.")
+                             "Please install 'footmark' by using 'sudo pip install --no-cache-dir footmark'.")
 
     # handling region parameter which is required by common utils file to login but not required by this module
     module.params['alicloud_region'] = 'cn-hangzhou'

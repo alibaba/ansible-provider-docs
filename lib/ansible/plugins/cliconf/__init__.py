@@ -311,7 +311,7 @@ class CliconfBase(with_metaclass(ABCMeta, object)):
         ssh = self._connection.paramiko_conn._connect_uncached()
         if proto == 'scp':
             if not HAS_SCP:
-                raise AnsibleError("Required library scp is not installed.  Please install it using `pip install scp`")
+                raise AnsibleError("Required library scp is not installed.  Please install it using `pip install --no-cache-dir scp`")
             with SCPClient(ssh.get_transport(), socket_timeout=timeout) as scp:
                 out = scp.put(source, destination)
         elif proto == 'sftp':
@@ -332,7 +332,7 @@ class CliconfBase(with_metaclass(ABCMeta, object)):
         ssh = self._connection.paramiko_conn._connect_uncached()
         if proto == 'scp':
             if not HAS_SCP:
-                raise AnsibleError("Required library scp is not installed.  Please install it using `pip install scp`")
+                raise AnsibleError("Required library scp is not installed.  Please install it using `pip install --no-cache-dir scp`")
             with SCPClient(ssh.get_transport(), socket_timeout=timeout) as scp:
                 scp.get(source, destination)
         elif proto == 'sftp':

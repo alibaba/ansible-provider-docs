@@ -555,7 +555,7 @@ To get redis up and running, perform the equivalent OS commands::
 
     yum install redis
     service redis start
-    pip install redis
+    pip install --no-cache-dir redis
 
 Note that the Python redis library should be installed from pip, the version packaged in EPEL is too old for use by Ansible.
 

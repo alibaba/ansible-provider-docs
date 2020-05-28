@@ -12,8 +12,8 @@ before_install:
 
 install:
   # Install the latest Ansible Container and Ansible
-  - pip install git+https://github.com/ansible/ansible-container.git
-  - pip install ansible
+  - pip install --no-cache-dir git+https://github.com/ansible/ansible-container.git
+  - pip install --no-cache-dir ansible
 
 script:
   # Make sure docker is functioning

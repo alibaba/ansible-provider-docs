@@ -39,10 +39,10 @@ Common Environment setup
 2. Change directory into the repository root dir: ``$ cd ansible``
 3. Create a virtual environment: ``$ python3 -m venv venv`` (or for
    Python 2 ``$ virtualenv venv``. Note, this requires you to install
-   the virtualenv package: ``$ pip install virtualenv``)
+   the virtualenv package: ``$ pip install --no-cache-dir virtualenv``)
 4. Activate the virtual environment: ``$ . venv/bin/activate``
 5. Install development requirements:
-   ``$ pip install -r requirements.txt``
+   ``$ pip install --no-cache-dir -r requirements.txt``
 6. Run the environment setup script for each new dev shell process:
    ``$ . hacking/env-setup``
 
@@ -278,7 +278,7 @@ Unit testing
 
 Unit tests for modules will be appropriately located in ``./test/units/modules``. You must first setup your testing environment. In this example, we're using Python 3.5.
 
-- Install the requirements (outside of your virtual environment): ``$ pip3 install -r ./test/runner/requirements/units.txt``
+- Install the requirements (outside of your virtual environment): ``$ pip3 install --no-cache-dir -r ./test/runner/requirements/units.txt``
 - To run all tests do the following: ``$ ansible-test units --python 3.5`` (you must run ``. hacking/env-setup`` prior to this)
 
 .. note:: Ansible uses pytest for unit testing.

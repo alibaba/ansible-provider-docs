@@ -253,15 +253,15 @@ class AzureRMModuleBase(object):
                                     required_if=merged_required_if)
 
         if not HAS_PACKAGING_VERSION:
-            self.fail("Do you have packaging installed? Try `pip install packaging`"
+            self.fail("Do you have packaging installed? Try `pip install --no-cache-dir packaging`"
                       "- {0}".format(HAS_PACKAGING_VERSION_EXC))
 
         if not HAS_MSRESTAZURE:
-            self.fail("Do you have msrestazure installed? Try `pip install msrestazure`"
+            self.fail("Do you have msrestazure installed? Try `pip install --no-cache-dir msrestazure`"
                       "- {0}".format(HAS_MSRESTAZURE_EXC))
 
         if not HAS_AZURE:
-            self.fail("Do you have azure>={1} installed? Try `pip install ansible[azure]`"
+            self.fail("Do you have azure>={1} installed? Try `pip install --no-cache-dir ansible[azure]`"
                       "- {0}".format(HAS_AZURE_EXC, AZURE_MIN_RELEASE))
 
         self._cloud_environment = None
@@ -409,10 +409,10 @@ class AzureRMModuleBase(object):
             expected_version = package_version.get('expected_version')
             if Version(client_version) < Version(expected_version):
                 self.fail("Installed azure-mgmt-{0} client version is {1}. The minimum supported version is {2}. Try "
-                          "`pip install ansible[azure]`".format(client_name, client_version, expected_version))
+                          "`pip install --no-cache-dir ansible[azure]`".format(client_name, client_version, expected_version))
             if Version(client_version) != Version(expected_version):
                 self.module.warn("Installed azure-mgmt-{0} client version is {1}. The expected version is {2}. Try "
-                                 "`pip install ansible[azure]`".format(client_name, client_version, expected_version))
+                                 "`pip install --no-cache-dir ansible[azure]`".format(client_name, client_version, expected_version))
 
     def exec_module(self, **kwargs):
         self.fail("Error: {0} failed to implement exec_module method.".format(self.__class__.__name__))
@@ -602,7 +602,7 @@ class AzureRMModuleBase(object):
 
         if auth_source == 'cli':
             if not HAS_AZURE_CLI_CORE:
-                self.fail("Azure auth_source is `cli`, but azure-cli package is not available. Try `pip install azure-cli --upgrade`")
+                self.fail("Azure auth_source is `cli`, but azure-cli package is not available. Try `pip install --no-cache-dir azure-cli --upgrade`")
             try:
                 self.log('Retrieving credentials from Azure CLI profile')
                 cli_credentials = self._get_azure_cli_credentials()

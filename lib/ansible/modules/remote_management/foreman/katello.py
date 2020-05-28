@@ -457,7 +457,7 @@ def main():
     )
 
     if not HAS_NAILGUN_PACKAGE:
-        module.fail_json(msg="Missing required nailgun module (check docs or install with: pip install nailgun")
+        module.fail_json(msg="Missing required nailgun module (check docs or install with: pip install --no-cache-dir nailgun")
 
     server_url = module.params['server_url']
     username = module.params['username']

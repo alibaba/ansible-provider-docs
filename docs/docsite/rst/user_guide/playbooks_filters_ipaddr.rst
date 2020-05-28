@@ -17,7 +17,7 @@ a computer on which you use Ansible (it is not required on remote hosts).
 It can usually be installed either via your system package manager, or using
 ``pip``::
 
-    pip install netaddr
+    pip install --no-cache-dir netaddr
 
 .. _netaddr: https://pypi.org/project/netaddr/
 

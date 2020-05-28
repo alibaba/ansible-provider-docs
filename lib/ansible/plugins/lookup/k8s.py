@@ -219,12 +219,12 @@ class KubernetesLookup(K8sAnsibleMixin):
 
         if not HAS_K8S_MODULE_HELPER:
             raise Exception(
-                "Requires the OpenShift Python client. Try `pip install openshift`"
+                "Requires the OpenShift Python client. Try `pip install --no-cache-dir openshift`"
             )
 
         if not HAS_YAML:
             raise Exception(
-                "Requires PyYAML. Try `pip install PyYAML`"
+                "Requires PyYAML. Try `pip install --no-cache-dir PyYAML`"
             )
 
         self.kind = None

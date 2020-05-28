@@ -50,7 +50,7 @@ from ansible.plugins.cache import BaseCacheModule
 try:
     from redis import StrictRedis
 except ImportError:
-    raise AnsibleError("The 'redis' python module is required for the redis fact cache, 'pip install redis'")
+    raise AnsibleError("The 'redis' python module is required for the redis fact cache, 'pip install --no-cache-dir redis'")
 
 
 class CacheModule(BaseCacheModule):

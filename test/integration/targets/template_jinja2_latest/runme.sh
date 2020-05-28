@@ -16,6 +16,6 @@ virtualenv --system-site-packages --python "${PYTHON}" "${MYTMPDIR}/jinja2"
 
 source "${MYTMPDIR}/jinja2/bin/activate"
 
-pip install -U jinja2
+pip install --no-cache-dir -U jinja2
 
 ansible-playbook -i ../../inventory main.yml -e @../../integration_config.yml -v "$@"

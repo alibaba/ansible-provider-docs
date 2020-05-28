@@ -225,7 +225,7 @@ def main():
     if display == 'json' and not HAS_JXMLEASE:
         module.fail_json(msg='jxmlease is required to display response in json format'
                              'but does not appear to be installed. '
-                             'It can be installed using `pip install jxmlease`')
+                             'It can be installed using `pip install --no-cache-dir jxmlease`')
 
     filter_spec = (filter_type, filter) if filter_type else None
 

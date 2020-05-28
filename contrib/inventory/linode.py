@@ -10,7 +10,7 @@ Linode using the Chube library.
 NOTE: This script assumes Ansible is being executed where Chube is already
 installed and has a valid config at ~/.chube. If not, run:
 
-    pip install chube
+    pip install --no-cache-dir chube
     echo -e "---\napi_key: <YOUR API KEY GOES HERE>" > ~/.chube
 
 For more details, see: https://github.com/exosite/chube

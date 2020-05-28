@@ -142,7 +142,7 @@ options:
     version_added: 2.5
 notes:
   - Requires the netaddr Python package on the host. This is as easy as
-    C(pip install netaddr).
+    C(pip install --no-cache-dir netaddr).
 requirements:
   - netaddr
 extends_documentation_fragment: f5

@@ -176,7 +176,7 @@ Insecure Platform Warning
 If you receive InsecurePlatformWarning from urllib3, install the
 requests security packages:
 
-    pip install requests[security]
+    pip install --no-cache-dir requests[security]
 
 
 author:
@@ -956,7 +956,7 @@ class AzureInventory(object):
 
 def main():
     if not HAS_AZURE:
-        sys.exit("The Azure python sdk is not installed (try `pip install 'azure>={0}' --upgrade`) - {1}".format(AZURE_MIN_VERSION, HAS_AZURE_EXC))
+        sys.exit("The Azure python sdk is not installed (try `pip install --no-cache-dir 'azure>={0}' --upgrade`) - {1}".format(AZURE_MIN_VERSION, HAS_AZURE_EXC))
 
     AzureInventory()
 

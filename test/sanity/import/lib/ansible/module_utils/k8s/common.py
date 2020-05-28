@@ -243,10 +243,10 @@ class KubernetesAnsibleModule(AnsibleModule, K8sAnsibleMixin):
         AnsibleModule.__init__(self, *args, **kwargs)
 
         if not HAS_K8S_MODULE_HELPER:
-            self.fail_json(msg="This module requires the OpenShift Python client. Try `pip install openshift`")
+            self.fail_json(msg="This module requires the OpenShift Python client. Try `pip install --no-cache-dir openshift`")
 
         if not HAS_YAML:
-            self.fail_json(msg="This module requires PyYAML. Try `pip install PyYAML`")
+            self.fail_json(msg="This module requires PyYAML. Try `pip install --no-cache-dir PyYAML`")
 
     def execute_module(self):
         raise NotImplementedError()

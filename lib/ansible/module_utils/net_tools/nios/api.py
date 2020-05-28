@@ -71,7 +71,7 @@ def get_connector(*args, **kwargs):
     if not HAS_INFOBLOX_CLIENT:
         raise Exception('infoblox-client is required but does not appear '
                         'to be installed.  It can be installed using the '
-                        'command `pip install infoblox-client`')
+                        'command `pip install --no-cache-dir infoblox-client`')
 
     if not set(kwargs.keys()).issubset(NIOS_PROVIDER_SPEC.keys()):
         raise Exception('invalid or unsupported keyword argument for connector')

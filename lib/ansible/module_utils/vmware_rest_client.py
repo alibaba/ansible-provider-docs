@@ -57,9 +57,9 @@ class VmwareRestClient(object):
         """
         if not HAS_REQUESTS:
             self.module.fail_json(msg="Unable to find 'requests' Python library which is required."
-                                      " Please install using 'pip install requests'")
+                                      " Please install using 'pip install --no-cache-dir requests'")
         if not HAS_PYVMOMI:
-            self.module.fail_json(msg="PyVmomi Python module required. Install using 'pip install PyVmomi'")
+            self.module.fail_json(msg="PyVmomi Python module required. Install using 'pip install --no-cache-dir PyVmomi'")
         if not HAS_VSPHERE:
             self.module.fail_json(msg="Unable to find 'vSphere Automation SDK' Python library which is required."
                                       " Please refer this URL for installation steps"

@@ -162,7 +162,7 @@ You can install Ansible into a virtualenv on the controller quite simply:
 
     $ virtualenv ansible
     $ source ./ansible/bin/activate
-    $ pip install ansible
+    $ pip install --no-cache-dir ansible
 
 If you want to run under Python 3 instead of Python 2 you may want to change that slightly:
 
@@ -170,7 +170,7 @@ If you want to run under Python 3 instead of Python 2 you may want to change tha
 
     $ virtualenv ansible
     $ source ./ansible/bin/activate
-    $ pip3 install ansible
+    $ pip3 install --no-cache-dir ansible
 
 If you need to use any libraries which are not available via pip (for instance, SELinux Python
 bindings on systems such as Red Hat Enterprise Linux or Fedora that have SELinux enabled) then you
@@ -423,7 +423,7 @@ password hashing library is installed:
 
 .. code-block:: shell-session
 
-    pip install passlib
+    pip install --no-cache-dir passlib
 
 Once the library is ready, SHA512 password values can then be generated as follows:
 
