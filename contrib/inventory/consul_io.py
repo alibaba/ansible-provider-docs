@@ -219,6 +219,7 @@ class ConsulInventory(object):
         self.nodes_by_availability = {}
         self.current_dc = None
         self.inmemory_kv = []
+        self.inmemory_node_meta = []
         self.inmemory_nodes = []
 
         config = ConsulConfig()
@@ -315,6 +316,7 @@ class ConsulInventory(object):
 
         self.load_groups_from_kv(node_data)
         self.load_node_metadata_from_kv(node_data)
+        self.load_node_metadata_from_node_meta(node_data)
         if self.config.suffixes == 'true':
             self.load_availability_groups(node_data, datacenter)
             for name, service in node_data['Services'].items():
@@ -339,6 +341,23 @@ class ConsulInventory(object):
                 except:
                     pass
 
+    def load_node_metadata_from_node_meta(self, node_data):
+        ''' load the json dict at the metadata path defined by the node-meta value
+            and the node name add each entry in the dictionary to the node's
+            metadata '''
+        node = node_data['Node']
+        if self.config.bulk_load == 'true':
+            metadata = node_data['Meta']
+        else:
+            metadata = node['Meta']
+            pass
+        if metadata:
+            try:
+                for k, v in metadata.items():
+                    self.add_metadata(node_data, k, v)
+            except:
+                pass
+
     def load_groups_from_kv(self, node_data):
         ''' load the comma separated list of groups at the path defined by the
             kv_groups config value and the node name add the node address to each
@@ -351,7 +370,7 @@ class ConsulInventory(object):
             else:
                 index, groups = self.consul_api.kv.get(key)
             if groups and groups['Value']:
-                for group in groups['Value'].split(','):
+                for group in groups['Value'].decode().split(','):
                     self.add_node_to_map(self.nodes_by_kv, group.strip(), node)
 
     def load_data_from_service(self, service_name, service, node_data):
@@ -465,7 +484,7 @@ class ConsulConfig(dict):
 
     def read_settings(self):
         ''' Reads the settings from the consul_io.ini file (or consul.ini for backwards compatibility)'''
-        config = configparser.SafeConfigParser()
+        config = configparser.ConfigParser()
         if os.path.isfile(os.path.dirname(os.path.realpath(__file__)) + '/consul_io.ini'):
             config.read(os.path.dirname(os.path.realpath(__file__)) + '/consul_io.ini')
         else:
@@ -529,3 +548,4 @@ class ConsulConfig(dict):
         return consul.Consul(host=host, port=port, token=token, scheme=scheme)
 
 ConsulInventory()
+
