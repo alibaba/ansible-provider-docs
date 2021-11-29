@@ -346,11 +346,7 @@ class ConsulInventory(object):
             and the node name add each entry in the dictionary to the node's
             metadata '''
         node = node_data['Node']
-        if self.config.bulk_load == 'true':
-            metadata = node_data['Meta']
-        else:
-            metadata = node['Meta']
-            pass
+        metadata = node['Meta']
         if metadata:
             try:
                 for k, v in metadata.items():
